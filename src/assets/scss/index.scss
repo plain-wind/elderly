@@ -1,0 +1,68 @@
+.main {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+
+  .box {
+    width: 60%;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    padding: 30px 50px;
+    background-color: #f8f7f0;
+
+    .big-title {
+      margin: auto;
+      font-weight: 700;
+      font-size: 30px;
+    }
+    .small-title {
+      margin: auto;
+      color: #8b909c;
+    }
+    .link {
+      text-align: right;
+      font-size: 14px;
+      color: #0c5905;
+      margin-bottom: 10px;
+      cursor: pointer;
+    }
+  }
+}
+
+.el-form {
+  margin: auto;
+  width: 100%;
+}
+
+.el-input {
+  height: 46px;
+}
+
+:deep(.el-input__inner) {
+  background-color: #fff;
+}
+
+:deep(.el-input__wrapper) {
+  border-radius: 10px;
+}
+
+:deep(.el-form-item__label) {
+  color: #000;
+}
+
+.el-button {
+  width: 100%;
+  height: 46px;
+  border-radius: 10px;
+  border: none;
+  background-color: #82d780;
+  color: #323235;
+  transition: all 0.3s ease-in-out;
+
+  &:hover {
+    background-color: #0cc609;
+    color: #fff;
+  }
+}

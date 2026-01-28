@@ -11,10 +11,16 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    Button: typeof import('./src/components/Button.vue')['default']
     ElButton: typeof import('element-plus/es')['ElButton']
+    ElderInput: typeof import('./src/components/ElderInput.vue')['default']
+    ElderRadio: typeof import('./src/components/ElderRadio.vue')['default']
     ElForm: typeof import('element-plus/es')['ElForm']
     ElFormItem: typeof import('element-plus/es')['ElFormItem']
     ElInput: typeof import('element-plus/es')['ElInput']
+    Input: typeof import('./src/components/Input.vue')['default']
+    Radio: typeof import('./src/components/Radio.vue')['default']
+    RadioGroup: typeof import('./src/components/RadioGroup.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     Test: typeof import('./src/components/Test.vue')['default']

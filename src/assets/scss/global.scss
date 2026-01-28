@@ -1,29 +1,23 @@
 // global.scss
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  color: #333;
+}
 
 a {
   text-decoration: none;
-  color: black;
+  color: inherit;
 }
 
-/* 毛玻璃效果 */
-.glass {
-  background: rgba(255, 255, 255, 0.1);
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  padding: 10px;
-}
-
-/* 隐藏滚动条但保留滚动功能 */
-.element {
-  overflow: auto; /* 或 scroll */
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE 10+ */
-  /* border: 2px solid red; */
-}
-
-.element::-webkit-scrollbar {
-  display: none; /* Chrome、Safari、Edge */
+/* 自定义选中文本颜色 */
+::selection {
+  background: #44803f;
+  color: #fff;
 }

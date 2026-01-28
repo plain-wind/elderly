@@ -1,14 +1,8 @@
 <script setup lang="ts">
-import Input from '@/components/Input.vue'
-import Button from '@/components/Button.vue'
-import { Login } from '@/types'
+import { ref, reactive } from 'vue'
+import { User, Lock } from '@element-plus/icons-vue'
 
-const router = useRouter();
-const loginForm = ref<Login>({ telephone: '', password: '' });
-
-const handleLogin = () => {
-  console.log('登录提交:', loginForm.value);
-};
+const loginForm = reactive({ telephone: '', password: '' })
 </script>
 
 <template>
@@ -18,57 +12,103 @@ const handleLogin = () => {
       <div class="divider"></div>
     </div>
 
-    <form @submit.prevent="handleLogin" class="form-body">
-      <Input v-model="loginForm.telephone" label="手机号码" type="tel" placeholder="请输入您的手机号" />
-      <Input v-model="loginForm.password" label="登录密码" type="password" placeholder="请输入密码" />
-      <div class="form-footer">
-        <span class="to-register" @click="router.push({ name: 'register' })">
-          还没有账号？点此注册
-        </span>
+    <el-form :model="loginForm" label-position="top" class="custom-form">
+      <el-form-item label="手机号码">
+        <el-input v-model="loginForm.telephone" placeholder="请输入您的手机号" required :prefix-icon="User" />
+      </el-form-item>
+
+      <el-form-item label="登录密码">
+        <el-input v-model="loginForm.password" type="password" show-password placeholder="请输入密码" required
+          :prefix-icon="Lock" />
+      </el-form-item>
+
+      <div class="form-options">
+        <el-link type="primary" underline="never">忘记密码？</el-link>
       </div>
 
-      <Button type="submit">安全登录</Button>
-    </form>
+      <el-button class="submit-btn" type="primary">安全登录</el-button>
+
+      <div class="footer-link">
+        还没有账号？<el-link type="success" @click="$router.push('/register')">立即注册</el-link>
+      </div>
+    </el-form>
   </div>
 </template>
 
 <style scoped lang="scss">
 .login-box {
   width: 100%;
-  max-width: 420px;
+  max-width: 400px;
   padding: 0 40px;
 
   .header {
-    margin-bottom: 40px;
+    margin-bottom: 30px;
 
     h2 {
-      font-size: 28px;
       color: #2e4e31;
-      font-weight: 600;
     }
 
     .divider {
-      width: 40px;
+      width: 30px;
       height: 4px;
       background: #44803f;
       margin-top: 8px;
-      border-radius: 2px;
     }
   }
 }
 
-.form-footer {
-  text-align: right;
-  margin-bottom: 30px;
+// 核心：覆盖 Element Plus 样式
+.custom-form {
+  :deep(.el-form-item__label) {
+    font-weight: 600;
+    color: #555;
+    padding-bottom: 4px;
+  }
 
-  .to-register {
-    color: #44803f;
-    font-size: 14px;
-    cursor: pointer;
+  :deep(.el-input__wrapper) {
+    background-color: #f9fbf9;
+    border-radius: 12px;
+    box-shadow: none;
+    border: 1px solid #eee;
+    padding: 5px 15px;
+    transition: all 0.3s;
 
-    &:hover {
-      text-decoration: underline;
+    &.is-focus {
+      border-color: #44803f;
+      background-color: #fff;
+      box-shadow: 0 0 0 1px #44803f inset !important;
     }
   }
+
+  .submit-btn {
+    width: 100%;
+    height: 54px;
+    border-radius: 14px;
+    font-size: 17px;
+    background: linear-gradient(90deg, #44803f, #5a9a54);
+    border: none;
+    box-shadow: 0 10px 20px rgba(68, 128, 63, 0.2);
+    margin-top: 15px;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 15px 25px rgba(68, 128, 63, 0.3);
+    }
+  }
+}
+
+.form-options {
+  text-align: right;
+  margin-bottom: 15px;
+}
+
+.footer-link {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 25px;
+  font-size: 14px;
+  color: #999;
 }
 </style>

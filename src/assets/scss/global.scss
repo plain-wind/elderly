@@ -1,23 +1,22 @@
-// global.scss
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-body {
-  font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
-  -webkit-font-smoothing: antialiased;
-  color: #333;
-}
+#app {
+  .el-input {
+    --el-input-inner-height: 40px; // 让输入框更高一点
+  }
 
-a {
-  text-decoration: none;
-  color: inherit;
-}
+  .el-button {
+    transition: all 0.3s;
+  }
 
-/* 自定义选中文本颜色 */
-::selection {
-  background: #44803f;
-  color: #fff;
+  .el-button--primary {
+    --el-button-hover-bg-color: #356632;
+    --el-button-active-bg-color: #2e4e31;
+    font-weight: 600;
+    letter-spacing: 1px;
+  }
 }

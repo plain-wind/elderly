@@ -6,5 +6,7 @@ export interface Login {
 export interface Register {
   name: string;
   telephone: string;
+  code: string;
   password: string;
+  confirmPassword: string;
 }

@@ -22,20 +22,23 @@
         <div class="data-card">
           <h3 class="card-title">电子围栏实时记录</h3>
           <div class="scroll-list">
-            <div v-for="item in dzwlData" :key="item.id" class="list-item">
+            <div v-for="item in dzwlData" :key="item.id" class="list-item clickable" @click="focusElder(item.lnglat)">
               <span class="tag">越界</span>
               <span class="name">{{ item.name }}</span>
               <span class="time">{{ item.time }}</span>
             </div>
           </div>
+          <p class="hint">点击记录快速定位</p>
         </div>
       </section>
 
       <section class="panel-column center-column">
-        <div class="video-container">
-          <div class="video-placeholder">
-            <div class="video-overlay">区域 A-01 实时监控 (模拟)</div>
-            <div class="scanning-line"></div>
+        <div class="map-container">
+          <div id="amap-container"></div>
+          <div class="map-overlay">
+            <div class="map-status">
+              <span class="dot"></span> 电子围栏监控区域：活跃
+            </div>
           </div>
         </div>
 
@@ -84,10 +87,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted, onUnmounted, shallowRef } from 'vue';
 import * as echarts from 'echarts';
+import AMapLoader from '@amap/amap-jsapi-loader';
 
-// 响应式数据
+// --- 基础数据 ---
 const currentTime = ref(new Date().toLocaleString());
 setInterval(() => {
   currentTime.value = new Date().toLocaleString();
@@ -100,11 +104,11 @@ const stats = ref([
   { label: '体征异常人数', value: '5', warning: true },
 ]);
 
-// 初始数据
+// 电子围栏数据（增加了模拟坐标）
 const dzwlData = ref([
-  { id: 1, name: '王秀英', time: '13:00:01' },
-  { id: 2, name: '李大爷', time: '14:20:05' },
-  { id: 3, name: '张婆婆', time: '15:10:32' },
+  { id: 1, name: '王秀英', time: '13:00:01', lnglat: [116.3974, 39.9092] },
+  { id: 2, name: '李大爷', time: '14:20:05', lnglat: [116.3980, 39.9100] },
+  { id: 3, name: '张婆婆', time: '15:10:32', lnglat: [116.3965, 39.9085] },
 ]);
 
 const jcyjData = ref([
@@ -113,17 +117,54 @@ const jcyjData = ref([
   { id: 3, title: '心率异常', name: '刘志强', address: '8号楼2单元202', time: '13:45:10' },
 ]);
 
-// 图表实例引用
+// --- 实例引用 ---
 const lineChartRef = ref(null);
 const pieChartRef = ref(null);
 const gaugeChartRef = ref(null);
+const map = shallowRef(null);
 
-onMounted(() => {
-  initLineChart();
-  initPieChart();
-  initGaugeChart();
-});
+// --- 初始化地图 ---
+const initMap = () => {
+  window._AMapSecurityConfig = {
+    securityJsCode: import.meta.env.VITE_AMAP_SECURITY, // TODO: 替换为你的安全密钥
+  };
 
+  AMapLoader.load({
+    key: import.meta.env.VITE_AMAP_KEY, // TODO: 替换为你的Key
+    version: '2.0',
+    plugins: [],
+  }).then((AMap) => {
+    map.value = new AMap.Map('amap-container', {
+      viewMode: '3D',
+      pitch: 45,
+      zoom: 17,
+      center: [116.3974, 39.9092],
+      theme: 'amap://styles/darkblue',
+    });
+
+    // 绘制模拟围栏区域
+    const polygon = new AMap.Polygon({
+      path: [
+        [116.397, 39.911], [116.399, 39.911],
+        [116.401, 39.909], [116.398, 39.907]
+      ],
+      strokeColor: '#00f2ff',
+      fillColor: '#00f2ff',
+      fillOpacity: 0.1,
+      strokeStyle: 'dashed',
+    });
+    map.value.add(polygon);
+  }).catch(e => console.error(e));
+};
+
+// 地图定位联动
+const focusElder = (lnglat) => {
+  if (map.value) {
+    map.value.setZoomAndCenter(18, lnglat, false, 500);
+  }
+};
+
+// --- 初始化 ECharts ---
 const initLineChart = () => {
   const chart = echarts.init(lineChartRef.value);
   chart.setOption({
@@ -162,53 +203,42 @@ const initGaugeChart = () => {
   chart.setOption({
     series: [{
       type: 'gauge',
-      radius: '90%', // 适当缩小半径，留出边距
-      center: ['50%', '55%'], // 中心点稍微下移
+      radius: '90%',
+      center: ['50%', '60%'],
       startAngle: 200,
       endAngle: -20,
-      splitNumber: 5, // 减少大刻度数量，避免拥挤
-      progress: {
-        show: true,
-        width: 12,
-        itemStyle: { color: '#00f2ff' }
-      },
-      axisLine: {
-        lineStyle: { width: 12, color: [[1, 'rgba(0,242,255,0.1)']] }
-      },
-      axisTick: { show: false }, // 隐藏小刻度，防止视觉混乱
-      splitLine: {
-        distance: 6, // 刻度线向内缩
-        length: 5,
-        lineStyle: { color: '#fff', width: 2 }
-      },
-      axisLabel: {
-        distance: 18, // 标签距离圆环的距离
-        color: '#ccc',
-        fontSize: 10
-      },
-      anchor: { show: false },
-      title: { show: false }, // 隐藏原本的标题，改用下面的 detail
-      detail: {
-        valueAnimation: true,
-        formatter: '{value}%',
-        color: '#00f2ff',
-        fontSize: 24,
-        fontWeight: 'bold',
-        offsetCenter: [0, '30%'] // 关键：将数字下移，避开指针中心
-      },
+      splitNumber: 5,
+      progress: { show: true, width: 8, itemStyle: { color: '#00f2ff' } },
+      axisLine: { lineStyle: { width: 8, color: [[1, 'rgba(0,242,255,0.1)']] } },
+      axisTick: { show: false },
+      splitLine: { distance: 6, length: 5, lineStyle: { color: '#fff' } },
+      axisLabel: { distance: 12, color: '#ccc', fontSize: 10 },
+      detail: { valueAnimation: true, formatter: '{value}%', color: '#00f2ff', fontSize: 20, offsetCenter: [0, '40%'] },
       data: [{ value: 85 }]
     }]
   });
 };
+
+onMounted(() => {
+  initMap();
+  initLineChart();
+  initPieChart();
+  initGaugeChart();
+});
+
+onUnmounted(() => {
+  if (map.value) map.value.destroy();
+});
 </script>
 
 <style scoped>
+/* 保持原有基础样式并增加地图相关样式 */
 .dashboard-container {
   background: #050d19;
   color: #fff;
   min-height: 100vh;
   padding: 10px;
-  font-family: 'PingFang SC', sans-serif;
+  font-family: sans-serif;
   overflow: hidden;
 }
 
@@ -219,7 +249,6 @@ const initGaugeChart = () => {
   align-items: center;
   justify-content: center;
   position: relative;
-  margin-bottom: 20px;
 }
 
 .title {
@@ -232,7 +261,6 @@ const initGaugeChart = () => {
 .now-time {
   position: absolute;
   left: 20px;
-  font-size: 16px;
   color: #00f2ff;
   font-family: monospace;
 }
@@ -242,6 +270,7 @@ const initGaugeChart = () => {
   grid-template-columns: 350px 1fr 350px;
   gap: 15px;
   height: calc(100vh - 100px);
+  margin-top: 10px;
 }
 
 .panel-column {
@@ -255,13 +284,11 @@ const initGaugeChart = () => {
   border: 1px solid rgba(0, 242, 255, 0.2);
   padding: 15px;
   border-radius: 4px;
-  position: relative;
 }
 
 .card-title {
   font-size: 16px;
   margin-bottom: 12px;
-  color: #fff;
   border-left: 4px solid #00f2ff;
   padding-left: 10px;
 }
@@ -278,16 +305,11 @@ const initGaugeChart = () => {
   text-align: center;
 }
 
-.stat-item .label {
-  font-size: 12px;
-  display: block;
-  color: #ccc;
-}
-
 .stat-item .value {
   font-size: 22px;
   font-weight: bold;
   color: #00f2ff;
+  display: block;
 }
 
 .stat-item .value.warning {
@@ -298,46 +320,58 @@ const initGaugeChart = () => {
   height: 180px;
 }
 
-.video-container {
+/* 地图容器样式 */
+.map-container {
   height: 400px;
-  background: #000;
-  border: 2px solid #1a2a44;
   position: relative;
-  overflow: hidden;
+  border: 1px solid rgba(0, 242, 255, 0.3);
 }
 
-.video-placeholder {
+#amap-container {
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle, #1a2a44 0%, #000 100%);
 }
 
-.video-overlay {
+.map-overlay {
   position: absolute;
   top: 10px;
   left: 10px;
-  background: rgba(0, 0, 0, 0.5);
-  padding: 4px 8px;
+  z-index: 10;
+}
+
+.map-status {
+  background: rgba(5, 13, 25, 0.8);
+  padding: 5px 12px;
+  border: 1px solid #00f2ff;
   font-size: 12px;
+  color: #00f2ff;
 }
 
-.scanning-line {
-  position: absolute;
-  width: 100%;
-  height: 2px;
-  background: rgba(0, 242, 255, 0.5);
-  top: 0;
-  animation: scan 3s linear infinite;
+.dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background: #00f2ff;
+  border-radius: 50%;
+  margin-right: 5px;
+  box-shadow: 0 0 8px #00f2ff;
 }
 
-@keyframes scan {
-  from {
-    top: 0;
-  }
+/* 列表可点击样式 */
+.clickable {
+  cursor: pointer;
+  transition: background 0.3s;
+}
 
-  to {
-    top: 100%;
-  }
+.clickable:hover {
+  background: rgba(0, 242, 255, 0.1);
+}
+
+.hint {
+  font-size: 10px;
+  color: #666;
+  text-align: right;
+  margin-top: 5px;
 }
 
 .scroll-list .list-item {
@@ -367,17 +401,6 @@ const initGaugeChart = () => {
   justify-content: space-between;
   color: #ff4d4f;
   font-weight: bold;
-}
-
-.alert-addr {
-  font-size: 12px;
-  color: #aaa;
-  margin: 4px 0;
-}
-
-.alert-time {
-  font-size: 11px;
-  color: #666;
 }
 
 .device-status {

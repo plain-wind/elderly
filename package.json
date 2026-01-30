@@ -12,6 +12,7 @@
   "license": "ISC",
   "packageManager": "pnpm@10.28.1",
   "dependencies": {
+    "@amap/amap-jsapi-loader": "^1.0.1",
     "@element-plus/icons-vue": "^2.3.2",
     "echarts": "^6.0.0",
     "element-plus": "^2.13.1",

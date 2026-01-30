@@ -1,8 +1,10 @@
 <script setup lang="ts">
+import Test1 from '@/components/Test1.vue'
 </script>
 
 <template>
-  <router-view></router-view>
+  <!-- <router-view></router-view> -->
+  <Test1></Test1>
 </template>
 
 <style lang="scss">

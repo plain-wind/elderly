@@ -12,6 +12,8 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     Button: typeof import('./src/components/Button.vue')['default']
+    DataCard: typeof import('./src/components/DataCard.vue')['default']
+    DataShow: typeof import('./src/components/DataShow.vue')['default']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElderInput: typeof import('./src/components/ElderInput.vue')['default']
     ElderRadio: typeof import('./src/components/ElderRadio.vue')['default']
@@ -23,6 +25,7 @@ declare module 'vue' {
     ElRadioButton: typeof import('element-plus/es')['ElRadioButton']
     ElRadioGroup: typeof import('element-plus/es')['ElRadioGroup']
     Input: typeof import('./src/components/Input.vue')['default']
+    PanelColumn: typeof import('./src/components/PanelColumn.vue')['default']
     Radio: typeof import('./src/components/Radio.vue')['default']
     RadioGroup: typeof import('./src/components/RadioGroup.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']

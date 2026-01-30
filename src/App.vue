@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import Test1 from '@/components/Test1.vue'
+import DataShow from '@/components/DataShow.vue'
 </script>
 
 <template>
   <!-- <router-view></router-view> -->
-  <Test1></Test1>
+  <DataShow></DataShow>
 </template>
 
 <style lang="scss">

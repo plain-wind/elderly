@@ -1,8 +1,15 @@
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
-import { User, Lock } from '@element-plus/icons-vue'
+import { User, Lock } from '@element-plus/icons-vue';
 
-const loginForm = reactive({ telephone: '', password: '' })
+const loginForm = ref({ telephone: '', password: '' });
+const router = useRouter();
+
+const handleLogin = () => {
+  console.log('登录信息:', loginForm.value);
+  // 执行登录逻辑
+  // 假设登录成功后跳转到首页
+  router.push('/admin');
+};
 </script>
 
 <template>
@@ -26,7 +33,7 @@ const loginForm = reactive({ telephone: '', password: '' })
         <el-link type="primary" underline="never">忘记密码？</el-link>
       </div>
 
-      <el-button class="submit-btn" type="primary">安全登录</el-button>
+      <el-button class="submit-btn" type="primary" @click="handleLogin">安全登录</el-button>
 
       <div class="footer-link">
         还没有账号？<el-link type="success" @click="$router.push('/register')">立即注册</el-link>

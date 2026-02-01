@@ -182,4 +182,10 @@
   opacity: 0;
   transform: translateX(-30px);
 }
+
+@media screen and (max-width: 480px) {
+  .brand-area {
+    display: none !important;
+  }
+}
 </style>

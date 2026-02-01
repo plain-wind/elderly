@@ -13,6 +13,8 @@ const registerForm = ref<Register>({
 const handleRegister = () => {
   console.log('注册信息:', registerForm.value);
   // 执行注册逻辑
+  // 假设注册成功后跳转到登录页面
+  router.push('/login');
 };
 </script>
 
@@ -47,7 +49,7 @@ const handleRegister = () => {
         </el-radio-group>
       </el-form-item>
 
-      <el-button class="submit-btn full" type="primary">开启智慧康养生活</el-button>
+      <el-button class="submit-btn full" type="primary" @click="handleRegister">开启智慧康养生活</el-button>
     </el-form>
   </div>
 </template>

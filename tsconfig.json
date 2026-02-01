@@ -1,8 +1,10 @@
 {
   "compilerOptions": {
     "strict": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "moduleResolution": "Node",
+    "moduleResolution": "bundler",
     "module": "ESNext",
     "target": "ESNext",
     "baseUrl": ".",
@@ -15,5 +17,8 @@
         "src/*"
       ]
     },
+    "types": [
+      "@amap/amap-jsapi-types"
+    ]
   },
 }

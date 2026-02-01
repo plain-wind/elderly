@@ -20,11 +20,10 @@
     "vue-router": "^4.6.4"
   },
   "devDependencies": {
-    "@tailwindcss/vite": "^4.1.18",
+    "@amap/amap-jsapi-types": "^0.0.15",
     "@types/node": "^25.0.10",
     "@vitejs/plugin-vue": "^6.0.3",
     "sass": "^1.97.3",
-    "tailwindcss": "^4.1.18",
     "unplugin-auto-import": "^21.0.0",
     "unplugin-vue-components": "^31.0.0",
     "vite": "^7.3.1",

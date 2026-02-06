@@ -12,24 +12,24 @@
           </div>
           <div class="info-content">
             <div class="name-row">
-              <h2 class="user-name">{{ userInfo.name }}</h2>
+              <h2 class="user-name">{{ name }}</h2>
               <el-tag size="small" effect="plain" type="success" round>档案已建立</el-tag>
             </div>
             <div class="contact-grid">
               <div class="contact-item">
                 <el-icon>
                   <Location />
-                </el-icon> {{ userInfo.address }}
+                </el-icon> {{ address }}
               </div>
               <div class="contact-item">
                 <el-icon>
                   <Phone />
-                </el-icon> {{ userInfo.phone }}
+                </el-icon> {{ phone }}
               </div>
               <div class="contact-item highlight">
                 <el-icon>
                   <Warning />
-                </el-icon> 急救: {{ userInfo.sonphone }}
+                </el-icon> 急救: {{ sonphone }}
               </div>
             </div>
           </div>
@@ -190,12 +190,7 @@ import {
   ArrowRight, Monitor, Document, Files, Download
 } from '@element-plus/icons-vue';
 
-const userInfo = ref({
-  name: '刘志强',
-  address: '天津市西青区檀园嘉苑',
-  phone: '13811110001',
-  sonphone: '13821110001'
-});
+const { name, address, phone, sonphone } = useRoute().query;
 
 const selectedDate = ref('2025-09-29');
 </script>

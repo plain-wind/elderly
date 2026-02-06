@@ -17,10 +17,10 @@
       <el-container>
         <el-menu>
           <div class="menu">
-            <router-link to="/admin/bodyData" class="menu-item" activeClass="active">
+            <router-link to="/admin/bodyData/list" class="menu-item" activeClass="active">
               <span>体征数据</span>
             </router-link>
-            <router-link to="/admin/volunteer" class="menu-item" activeClass="active">
+            <router-link to="/admin/volunteer/list" class="menu-item" activeClass="active">
               <span>志愿审核</span>
             </router-link>
             <router-link to="/admin/activity" class="menu-item" activeClass="active">

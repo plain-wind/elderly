@@ -34,10 +34,6 @@ const routes = [
   },
   {
     path: '/admin',
-    redirect: '/admin/data',
-  },
-  {
-    path: '/admin',
     name: 'admin',
     component: () => import('@/views/admin/index.vue'),
     children: [
@@ -55,6 +51,23 @@ const routes = [
             path: 'detail',
             name: 'detail',
             component: () => import('@/views/admin/bodyData/Detail.vue'),
+          },
+        ],
+      },
+      {
+        path: 'volunteer',
+        name: 'volunteer',
+        component: () => import('@/views/admin/volunteer/index.vue'),
+        children: [
+          {
+            path: 'list',
+            name: 'volunteerList',
+            component: () => import('@/views/admin/volunteer/List.vue'),
+          },
+          {
+            path: 'detail',
+            name: 'volunteerDetail',
+            component: () => import('@/views/admin/volunteer/Detail.vue'),
           },
         ],
       },

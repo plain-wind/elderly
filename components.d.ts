@@ -31,6 +31,7 @@ declare module 'vue' {
     ElOption: typeof import('element-plus/es')['ElOption']
     ElPageHeader: typeof import('element-plus/es')['ElPageHeader']
     ElProgress: typeof import('element-plus/es')['ElProgress']
+    ElRadio: typeof import('element-plus/es')['ElRadio']
     ElRadioButton: typeof import('element-plus/es')['ElRadioButton']
     ElRadioGroup: typeof import('element-plus/es')['ElRadioGroup']
     ElSelect: typeof import('element-plus/es')['ElSelect']
@@ -44,6 +45,8 @@ declare module 'vue' {
     RadioGroup: typeof import('./src/components/RadioGroup.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    Star: typeof import('./src/components/Star.vue')['default']
+    StarRating: typeof import('./src/components/StarRating.vue')['default']
     Test: typeof import('./src/components/Test.vue')['default']
     Test1: typeof import('./src/components/Test1.vue')['default']
     VanButton: typeof import('vant/es')['Button']
@@ -53,5 +56,6 @@ declare module 'vue' {
     VanForm: typeof import('vant/es')['Form']
     VanPicker: typeof import('vant/es')['Picker']
     VanPopup: typeof import('vant/es')['Popup']
+    VolunteerItem: typeof import('./src/components/VolunteerItem.vue')['default']
   }
 }

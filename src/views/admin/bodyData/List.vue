@@ -62,10 +62,15 @@
           </template>
         </el-table-column>
         <el-table-column prop="do" label="操作">
-          <template #default="row">
+          <template #default="{ row }">
             <el-button link type="primary" size="default" @click="$router.push({
               name: 'detail',
-              query: row
+              query: {
+                name: row.name,
+                address: row.address,
+                phone: row.phone,
+                sonphone: row.sonphone,
+              }
             })" class="detail-btn">
               查看详情
             </el-button>
@@ -157,7 +162,7 @@ const tableData = [
   display: flex;
   flex-direction: column;
   gap: 24px;
-  padding: 20px 0;
+  // padding: 20px 0;
 
   // 头部数据统计
   .bdm-header {

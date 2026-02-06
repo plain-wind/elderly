@@ -10,3 +10,10 @@ export interface Register {
   confirmPassword: string;
   role: string;
 }
+
+export enum Status {
+  All = 'all',
+  Examine = 'examine',
+  Pass = 'pass',
+  Reject = 'reject',
+}

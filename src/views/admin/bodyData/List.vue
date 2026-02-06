@@ -62,8 +62,11 @@
           </template>
         </el-table-column>
         <el-table-column prop="do" label="操作">
-          <template #default>
-            <el-button link type="primary" size="default" @click="$router.push('/detail')" class="detail-btn">
+          <template #default="row">
+            <el-button link type="primary" size="default" @click="$router.push({
+              name: 'detail',
+              query: row
+            })" class="detail-btn">
               查看详情
             </el-button>
           </template>

@@ -206,9 +206,9 @@ $bg-light: #f9fbf9;
 $border-color: #eef2ee;
 $text-main: #2c3e50;
 
-.detail {
-  padding: 20px;
-}
+// .detail {
+//   padding: 20px;
+// }
 
 .layout-container {
   display: flex;
@@ -294,7 +294,7 @@ $text-main: #2c3e50;
   }
 
   .info-content {
-    flex: 1;
+    // flex: 1;
 
     .name-row {
       display: flex;
@@ -336,15 +336,12 @@ $text-main: #2c3e50;
 
 // 症状分布图 - 核心调整
 .health-map {
-  flex: 1;
 
   .map-content {
     display: flex;
-    height: calc(100% - 60px);
     gap: 20px;
 
     .body-projection {
-      flex: 1;
       background: $bg-light;
       border-radius: 16px;
       display: flex;

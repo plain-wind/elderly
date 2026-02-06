@@ -1,57 +1,70 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import { isTopLevelChange } from '@/utils';
 
+const routes = [
+  {
+    path: '/',
+    redirect: '/login',
+  },
+  {
+    path: '/admin',
+    redirect: '/admin/bodyData/list',
+  },
+  {
+    path: '/',
+    name: 'index',
+    component: () => import('@/views/index/index.vue'),
+    children: [
+      {
+        path: 'login',
+        name: 'login',
+        component: () => import('@/views/index/Login.vue'),
+      },
+      {
+        path: 'register',
+        name: 'register',
+        component: () => import('@/views/index/Register.vue'),
+      },
+    ],
+  },
+  {
+    path: '/monitor',
+    name: 'monitor',
+    component: () => import('@/views/Monitor.vue'),
+  },
+  {
+    path: '/admin',
+    redirect: '/admin/data',
+  },
+  {
+    path: '/admin',
+    name: 'admin',
+    component: () => import('@/views/admin/index.vue'),
+    children: [
+      {
+        path: 'bodyData',
+        name: 'bodyData',
+        component: () => import('@/views/admin/bodyData/index.vue'),
+        children: [
+          {
+            path: 'list',
+            name: 'list',
+            component: () => import('@/views/admin/bodyData/List.vue'),
+          },
+          {
+            path: 'detail',
+            name: 'detail',
+            component: () => import('@/views/admin/bodyData/Detail.vue'),
+          },
+        ],
+      },
+    ],
+  },
+];
+
 const router = createRouter({
   history: createWebHistory(),
-  routes: [
-    {
-      path: '/',
-      redirect: '/login',
-    },
-    {
-      path: '/',
-      name: 'index',
-      component: () => import('@/views/index/index.vue'),
-      children: [
-        {
-          path: 'login',
-          name: 'login',
-          component: () => import('@/views/index/Login.vue'),
-        },
-        {
-          path: 'register',
-          name: 'register',
-          component: () => import('@/views/index/Register.vue'),
-        },
-      ],
-    },
-    {
-      path: '/monitor',
-      name: 'monitor',
-      component: () => import('@/views/Monitor.vue'),
-    },
-    {
-      path: '/admin',
-      redirect: '/admin/data',
-    },
-    {
-      path: '/admin',
-      name: 'admin',
-      component: () => import('@/views/admin/index.vue'),
-      children: [
-        {
-          path: 'data',
-          name: 'data',
-          component: () => import('@/views/admin/data.vue'),
-        },
-      ],
-    },
-    {
-      path: '/detail',
-      name: 'detail',
-      component: () => import('@/views/Detail.vue'),
-    },
-  ],
+  routes
 });
 
 // 路由加载状态管理

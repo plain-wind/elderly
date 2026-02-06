@@ -17,7 +17,7 @@
       <el-container>
         <el-menu>
           <div class="menu">
-            <router-link to="/admin/data" class="menu-item" activeClass="active">
+            <router-link to="/admin/bodyData" class="menu-item" activeClass="active">
               <span>体征数据</span>
             </router-link>
             <router-link to="/admin/volunteer" class="menu-item" activeClass="active">
@@ -42,9 +42,7 @@
 
 <style scoped lang="scss">
 .admin {
-  width: 100vw;
   height: 100vh;
-  overflow: hidden;
   background: linear-gradient(135deg, #f9fbf9 0%, #ffffff 100%);
 
   .el-container {
@@ -104,8 +102,9 @@
     }
 
     .el-menu {
-      width: 250px;
+      width: 230px;
       height: 100%;
+      flex-shrink: 0;
       border-right: 1px solid rgba(68, 128, 63, 0.1);
       padding: 30px 0;
       background: white;
@@ -152,12 +151,8 @@
     }
 
     .el-main {
-      width: 100%;
-      height: 100%;
-      box-sizing: border-box;
-      padding: 30px;
+      height: calc(100vh - 80px);
       background: linear-gradient(135deg, #f9fbf9 0%, #ffffff 100%);
-      overflow-y: auto;
 
       &::-webkit-scrollbar {
         width: 8px;

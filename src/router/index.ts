@@ -40,6 +40,7 @@ const routes = [
       {
         path: 'bodyData',
         name: 'bodyData',
+        redirect: '/admin/bodyData/list',
         component: () => import('@/views/admin/bodyData/index.vue'),
         children: [
           {
@@ -58,6 +59,7 @@ const routes = [
         path: 'volunt',
         name: 'volunt',
         component: () => import('@/views/admin/volunt/index.vue'),
+        redirect: '/admin/volunt/list',
         children: [
           {
             path: 'list',
@@ -74,6 +76,7 @@ const routes = [
       {
         path: 'active',
         name: 'active',
+        redirect: '/admin/active/list',
         component: () => import('@/views/admin/active/index.vue'),
         children: [
           {

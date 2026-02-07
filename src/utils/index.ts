@@ -4,4 +4,5 @@ const isTopLevelChange = (to: RouteLocationNormalized, from: RouteLocationNormal
   return to.matched[0] !== from.matched[0];
 };
 
+
 export { isTopLevelChange };

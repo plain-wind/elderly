@@ -11,6 +11,7 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    ActiveItem: typeof import('./src/components/ActiveItem.vue')['default']
     Button: typeof import('./src/components/Button.vue')['default']
     DataCard: typeof import('./src/components/DataCard.vue')['default']
     DataShow: typeof import('./src/components/DataShow.vue')['default']
@@ -20,6 +21,7 @@ declare module 'vue' {
     ElDatePicker: typeof import('element-plus/es')['ElDatePicker']
     ElderInput: typeof import('./src/components/ElderInput.vue')['default']
     ElderRadio: typeof import('./src/components/ElderRadio.vue')['default']
+    ElDialog: typeof import('element-plus/es')['ElDialog']
     ElForm: typeof import('element-plus/es')['ElForm']
     ElFormItem: typeof import('element-plus/es')['ElFormItem']
     ElHeader: typeof import('element-plus/es')['ElHeader']
@@ -40,6 +42,7 @@ declare module 'vue' {
     ElTag: typeof import('element-plus/es')['ElTag']
     Input: typeof import('./src/components/Input.vue')['default']
     LoadingSpinner: typeof import('./src/components/LoadingSpinner.vue')['default']
+    Message: typeof import('./src/components/Message.vue')['default']
     PanelColumn: typeof import('./src/components/PanelColumn.vue')['default']
     Radio: typeof import('./src/components/Radio.vue')['default']
     RadioGroup: typeof import('./src/components/RadioGroup.vue')['default']
@@ -57,5 +60,6 @@ declare module 'vue' {
     VanPicker: typeof import('vant/es')['Picker']
     VanPopup: typeof import('vant/es')['Popup']
     VolunteerItem: typeof import('./src/components/VolunteerItem.vue')['default']
+    VoluntItem: typeof import('./src/components/VoluntItem.vue')['default']
   }
 }

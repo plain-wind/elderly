@@ -11,9 +11,15 @@ export interface Register {
   role: string;
 }
 
-export enum Status {
+export enum VoluntStatus {
   All = 'all',
   Examine = 'examine',
   Pass = 'pass',
   Reject = 'reject',
+}
+
+export enum ActiveStatus {
+  All = 'all',
+  Open = 'open',
+  Close = 'close',
 }

@@ -17,14 +17,14 @@
       <el-container>
         <el-menu>
           <div class="menu">
-            <router-link to="/admin/bodyData/list" class="menu-item" activeClass="active">
+            <router-link to="/admin/bodyData" class="menu-item" activeClass="active">
               <span>体征数据</span>
             </router-link>
-            <router-link to="/admin/volunteer/list" class="menu-item" activeClass="active">
+            <router-link to="/admin/volunt" class="menu-item" activeClass="active">
               <span>志愿审核</span>
             </router-link>
-            <router-link to="/admin/activity" class="menu-item" activeClass="active">
-              <span>活动发布</span>
+            <router-link to="/admin/active" class="menu-item" activeClass="active">
+              <span>活动管理</span>
             </router-link>
           </div>
         </el-menu>
@@ -37,7 +37,6 @@
 </template>
 
 <script setup lang="ts">
-
 </script>
 
 <style scoped lang="scss">

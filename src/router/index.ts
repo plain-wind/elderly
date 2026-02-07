@@ -55,19 +55,36 @@ const routes = [
         ],
       },
       {
-        path: 'volunteer',
-        name: 'volunteer',
-        component: () => import('@/views/admin/volunteer/index.vue'),
+        path: 'volunt',
+        name: 'volunt',
+        component: () => import('@/views/admin/volunt/index.vue'),
         children: [
           {
             path: 'list',
-            name: 'volunteerList',
-            component: () => import('@/views/admin/volunteer/List.vue'),
+            name: 'voluntList',
+            component: () => import('@/views/admin/volunt/List.vue'),
           },
           {
             path: 'detail',
-            name: 'volunteerDetail',
-            component: () => import('@/views/admin/volunteer/Detail.vue'),
+            name: 'voluntDetail',
+            component: () => import('@/views/admin/volunt/Detail.vue'),
+          },
+        ],
+      },
+      {
+        path: 'active',
+        name: 'active',
+        component: () => import('@/views/admin/active/index.vue'),
+        children: [
+          {
+            path: 'list',
+            name: 'activeList',
+            component: () => import('@/views/admin/active/List.vue'),
+          },
+          {
+            path: 'detail',
+            name: 'activeDetail',
+            component: () => import('@/views/admin/active/Detail.vue'),
           },
         ],
       },

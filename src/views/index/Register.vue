@@ -41,13 +41,13 @@ const handleRegister = () => {
         <el-input v-model="registerForm.confirmPassword" type="password" placeholder="重复密码" required />
       </el-form-item>
 
-      <el-form-item label="您的身份" class="full">
+      <!-- <el-form-item label="您的身份" class="full">
         <el-radio-group v-model="registerForm.role" class="custom-radio-group">
           <el-radio-button label="elderly" value="elderly">长辈</el-radio-button>
           <el-radio-button label="family" value="family">家属</el-radio-button>
           <el-radio-button label="staff" value="staff">医护</el-radio-button>
         </el-radio-group>
-      </el-form-item>
+      </el-form-item> -->
 
       <el-button class="submit-btn full" type="primary" @click="handleRegister">开启智慧康养生活</el-button>
     </el-form>

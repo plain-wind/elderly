@@ -1,14 +1,36 @@
 <script setup lang="ts">
 import { User, Lock } from '@element-plus/icons-vue';
+import type { FormInstance, FormRules } from 'element-plus';
+import { validateTelephone } from '@/utils';
 
 const loginForm = ref({ telephone: '', password: '' });
 const router = useRouter();
+const loginFormRef = ref<FormInstance>();
+
+const rules = reactive<FormRules<typeof loginForm.value>>({
+  telephone: [
+    { required: true, message: '请输入手机号码', trigger: 'blur' },
+    { validator: validateTelephone, message: '请输入正确的手机号码', trigger: 'blur' },
+  ],
+  password: [
+    { required: true, message: '请输入登录密码', trigger: 'blur' },
+    { min: 6, max: 16, message: '密码长度必须在6到16位之间', trigger: 'blur' },
+  ],
+});
 
 const handleLogin = () => {
-  console.log('登录信息:', loginForm.value);
   // 执行登录逻辑
-  // 假设登录成功后跳转到首页
-  router.push('/admin');
+  loginFormRef.value?.validate((valid) => {
+    if (valid) {
+      // 登录成功逻辑
+      console.log('登录信息:', loginForm.value);
+      ElMessage.success('登录成功');
+      // 假设登录成功后跳转到首页
+      router.push('/admin');
+    } else {
+      ElMessage.error('登录失败');
+    }
+  });
 };
 </script>
 
@@ -19,12 +41,13 @@ const handleLogin = () => {
       <div class="divider"></div>
     </div>
 
-    <el-form :model="loginForm" label-position="top" class="custom-form">
-      <el-form-item label="手机号码">
+    <el-form @submit.native.prevent ref="loginFormRef" :model="loginForm" :rules="rules" label-position="top"
+      class="custom-form">
+      <el-form-item label="手机号码" prop="telephone">
         <el-input v-model="loginForm.telephone" placeholder="请输入您的手机号" required :prefix-icon="User" />
       </el-form-item>
 
-      <el-form-item label="登录密码">
+      <el-form-item label="登录密码" prop="password">
         <el-input v-model="loginForm.password" type="password" show-password placeholder="请输入密码" required
           :prefix-icon="Lock" />
       </el-form-item>

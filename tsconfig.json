@@ -19,8 +19,11 @@
     },
     "types": [
       "@amap/amap-jsapi-types",
-      "auto-imports.d.ts",
-      "components.d.ts",
     ]
   },
+  "include": [
+    "src/**/*",
+    "components.d.ts",
+    "auto-imports.d.ts",
+  ],
 }

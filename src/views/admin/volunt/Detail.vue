@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { ArrowLeft, Check, Close, Star, Phone, Location, Calendar, Clock, Medal } from '@element-plus/icons-vue';
-import { VoluntStatus as Status } from '@/types';
+import { VoluntStatus as Status, Volunt } from '@/types';
 import StarRating from '@/components/StarRating.vue';
 
 const route = useRoute();
 const router = useRouter();
-const { imgSrc, activeName, name, position, status }: Record<string, any> = route.query;
+const { imgSrc, activeName, name, position, status }: Volunt = route.query as any;
 
 // 模拟额外数据
 const voluntDetails = {
@@ -20,7 +20,7 @@ const voluntDetails = {
 };
 
 // 获取状态显示文本
-const getStatusText = (status: any) => {
+const getStatusText = (status: Status) => {
   const statusStr = String(status || '');
   switch (statusStr) {
     case Status.Examine:
@@ -35,7 +35,7 @@ const getStatusText = (status: any) => {
 };
 
 // 获取状态样式类
-const getStatusClass = (status: any) => {
+const getStatusClass = (status: Status) => {
   const statusStr = String(status || '');
   switch (statusStr) {
     case Status.Examine:

@@ -9,7 +9,7 @@
         <el-button style="padding: 24px; font-size: 16px;" type="danger" size="large"
           @click="$router.push('/monitor')">进入监控界面</el-button>
         <!-- 用户 -->
-        <div class="header-user">
+        <div class="header-user" @click="isOpen = true">
           <img src="@/assets/imgs/user.webp" alt="用户头像" width="48px">
           <span>{{ '王磊' }}</span>
         </div>
@@ -33,10 +33,17 @@
         </el-main>
       </el-container>
     </el-container>
+    <teleport to="#app">
+      <PersonDetail v-model:isOpen="isOpen" />
+    </teleport>
   </div>
 </template>
 
 <script setup lang="ts">
+import PersonDetail from '@/components/PersonDetail.vue';
+
+// 个人信息弹窗控制
+const isOpen = ref(false);
 </script>
 
 <style scoped lang="scss">
@@ -150,6 +157,7 @@
     }
 
     .el-main {
+      --el-main-padding: 30px;
       height: calc(100vh - 80px);
       background: linear-gradient(135deg, #f9fbf9 0%, #ffffff 100%);
 

@@ -23,3 +23,22 @@ export enum ActiveStatus {
   Open = 'open',
   Close = 'close',
 }
+
+export interface Volunt {
+  id: number;
+  imgSrc: string;
+  activeName: string;
+  name: string;
+  position: string;
+  status: VoluntStatus;
+}
+
+export interface Active {
+  id: number;
+  imgSrc: string;
+  activeName: string;
+  date: string;
+  position: string;
+  personNum: number | null;
+  status: ActiveStatus;
+}

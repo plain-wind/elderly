@@ -1,15 +1,8 @@
 <script setup lang="ts">
 import VoluntItem from '@/components/VoluntItem.vue';
-import { VoluntStatus as Status } from '@/types';
+import { VoluntStatus as Status, Volunt } from '@/types';
 
-interface Volunt {
-  id: number;
-  imgSrc: string;
-  activeName: string;
-  name: string;
-  position: string;
-  status: Status;
-}
+
 
 const status = ref(Status.All);
 

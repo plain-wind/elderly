@@ -1,6 +1,9 @@
 <template>
   <div class="detail">
-    <el-button type="primary" size="large" style="margin-bottom: 10px;" @click="$router.back()">
+    <el-button size="large" style="margin-bottom: 10px;" @click="$router.back()" plain>
+      <el-icon>
+        <ArrowLeft />
+      </el-icon>
       返回列表
     </el-button>
     <div class="layout-container">
@@ -187,7 +190,8 @@
 // 导入所有用到的图标
 import {
   Location, Phone, Warning, FirstAidKit,
-  ArrowRight, Monitor, Document, Files, Download
+  ArrowRight, Monitor, Document, Files, Download,
+  ArrowLeft
 } from '@element-plus/icons-vue';
 
 const { name, address, phone, sonphone } = useRoute().query;

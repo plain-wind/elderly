@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { ArrowLeft, Calendar, Location, User, Clock, Star, Phone, ChatDotRound, Document, Share, Star as Bookmark } from '@element-plus/icons-vue';
-import { ActiveStatus as Status } from '@/types';
+import { ActiveStatus as Status, Active } from '@/types';
 
 const route = useRoute();
 const router = useRouter();
 
 // 接收路由参数
-const { id, imgSrc, activeName, date, position, personNum, status }: Record<string, any> = route.query;
+const { id, imgSrc, activeName, date, position, personNum, status }: Active = route.query as any;
 
 // 模拟额外数据
 const activeDetails = {
@@ -62,7 +62,7 @@ const activeDetails = {
 };
 
 // 获取状态显示文本
-const getStatusText = (status: any) => {
+const getStatusText = (status: Status) => {
   const statusStr = String(status || '');
   switch (statusStr) {
     case Status.Open:
@@ -75,7 +75,7 @@ const getStatusText = (status: any) => {
 };
 
 // 获取状态样式类
-const getStatusClass = (status: any) => {
+const getStatusClass = (status: Status) => {
   const statusStr = String(status || '');
   switch (statusStr) {
     case Status.Open:

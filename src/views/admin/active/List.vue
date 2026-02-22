@@ -1,18 +1,12 @@
 <script setup lang="ts">
 import ActiveItem from '@/components/ActiveItem.vue';
-import { ActiveStatus as Status } from '@/types';
-
-interface Active {
-  id: number;
-  imgSrc: string;
-  activeName: string;
-  date: string;
-  position: string;
-  personNum: number;
-  status: Status;
-}
+import UpdateActive from '@/components/UpdateActive.vue';
+import { ActiveStatus as Status, Active } from '@/types';
 
 const status = ref(Status.All);
+
+// 添加活动弹窗控制变量
+const isOpen = ref(false);
 
 const activeAll = ref<Active[]>([
   {
@@ -114,17 +108,25 @@ handleStatusChange(status.value);
 
 <template>
   <div class="active-list">
-    <div class="change-status">
-      <el-radio-group size="large" v-model="status" @change="handleStatusChange">
-        <el-radio-button value="all">全部</el-radio-button>
-        <el-radio-button value="open">进行中</el-radio-button>
-        <el-radio-button value="close">已结束</el-radio-button>
-      </el-radio-group>
+    <div class="active-top">
+      <div class="change-status">
+        <el-radio-group size="large" v-model="status" @change="handleStatusChange">
+          <el-radio-button value="all">全部</el-radio-button>
+          <el-radio-button value="open">进行中</el-radio-button>
+          <el-radio-button value="close">已结束</el-radio-button>
+        </el-radio-group>
+      </div>
+      <el-button size="large" type="primary" @click="isOpen = true">添加活动</el-button>
     </div>
+
     <div class="content">
       <active-item v-for="item in activeList" :key="item.id" :imgSrc="item.imgSrc" :activeName="item.activeName"
-        :date="item.date" :position="item.position" :personNum="item.personNum" :status="item.status" />
+        :date="item.date" :position="item.position" :personNum="Number(item.personNum)" :status="item.status" />
     </div>
+
+    <teleport to="#app">
+      <update-active v-model:isOpen="isOpen" />
+    </teleport>
   </div>
 </template>
 
@@ -133,6 +135,12 @@ handleStatusChange(status.value);
   display: flex;
   flex-direction: column;
   gap: 30px;
+
+  .active-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
 
   .el-radio-group {
     :deep(.el-radio-button) {

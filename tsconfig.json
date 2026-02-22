@@ -25,5 +25,6 @@
     "src/**/*",
     "components.d.ts",
     "auto-imports.d.ts",
+    "vite-env.d.ts"
   ],
 }

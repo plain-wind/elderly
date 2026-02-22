@@ -44,6 +44,17 @@
             <div class="map-status">
               <span class="dot"></span> 电子围栏监控：活跃
             </div>
+            <div class="map-controls">
+              <el-button size="small" type="primary" @click="startRectSelect"
+                v-if="!isSelecting && !isFourSelecting">矩形框选</el-button>
+              <el-button size="small" type="primary" @click="startFourSelect"
+                v-if="!isSelecting && !isFourSelecting">四点围栏</el-button>
+              <el-button size="small" type="success" @click="confirmRect" v-if="isSelecting">保存</el-button>
+              <el-button size="small" type="warning" @click="cancelRect" v-if="isSelecting">取消</el-button>
+
+              <el-button size="small" type="success" @click="confirmFour" v-if="isFourSelecting">保存</el-button>
+              <el-button size="small" type="warning" @click="cancelFour" v-if="isFourSelecting">取消</el-button>
+            </div>
           </div>
         </div>
       </PanelColumn>
@@ -127,15 +138,172 @@ let charts: echarts.ECharts[] = [];
 const initMap = () => {
   window._AMapSecurityConfig = { securityJsCode: import.meta.env.VITE_AMAP_SECURITY };
   AMapLoader.load({ key: import.meta.env.VITE_AMAP_KEY, version: '2.0' }).then((AMap) => {
+    amapLib.value = AMap;
     map.value = new AMap.Map('amap-container', {
       viewMode: '3D', pitch: 45, zoom: 17, center: [116.3974, 39.9092], theme: 'amap://styles/darkblue'
     });
-    const polygon = new AMap.Polygon({
-      path: [[116.397, 39.911], [116.399, 39.911], [116.401, 39.909], [116.398, 39.907]],
-      strokeColor: '#00f2ff', fillColor: '#00f2ff', fillOpacity: 0.1, strokeStyle: 'dashed'
-    });
-    map.value?.add(polygon);
+    // const polygon = new AMap.Polygon({
+    //   path: [[116.397, 39.911], [116.399, 39.911], [116.401, 39.909], [116.398, 39.907]],
+    //   strokeColor: '#00f2ff', fillColor: '#00f2ff', fillOpacity: 0.1, strokeStyle: 'dashed'
+    // });
+    // map.value?.add(polygon);
   });
+};
+
+// --- 矩形框选电子围栏 ---
+let mouseTool: any = null;
+const amapLib: any = ref(null);
+const isSelecting = ref(false);
+const currentDrawObj = ref<any>(null);
+const geofences = ref<any[]>([]);
+
+const startRectSelect = async () => {
+  if (!map.value) return;
+  isSelecting.value = true;
+  const AMap = amapLib || (await AMapLoader.load({ key: import.meta.env.VITE_AMAP_KEY, version: '2.0', plugins: ['AMap.MouseTool'] }));
+  const Lib = AMap && AMap.Map ? AMap : AMapLoader;
+  if (!amapLib) amapLib.value = AMap;
+  // 确保 MouseTool 已加载
+  if (!amapLib.value.MouseTool) {
+    await AMapLoader.load({ key: import.meta.env.VITE_AMAP_KEY, version: '2.0', plugins: ['AMap.MouseTool'] });
+  }
+  mouseTool = new amapLib.value.MouseTool(map.value);
+  mouseTool.on('draw', (e: any) => {
+    currentDrawObj.value = e.obj; // e.obj 是用户完成的覆盖物（矩形）
+  });
+  mouseTool.rectangle();
+};
+
+const confirmRect = () => {
+  if (!currentDrawObj.value || !map.value) return;
+  // 将当前绘制对象转为规范 polygon 并加入地图持久化
+  const path = currentDrawObj.value.getPath ? currentDrawObj.value.getPath() : null;
+  if (path) {
+    const polygon = new amapLib.value.Polygon({
+      path,
+      strokeColor: '#ffae00',
+      fillColor: '#ffae00',
+      fillOpacity: 0.15,
+    });
+    map.value.add(polygon);
+    geofences.value.push({ polygon, path });
+  }
+  // 清理临时绘制
+  if (currentDrawObj.value && currentDrawObj.value.close) currentDrawObj.value.close();
+  if (mouseTool && mouseTool.close) mouseTool.close();
+  currentDrawObj.value = null;
+  isSelecting.value = false;
+};
+
+const cancelRect = () => {
+  if (mouseTool && mouseTool.close) mouseTool.close();
+  if (currentDrawObj.value && currentDrawObj.value.setMap) currentDrawObj.value.setMap(null);
+  currentDrawObj.value = null;
+  isSelecting.value = false;
+};
+
+// --- 四点控制点围栏 ---
+const isFourSelecting = ref(false);
+const fourMarkers = ref<any[]>([]);
+const fourPolygon = ref<any>(null);
+let mapClickHandler: any = null;
+
+const getLngLatFromEvent = (e: any) => {
+  if (!e) return null;
+  if (e.lnglat) {
+    // AMap 事件对象通常包含 lnglat {lng, lat}
+    const ll = e.lnglat;
+    return Array.isArray(ll) ? ll : [ll.lng ?? ll.getLng?.(), ll.lat ?? ll.getLat?.()];
+  }
+  if (e.lng && e.lat) return [e.lng, e.lat];
+  return null;
+};
+
+const startFourSelect = async () => {
+  if (!map.value) return;
+  isFourSelecting.value = true;
+  // ensure amapLib loaded
+  if (!amapLib.value) {
+    amapLib.value = await AMapLoader.load({ key: import.meta.env.VITE_AMAP_KEY, version: '2.0' });
+  }
+  // 清理上一次临时对象
+  cleanupFourTemp();
+  // 添加点击监听，点击地图放置标记
+  mapClickHandler = (e: any) => {
+    const lnglat = getLngLatFromEvent(e) as [number, number];
+    if (!lnglat) return;
+    addFourMarker(lnglat);
+  };
+  try { map.value.on('click', mapClickHandler); } catch (err) { /* ignore */ }
+};
+
+const addFourMarker = (lnglat: [number, number]) => {
+  if (!amapLib.value || !map.value) return;
+  if (fourMarkers.value.length >= 4) return;
+  const marker = new amapLib.value.Marker({ position: lnglat, draggable: true });
+  marker.setMap(map.value);
+  marker.on('dragend', () => updateFourPolygon());
+  fourMarkers.value.push(marker);
+  updateFourPolygon();
+  // 如果已放置 4 个点，自动停止继续放置
+  if (fourMarkers.value.length === 4) {
+    try { map.value.off('click', mapClickHandler); } catch (err) { /* ignore */ }
+    mapClickHandler = null;
+  }
+};
+
+const updateFourPolygon = () => {
+  if (!map.value) return;
+  const path = fourMarkers.value.map(m => {
+    const p = m.getPosition ? m.getPosition() : (m.getLngLat ? m.getLngLat() : null);
+    if (!p) return null;
+    return Array.isArray(p) ? p : [p.lng ?? p.getLng?.(), p.lat ?? p.getLat?.()];
+  }).filter(Boolean) as [number, number][];
+  if (path.length === 0) return;
+  if (!fourPolygon.value) {
+    fourPolygon.value = new amapLib.value.Polygon({
+      path,
+      strokeColor: '#00ff88',
+      fillColor: '#00ff88',
+      fillOpacity: 0.12,
+    });
+    map.value.add(fourPolygon.value);
+  } else {
+    fourPolygon.value.setPath(path);
+  }
+};
+
+const confirmFour = () => {
+  if (!fourPolygon.value || !map.value) return;
+  // 将当前四点多边形转为持久化围栏
+  const path = fourPolygon.value.getPath ? fourPolygon.value.getPath() : null;
+  if (path) {
+    const polygon = new amapLib.value.Polygon({
+      path,
+      strokeColor: '#ff4d4f',
+      fillColor: '#ff4d4f',
+      fillOpacity: 0.12,
+    });
+    map.value.add(polygon);
+    geofences.value.push({ polygon, path });
+  }
+  // 清理临时标记（保留持久 polygon）
+  cleanupFourTemp();
+  isFourSelecting.value = false;
+};
+
+const cancelFour = () => {
+  cleanupFourTemp();
+  isFourSelecting.value = false;
+};
+
+const cleanupFourTemp = () => {
+  try { if (map.value && mapClickHandler) map.value.off('click', mapClickHandler); } catch (err) { }
+  mapClickHandler = null;
+  fourMarkers.value.forEach(m => { try { if (m.setMap) m.setMap(null); } catch (e) { } });
+  fourMarkers.value = [];
+  if (fourPolygon.value) { try { if (fourPolygon.value.setMap) fourPolygon.value.setMap(null); } catch (e) { } }
+  fourPolygon.value = null;
 };
 
 const focusElder = (lnglat: [number, number]) => { if (map.value) map.value.setZoomAndCenter(18, lnglat, false, 500); };

@@ -9,7 +9,7 @@ const status = ref(Status.All);
 const voluntAll = ref<Volunt[]>([
   {
     id: 4,
-    imgSrc: '/src/assets/imgs/volunteer/volunteer6.png',
+    imgSrc: '/imgs/volunteer/volunteer6.png',
     activeName: '购物',
     name: '赵光明',
     position: '和谐社区12号楼3单元202',
@@ -17,7 +17,7 @@ const voluntAll = ref<Volunt[]>([
   },
   {
     id: 5,
-    imgSrc: '/src/assets/imgs/volunteer/volunteer1.png',
+    imgSrc: '/imgs/volunteer/volunteer1.png',
     activeName: '维修家电',
     name: '陈师傅',
     position: '明珠花园6号楼2单元401',
@@ -25,7 +25,7 @@ const voluntAll = ref<Volunt[]>([
   },
   {
     id: 6,
-    imgSrc: '/src/assets/imgs/volunteer/volunteer2.png',
+    imgSrc: '/imgs/volunteer/volunteer2.png',
     activeName: '做饭',
     name: '刘阿姨',
     position: '绿城小区9号楼1单元602',
@@ -33,7 +33,7 @@ const voluntAll = ref<Volunt[]>([
   },
   {
     id: 1,
-    imgSrc: '/src/assets/imgs/volunteer/volunteer3.png',
+    imgSrc: '/imgs/volunteer/volunteer3.png',
     activeName: '浇花',
     name: '张桂兰',
     position: '檀园嘉苑12号楼1单元101',
@@ -41,7 +41,7 @@ const voluntAll = ref<Volunt[]>([
   },
   {
     id: 2,
-    imgSrc: '/src/assets/imgs/volunteer/volunteer5.png',
+    imgSrc: '/imgs/volunteer/volunteer5.png',
     activeName: '打扫卫生',
     name: '李建国',
     position: '阳光小区5号楼2单元302',
@@ -49,7 +49,7 @@ const voluntAll = ref<Volunt[]>([
   },
   {
     id: 3,
-    imgSrc: '/src/assets/imgs/volunteer/volunteer4.png',
+    imgSrc: '/imgs/volunteer/volunteer4.png',
     activeName: '陪伴聊天',
     name: '王淑芬',
     position: '幸福里8号楼1单元501',

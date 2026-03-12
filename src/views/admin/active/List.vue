@@ -11,7 +11,7 @@ const isOpen = ref(false);
 const activeAll = ref<Active[]>([
   {
     id: 1,
-    imgSrc: '/src/assets/imgs/active/active5.png',
+    imgSrc: '/imgs/active/active5.png',
     activeName: '名医讲堂',
     date: '2026-02-05',
     position: '檀园嘉苑社区居委会会议室',
@@ -20,7 +20,7 @@ const activeAll = ref<Active[]>([
   },
   {
     id: 2,
-    imgSrc: '/src/assets/imgs/active/active1.png',
+    imgSrc: '/imgs/active/active1.png',
     activeName: '手工制作课堂',
     date: '2026-02-10',
     position: '阳光小区活动中心',
@@ -29,7 +29,7 @@ const activeAll = ref<Active[]>([
   },
   {
     id: 3,
-    imgSrc: '/src/assets/imgs/active/active2.png',
+    imgSrc: '/imgs/active/active2.png',
     activeName: '棋牌娱乐活动',
     date: '2026-02-08',
     position: '和谐社区老年活动室',
@@ -38,7 +38,7 @@ const activeAll = ref<Active[]>([
   },
   {
     id: 4,
-    imgSrc: '/src/assets/imgs/active/active3.png',
+    imgSrc: '/imgs/active/active3.png',
     activeName: '户外健步走',
     date: '2026-02-01',
     position: '明珠公园',
@@ -47,7 +47,7 @@ const activeAll = ref<Active[]>([
   },
   {
     id: 5,
-    imgSrc: '/src/assets/imgs/active/active7.png',
+    imgSrc: '/imgs/active/active7.png',
     activeName: '音乐欣赏会',
     date: '2026-01-28',
     position: '绿城小区多功能厅',
@@ -56,7 +56,7 @@ const activeAll = ref<Active[]>([
   },
   {
     id: 6,
-    imgSrc: '/src/assets/imgs/active/active6.png',
+    imgSrc: '/imgs/active/active6.png',
     activeName: '书法教学',
     date: '2026-01-25',
     position: '幸福里社区文化室',
@@ -65,7 +65,7 @@ const activeAll = ref<Active[]>([
   },
   {
     id: 7,
-    imgSrc: '/src/assets/imgs/active/active4.png',
+    imgSrc: '/imgs/active/active4.png',
     activeName: '健康体检',
     date: '2026-02-15',
     position: '檀园嘉苑社区卫生服务站',
@@ -74,7 +74,7 @@ const activeAll = ref<Active[]>([
   },
   {
     id: 8,
-    imgSrc: '/src/assets/imgs/active/active8.png',
+    imgSrc: '/imgs/active/active8.png',
     activeName: '茶艺品鉴',
     date: '2026-02-12',
     position: '阳光小区茶艺室',
@@ -121,11 +121,11 @@ handleStatusChange(status.value);
 
     <div class="content">
       <active-item v-for="item in activeList" :key="item.id" :imgSrc="item.imgSrc" :activeName="item.activeName"
-        :date="item.date" :position="item.position" :personNum="Number(item.personNum)" :status="item.status" />
+        :date="item.date" :position="item.position" :personNum.number="Number(item.personNum)" :status="item.status" />
     </div>
 
     <teleport to="#app">
-      <update-active v-model:isOpen="isOpen" />
+      <update-active v-model:isOpen="isOpen" @update="(active: Active) => activeAll.push(active)" />
     </teleport>
   </div>
 </template>

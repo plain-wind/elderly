@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Active, ActiveStatus } from '@/types';
+import { ref } from 'vue';
 import Mask from './Mask.vue';
 import { Plus } from '@element-plus/icons-vue';
 
@@ -7,6 +8,8 @@ const emit = defineEmits<{
   (e: 'update:isOpen', isOpen: boolean): void;
   (e: 'update', active: Active): void;
 }>();
+
+const fileInput = ref<HTMLInputElement | null>(null);
 
 defineProps<{
   isOpen: boolean;
@@ -26,7 +29,6 @@ const submit = () => {
   emit('update:isOpen', false);
   emit('update', updateActiveForm.value);
   // 这里可以添加表单验证和提交逻辑
-  console.log('提交的活动信息:', updateActiveForm.value);
   updateActiveForm.value = {
     id: 0,
     imgSrc: '',
@@ -36,6 +38,16 @@ const submit = () => {
     personNum: null,
     status: ActiveStatus.Open,
   };
+};
+
+const onFileChange = (e: Event) => {
+  const file = (e.target as HTMLInputElement).files?.[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    updateActiveForm.value.imgSrc = String(reader.result ?? '');
+  };
+  reader.readAsDataURL(file);
 };
 </script>
 
@@ -47,11 +59,12 @@ const submit = () => {
       <el-input size="large" placeholder="请输入活动名称" v-model="updateActiveForm.activeName" class="input-item" />
       <!-- 活动图片输入 -->
       <img v-if="updateActiveForm.imgSrc" :src="updateActiveForm.imgSrc" alt="活动图片">
-      <el-icon v-else class="img-icon">
+      <el-icon v-else class="img-icon" @click="fileInput?.click()">
         <Plus />
       </el-icon>
+      <input type="file" accept="image/*" style="display: none;" ref="fileInput" @change="onFileChange" />
       <!-- 活动日期输入 -->
-      <el-date-picker size="large" v-model="updateActiveForm.date" type="date" placeholder="请选择活动日期"
+      <el-date-picker size="large" v-model="updateActiveForm.date" value-format="YYYY-MM-DD" type="date" placeholder="请选择活动日期"
         class="input-item" />
       <!-- 活动地点输入 -->
       <el-input size="large" placeholder="请输入活动地点" v-model="updateActiveForm.position" class="input-item" />

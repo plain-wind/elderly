@@ -2,7 +2,7 @@
   <div class="dashboard-container">
     <header class="header">
       <div class="now-time">{{ currentTime }}</div>
-      <h1 class="title">智慧养老院数据监控中心</h1>
+      <h1 class="title">智护银龄数据监控中心</h1>
     </header>
 
     <main class="main-content">
@@ -30,11 +30,18 @@
       <PanelColumn>
         <div class="video-container">
           <div class="video-header">
-            <span class="live-tag">LIVE</span> 实时监控：A区大厅
+            <span class="live-tag">LIVE</span>
+            <span class="video-title">实时监控：</span>
+            <el-select v-model="selectedCamera" size="small" placeholder="选择摄像头" style="width:220px; margin-left:8px"
+              @change="onCameraChange">
+              <el-option v-for="cam in cameras" :key="cam.id" :label="cam.label + ' - ' + cam.location"
+                :value="cam.id" />
+            </el-select>
           </div>
           <div class="video-placeholder">
             <div class="scanning-line"></div>
-            <div class="video-overlay-info">1080P | H.265 | 30FPS</div>
+            <div class="video-overlay-info">{{ currentCamera?.resolution || '1080P' }} | {{ currentCamera?.codec ||
+              'H.265' }} | {{ currentCamera?.fps || '30FPS' }}</div>
           </div>
         </div>
 
@@ -129,6 +136,21 @@ const jcyjData = ref<{ id: number; title: string; name: string; address: string;
   { id: 3, title: '心率异常', name: '刘志强', address: '8号楼2单元202', time: '13:45:10' },
 ]);
 
+// --- 摄像头选择功能 ---
+const cameras = ref<Array<{ id: number; label: string; location: string; resolution?: string; codec?: string; fps?: string }>>([
+  { id: 1, label: '厅堂摄像头A', location: 'A区大厅', resolution: '1080P', codec: 'H.265', fps: '30FPS' },
+  { id: 2, label: '走廊摄像头B', location: 'A区走廊', resolution: '720P', codec: 'H.264', fps: '25FPS' },
+  { id: 3, label: '门口摄像头C', location: '西门', resolution: '4K', codec: 'H.265', fps: '30FPS' },
+]);
+
+const selectedCamera = ref<number>(cameras.value[0].id);
+const currentCamera = computed(() => cameras.value.find(c => c.id === selectedCamera.value) || cameras.value[0]);
+
+const onCameraChange = (id: number) => {
+  // 这里可扩展为切换实际视频流（例如更新 video 元素的 src 或调用后端接口）
+  selectedCamera.value = id;
+};
+
 const lineChartRef = ref(null);
 const pieChartRef = ref(null);
 const gaugeChartRef = ref(null);
@@ -142,11 +164,11 @@ const initMap = () => {
     map.value = new AMap.Map('amap-container', {
       viewMode: '3D', pitch: 45, zoom: 17, center: [116.3974, 39.9092], theme: 'amap://styles/darkblue'
     });
-    // const polygon = new AMap.Polygon({
-    //   path: [[116.397, 39.911], [116.399, 39.911], [116.401, 39.909], [116.398, 39.907]],
-    //   strokeColor: '#00f2ff', fillColor: '#00f2ff', fillOpacity: 0.1, strokeStyle: 'dashed'
-    // });
-    // map.value?.add(polygon);
+    const polygon = new AMap.Polygon({
+      path: [[116.397, 39.911], [116.399, 39.911], [116.401, 39.909], [116.398, 39.907]],
+      strokeColor: '#00f2ff', fillColor: '#00f2ff', fillOpacity: 0.1, strokeStyle: 'dashed'
+    });
+    map.value?.add(polygon);
   });
 };
 

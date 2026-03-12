@@ -38,6 +38,7 @@ defineProps<{
               activeName,
               date,
               position,
+              personNum,
               status,
             },
           });

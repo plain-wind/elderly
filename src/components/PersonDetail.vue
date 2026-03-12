@@ -23,7 +23,7 @@ const person = {
       </div>
       <div class="person-detail">
         <h2>个人信息</h2>
-        <img src="@/assets/imgs/user.webp" alt="用户头像" width="60px">
+        <img src="/imgs/user.webp" alt="用户头像" width="60px">
         <p><strong>姓名：</strong>{{ person.name }}</p>
         <p><strong>账号：</strong>{{ person.account }}</p>
         <p><strong>密码：</strong>{{ person.password }}</p>

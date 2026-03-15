@@ -61,6 +61,9 @@ const fourMarkers = ref<any[]>([]);
 const fourPolygon = ref<any>(null);
 let mapClickHandler: any = null;
 
+const personMarkers = ref<any[]>([]);
+const returnRoutes = ref<any[]>([]);
+
 const dzwlData = ref<DzwlItem[]>([
   { id: 1, name: '王秀英', time: '13:00:01', lnglat: [116.3974, 39.9092] },
   { id: 2, name: '李大爷', time: '14:20:05', lnglat: [116.3980, 39.9100] },
@@ -90,6 +93,7 @@ const initMap = async () => {
   map.value = new AMap.Map('amap-container', { viewMode: '3D', pitch: 45, zoom: 17, center: [116.3974, 39.9092], theme: 'amap://styles/darkblue' });
   const polygon = new AMap.Polygon({ path: [[116.397, 39.911], [116.399, 39.911], [116.401, 39.909], [116.398, 39.907]], strokeColor: '#00f2ff', fillColor: '#00f2ff', fillOpacity: 0.1, strokeStyle: 'dashed' });
   map.value?.add(polygon);
+  renderPersonMarkers();
 };
 
 const startRectSelect = async () => {
@@ -135,6 +139,38 @@ const getLngLatFromEvent = (e: any) => {
   }
   if (e.lng && e.lat) return [e.lng, e.lat];
   return null;
+};
+
+const clearPersonMarkers = () => {
+  personMarkers.value.forEach(m => { try { m.setMap(null); } catch (e) { } });
+  personMarkers.value = [];
+};
+
+const renderPersonMarkers = () => {
+  if (!map.value || !amapLib.value) return;
+  clearPersonMarkers();
+
+  const runnerHtml = `
+    <div class="person-marker">
+      <div class="runner">
+        <span class="head"></span>
+        <span class="body"></span>
+        <span class="leg left"></span>
+        <span class="leg right"></span>
+      </div>
+    </div>
+  `;
+
+  dzwlData.value.forEach(item => {
+    if (!item.lnglat || item.lnglat.length < 2) return;
+    const marker = new amapLib.value.Marker({
+      position: item.lnglat,
+      content: runnerHtml,
+      title: item.name
+    });
+    marker.setMap(map.value!);
+    personMarkers.value.push(marker);
+  });
 };
 
 const startFourSelect = async () => {
@@ -199,9 +235,31 @@ const cleanupFourTemp = () => {
   fourPolygon.value = null;
 };
 
+const clearReturnRoutes = () => {
+  returnRoutes.value.forEach(r => { try { r.setMap(null); } catch (e) { } });
+  returnRoutes.value = [];
+};
+
+const drawReturnRoute = (from: [number, number]) => {
+  if (!map.value || !amapLib.value) return;
+  const center = map.value.getCenter ? map.value.getCenter() : null;
+  const to = center ? [center.getLng?.(), center.getLat?.()] : null;
+  if (!to || to.length < 2) return;
+  clearReturnRoutes();
+  const line = new amapLib.value.Polyline({
+    path: [from, to],
+    strokeColor: '#52c41a',
+    strokeWeight: 3,
+    strokeStyle: 'dashed'
+  });
+  map.value.add(line);
+  returnRoutes.value.push(line);
+};
+
 const focusElder = (lnglat: [number, number] | null) => {
   if (!map.value || !lnglat || lnglat.length < 2) return;
   map.value.setZoomAndCenter(18, lnglat, false, 500);
+  drawReturnRoute(lnglat);
 };
 
 onMounted(async () => {
@@ -229,6 +287,7 @@ watch(() => props.isMonitor, async (value) => {
 onUnmounted(() => {
   if (targetCheckTimer !== null) window.clearInterval(targetCheckTimer);
   cleanupFourTemp();
+  clearReturnRoutes();
   if (mouseTool && mouseTool.close) mouseTool.close();
   if (map.value) map.value.destroy();
 });
@@ -265,6 +324,106 @@ onUnmounted(() => {
       border: 1px solid #00f2ff;
       font-size: 12px;
       color: #00f2ff;
+    }
+  }
+
+  $person-color: #ff0000;
+
+  /* 地图人物跑步动画（Marker 内容在 map 容器外，需用 :deep() 让样式生效） */
+  :deep(.person-marker) {
+    width: 28px;
+    height: 36px;
+    transform: translate(-50%, -100%);
+    pointer-events: none;
+  }
+
+  :deep(.person-marker .runner) {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    animation: run 0.6s steps(2) infinite;
+  }
+
+  :deep(.person-marker .head) {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: $person-color;
+    transform: translateX(-50%);
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.25);
+  }
+
+  :deep(.person-marker .body) {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    width: 6px;
+    height: 12px;
+    background: $person-color;
+    transform: translateX(-50%);
+    border-radius: 3px;
+  }
+
+  :deep(.person-marker .leg) {
+    position: absolute;
+    bottom: 0;
+    width: 4px;
+    height: 12px;
+    background: $person-color;
+    border-radius: 2px;
+    transform-origin: top;
+  }
+
+  :deep(.person-marker .leg.left) {
+    left: 30%;
+    animation: leg-left 0.6s ease-in-out infinite;
+  }
+
+  :deep(.person-marker .leg.right) {
+    left: 60%;
+    animation: leg-right 0.6s ease-in-out infinite;
+  }
+
+  @keyframes leg-left {
+    0% {
+      transform: rotate(25deg);
+    }
+
+    50% {
+      transform: rotate(-25deg);
+    }
+
+    100% {
+      transform: rotate(25deg);
+    }
+  }
+
+  @keyframes leg-right {
+    0% {
+      transform: rotate(-25deg);
+    }
+
+    50% {
+      transform: rotate(25deg);
+    }
+
+    100% {
+      transform: rotate(-25deg);
+    }
+  }
+
+  @keyframes run {
+
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(-2px);
     }
   }
 }

@@ -3,433 +3,55 @@
     <header class="header">
       <div class="now-time">{{ currentTime }}</div>
       <h1 class="title">智护银龄数据监控中心</h1>
+      <button
+        style="position: absolute; right: 30px; padding: 10px; background-color: rgb(0, 155, 171); color: #fff; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;"
+        @click="isMonitor = !isMonitor">
+        {{ isMonitor ? '切换到地图' : '切换到监控' }}
+      </button>
     </header>
 
     <main class="main-content">
       <PanelColumn>
-        <DataCard class="stat-grid">
-          <div class="stat-item" v-for="item in stats" :key="item.label">
-            <span class="label">{{ item.label }}</span>
-            <span class="value" :class="{ 'warning': item.warning }">{{ item.value }}</span>
-          </div>
-        </DataCard>
-
-        <DataCard title="体征数据异常趋势">
-          <div ref="lineChartRef" class="chart-box"></div>
-        </DataCard>
-
-        <DataCard title="今日活动完成率">
-          <div ref="gaugeChartRef" class="chart-box-small"></div>
-        </DataCard>
-
-        <DataCard title="今日警报类型分布">
-          <div ref="pieChartRef" class="chart-box-small"></div>
-        </DataCard>
+        <MonitorStats :stats="stats" />
+        <MonitorCharts />
       </PanelColumn>
 
       <PanelColumn>
-        <div class="video-container">
-          <div class="video-header">
-            <span class="live-tag">LIVE</span>
-            <span class="video-title">实时监控：</span>
-            <el-select v-model="selectedCamera" size="small" placeholder="选择摄像头" style="width:220px; margin-left:8px"
-              @change="onCameraChange">
-              <el-option v-for="cam in cameras" :key="cam.id" :label="cam.label + ' - ' + cam.location"
-                :value="cam.id" />
-            </el-select>
-          </div>
-          <div class="video-placeholder">
-            <div class="scanning-line"></div>
-            <div class="video-overlay-info">{{ currentCamera?.resolution || '1080P' }} | {{ currentCamera?.codec ||
-              'H.265' }} | {{ currentCamera?.fps || '30FPS' }}</div>
-          </div>
-        </div>
-
-        <div class="map-container">
-          <div id="amap-container"></div>
-          <div class="map-overlay">
-            <div class="map-status">
-              <span class="dot"></span> 电子围栏监控：活跃
-            </div>
-            <div class="map-controls">
-              <el-button size="small" type="primary" @click="startRectSelect"
-                v-if="!isSelecting && !isFourSelecting">矩形框选</el-button>
-              <el-button size="small" type="primary" @click="startFourSelect"
-                v-if="!isSelecting && !isFourSelecting">四点围栏</el-button>
-              <el-button size="small" type="success" @click="confirmRect" v-if="isSelecting">保存</el-button>
-              <el-button size="small" type="warning" @click="cancelRect" v-if="isSelecting">取消</el-button>
-
-              <el-button size="small" type="success" @click="confirmFour" v-if="isFourSelecting">保存</el-button>
-              <el-button size="small" type="warning" @click="cancelFour" v-if="isFourSelecting">取消</el-button>
-            </div>
-          </div>
-        </div>
+        <MonitorMap :isMonitor="isMonitor" />
       </PanelColumn>
 
       <PanelColumn>
-
-        <DataCard title="实时监测预警">
-          <div class="alert-list">
-            <div v-for="item in jcyjData" :key="item.id" class="alert-item">
-              <div class="alert-header">
-                <span class="alert-type">{{ item.title }}</span>
-                <span class="alert-name">{{ item.name }}</span>
-              </div>
-              <p class="alert-addr">{{ item.address }}</p>
-              <p class="alert-time">{{ item.time }}</p>
-            </div>
-          </div>
-        </DataCard>
-        <DataCard title="电子围栏实时记录">
-          <div class="scroll-list">
-            <div v-for="item in dzwlData" :key="item.id" class="list-item clickable" @click="focusElder(item.lnglat)">
-              <span class="tag">越界</span>
-              <span class="name">{{ item.name }}</span>
-              <span class="time">{{ item.time }}</span>
-            </div>
-          </div>
-          <p class="hint">点击记录快速定位</p>
-        </DataCard>
-        <DataCard title="智能设备状态">
-          <div class="device-status">
-            <div class="device-item">
-              <p>在线设备</p>
-              <h2 style="color: #00f2ff">128</h2>
-            </div>
-            <div class="device-item">
-              <p>异常故障</p>
-              <h2 style="color: #ff4d4f">2</h2>
-            </div>
-          </div>
-        </DataCard>
+        <MonitorAlerts :jcyjData="jcyjData" />
       </PanelColumn>
     </main>
   </div>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue';
 import PanelColumn from '@/components/PanelColumn.vue';
-import DataCard from '@/components/DataCard.vue';
-import * as echarts from 'echarts';
-import AMapLoader from '@amap/amap-jsapi-loader';
+import MonitorStats from '@/components/monitor/MonitorStats.vue';
+import MonitorCharts from '@/components/monitor/MonitorCharts.vue';
+import MonitorMap from '@/components/monitor/MonitorMap.vue';
+import MonitorAlerts from '@/components/monitor/MonitorAlerts.vue';
 
 const currentTime = ref(new Date().toLocaleString());
 setInterval(() => { currentTime.value = new Date().toLocaleString(); }, 1000);
 
-// --- 模拟数据 (恢复之前的版本) ---
-const stats = ref<{ label: string; value: string; warning?: boolean }[]>([
+const isMonitor = ref(true);
+
+const stats = ref([
   { label: '老年人总数', value: '156' },
   { label: '管理员总数', value: '12' },
   { label: '监护人总数', value: '240' },
-  { label: '体征异常人数', value: '5', warning: true },
+  { label: '体征异常人数', value: '5', warning: true }
 ]);
 
-const dzwlData = ref<{ id: number; name: string; time: string; lnglat: [number, number] }[]>([
-  { id: 1, name: '王秀英', time: '13:00:01', lnglat: [116.3974, 39.9092] },
-  { id: 2, name: '李大爷', time: '14:20:05', lnglat: [116.3980, 39.9100] },
-  { id: 3, name: '张婆婆', time: '15:10:32', lnglat: [116.3965, 39.9085] },
-]);
-
-const jcyjData = ref<{ id: number; title: string; name: string; address: string; time: string }[]>([
+const jcyjData = ref([
   { id: 1, title: '检测到跌倒', name: '王秀英', address: '5号楼3单元301', time: '13:00:01' },
   { id: 2, title: '检测到烟雾', name: '李明', address: '8号楼3单元201', time: '13:15:20' },
-  { id: 3, title: '心率异常', name: '刘志强', address: '8号楼2单元202', time: '13:45:10' },
+  { id: 3, title: '心率异常', name: '刘志强', address: '8号楼2单元202', time: '13:45:10' }
 ]);
-
-// --- 摄像头选择功能 ---
-const cameras = ref<Array<{ id: number; label: string; location: string; resolution?: string; codec?: string; fps?: string }>>([
-  { id: 1, label: '厅堂摄像头A', location: 'A区大厅', resolution: '1080P', codec: 'H.265', fps: '30FPS' },
-  { id: 2, label: '走廊摄像头B', location: 'A区走廊', resolution: '720P', codec: 'H.264', fps: '25FPS' },
-  { id: 3, label: '门口摄像头C', location: '西门', resolution: '4K', codec: 'H.265', fps: '30FPS' },
-]);
-
-const selectedCamera = ref<number>(cameras.value[0].id);
-const currentCamera = computed(() => cameras.value.find(c => c.id === selectedCamera.value) || cameras.value[0]);
-
-const onCameraChange = (id: number) => {
-  // 这里可扩展为切换实际视频流（例如更新 video 元素的 src 或调用后端接口）
-  selectedCamera.value = id;
-};
-
-const lineChartRef = ref(null);
-const pieChartRef = ref(null);
-const gaugeChartRef = ref(null);
-const map = shallowRef<AMap.Map | null>(null);
-let charts: echarts.ECharts[] = [];
-
-const initMap = () => {
-  window._AMapSecurityConfig = { securityJsCode: import.meta.env.VITE_AMAP_SECURITY };
-  AMapLoader.load({ key: import.meta.env.VITE_AMAP_KEY, version: '2.0' }).then((AMap) => {
-    amapLib.value = AMap;
-    map.value = new AMap.Map('amap-container', {
-      viewMode: '3D', pitch: 45, zoom: 17, center: [116.3974, 39.9092], theme: 'amap://styles/darkblue'
-    });
-    const polygon = new AMap.Polygon({
-      path: [[116.397, 39.911], [116.399, 39.911], [116.401, 39.909], [116.398, 39.907]],
-      strokeColor: '#00f2ff', fillColor: '#00f2ff', fillOpacity: 0.1, strokeStyle: 'dashed'
-    });
-    map.value?.add(polygon);
-  });
-};
-
-// --- 矩形框选电子围栏 ---
-let mouseTool: any = null;
-const amapLib: any = ref(null);
-const isSelecting = ref(false);
-const currentDrawObj = ref<any>(null);
-const geofences = ref<any[]>([]);
-
-const startRectSelect = async () => {
-  if (!map.value) return;
-  isSelecting.value = true;
-  const AMap = amapLib || (await AMapLoader.load({ key: import.meta.env.VITE_AMAP_KEY, version: '2.0', plugins: ['AMap.MouseTool'] }));
-  const Lib = AMap && AMap.Map ? AMap : AMapLoader;
-  if (!amapLib) amapLib.value = AMap;
-  // 确保 MouseTool 已加载
-  if (!amapLib.value.MouseTool) {
-    await AMapLoader.load({ key: import.meta.env.VITE_AMAP_KEY, version: '2.0', plugins: ['AMap.MouseTool'] });
-  }
-  mouseTool = new amapLib.value.MouseTool(map.value);
-  mouseTool.on('draw', (e: any) => {
-    currentDrawObj.value = e.obj; // e.obj 是用户完成的覆盖物（矩形）
-  });
-  mouseTool.rectangle();
-};
-
-const confirmRect = () => {
-  if (!currentDrawObj.value || !map.value) return;
-  // 将当前绘制对象转为规范 polygon 并加入地图持久化
-  const path = currentDrawObj.value.getPath ? currentDrawObj.value.getPath() : null;
-  if (path) {
-    const polygon = new amapLib.value.Polygon({
-      path,
-      strokeColor: '#ffae00',
-      fillColor: '#ffae00',
-      fillOpacity: 0.15,
-    });
-    map.value.add(polygon);
-    geofences.value.push({ polygon, path });
-  }
-  // 清理临时绘制
-  if (currentDrawObj.value && currentDrawObj.value.close) currentDrawObj.value.close();
-  if (mouseTool && mouseTool.close) mouseTool.close();
-  currentDrawObj.value = null;
-  isSelecting.value = false;
-};
-
-const cancelRect = () => {
-  if (mouseTool && mouseTool.close) mouseTool.close();
-  if (currentDrawObj.value && currentDrawObj.value.setMap) currentDrawObj.value.setMap(null);
-  currentDrawObj.value = null;
-  isSelecting.value = false;
-};
-
-// --- 四点控制点围栏 ---
-const isFourSelecting = ref(false);
-const fourMarkers = ref<any[]>([]);
-const fourPolygon = ref<any>(null);
-let mapClickHandler: any = null;
-
-const getLngLatFromEvent = (e: any) => {
-  if (!e) return null;
-  if (e.lnglat) {
-    // AMap 事件对象通常包含 lnglat {lng, lat}
-    const ll = e.lnglat;
-    return Array.isArray(ll) ? ll : [ll.lng ?? ll.getLng?.(), ll.lat ?? ll.getLat?.()];
-  }
-  if (e.lng && e.lat) return [e.lng, e.lat];
-  return null;
-};
-
-const startFourSelect = async () => {
-  if (!map.value) return;
-  isFourSelecting.value = true;
-  // ensure amapLib loaded
-  if (!amapLib.value) {
-    amapLib.value = await AMapLoader.load({ key: import.meta.env.VITE_AMAP_KEY, version: '2.0' });
-  }
-  // 清理上一次临时对象
-  cleanupFourTemp();
-  // 添加点击监听，点击地图放置标记
-  mapClickHandler = (e: any) => {
-    const lnglat = getLngLatFromEvent(e) as [number, number];
-    if (!lnglat) return;
-    addFourMarker(lnglat);
-  };
-  try { map.value.on('click', mapClickHandler); } catch (err) { /* ignore */ }
-};
-
-const addFourMarker = (lnglat: [number, number]) => {
-  if (!amapLib.value || !map.value) return;
-  if (fourMarkers.value.length >= 4) return;
-  const marker = new amapLib.value.Marker({ position: lnglat, draggable: true });
-  marker.setMap(map.value);
-  marker.on('dragend', () => updateFourPolygon());
-  fourMarkers.value.push(marker);
-  updateFourPolygon();
-  // 如果已放置 4 个点，自动停止继续放置
-  if (fourMarkers.value.length === 4) {
-    try { map.value.off('click', mapClickHandler); } catch (err) { /* ignore */ }
-    mapClickHandler = null;
-  }
-};
-
-const updateFourPolygon = () => {
-  if (!map.value) return;
-  const path = fourMarkers.value.map(m => {
-    const p = m.getPosition ? m.getPosition() : (m.getLngLat ? m.getLngLat() : null);
-    if (!p) return null;
-    return Array.isArray(p) ? p : [p.lng ?? p.getLng?.(), p.lat ?? p.getLat?.()];
-  }).filter(Boolean) as [number, number][];
-  if (path.length === 0) return;
-  if (!fourPolygon.value) {
-    fourPolygon.value = new amapLib.value.Polygon({
-      path,
-      strokeColor: '#00ff88',
-      fillColor: '#00ff88',
-      fillOpacity: 0.12,
-    });
-    map.value.add(fourPolygon.value);
-  } else {
-    fourPolygon.value.setPath(path);
-  }
-};
-
-const confirmFour = () => {
-  if (!fourPolygon.value || !map.value) return;
-  // 将当前四点多边形转为持久化围栏
-  const path = fourPolygon.value.getPath ? fourPolygon.value.getPath() : null;
-  if (path) {
-    const polygon = new amapLib.value.Polygon({
-      path,
-      strokeColor: '#ff4d4f',
-      fillColor: '#ff4d4f',
-      fillOpacity: 0.12,
-    });
-    map.value.add(polygon);
-    geofences.value.push({ polygon, path });
-  }
-  // 清理临时标记（保留持久 polygon）
-  cleanupFourTemp();
-  isFourSelecting.value = false;
-};
-
-const cancelFour = () => {
-  cleanupFourTemp();
-  isFourSelecting.value = false;
-};
-
-const cleanupFourTemp = () => {
-  try { if (map.value && mapClickHandler) map.value.off('click', mapClickHandler); } catch (err) { }
-  mapClickHandler = null;
-  fourMarkers.value.forEach(m => { try { if (m.setMap) m.setMap(null); } catch (e) { } });
-  fourMarkers.value = [];
-  if (fourPolygon.value) { try { if (fourPolygon.value.setMap) fourPolygon.value.setMap(null); } catch (e) { } }
-  fourPolygon.value = null;
-};
-
-const focusElder = (lnglat: [number, number]) => { if (map.value) map.value.setZoomAndCenter(18, lnglat, false, 500); };
-
-const initCharts = () => {
-  // 趋势图
-  const line = echarts.init(lineChartRef.value);
-  line.setOption({
-    grid: { top: 30, bottom: 20, left: 30, right: 10 },
-    xAxis: { type: 'category', data: ['08:00', '10:00', '12:00', '14:00', '16:00', '18:00'], axisLabel: { color: '#ccc', fontSize: 10 } },
-    yAxis: { type: 'value', splitLine: { lineStyle: { color: '#222' } }, axisLabel: { color: '#ccc' } },
-    series: [{ data: [2, 5, 3, 8, 4, 5], type: 'line', smooth: true, itemStyle: { color: '#00f2ff' }, areaStyle: { color: 'rgba(0,242,255,0.2)' } }]
-  });
-
-  // --- 2. 仪表盘 (优化：减小半径，精简刻度) ---
-  const gauge = echarts.init(gaugeChartRef.value);
-  gauge.setOption({
-    series: [{
-      type: 'gauge',
-      radius: '110%',          // 关键：从 95% 缩小到 80%，留出边距
-      center: ['50%', '55%'],  // 关键：稍微上移，防止底部文字溢出
-      startAngle: 210,
-      endAngle: -30,
-      splitNumber: 5,          // 减少大刻度数量
-      progress: { show: true, width: 8, itemStyle: { color: '#00f2ff' } },
-      axisLine: { lineStyle: { width: 8, color: [[1, 'rgba(0,242,255,0.1)']] } },
-      axisTick: { show: false }, // 隐藏小刻度，更清爽
-      splitLine: { length: 10, distance: -3, lineStyle: { color: '#fff', width: 1 } },
-      axisLabel: { distance: 12, color: '#666', fontSize: 10 }, // 调小文字
-      detail: {
-        valueAnimation: true,
-        formatter: '{value}%',
-        color: '#00f2ff',
-        fontSize: 16,
-        offsetCenter: [0, '40%']
-      },
-      data: [{ value: 85, name: '' }]
-    }]
-  });
-
-  // 饼图
-  const pie = echarts.init(pieChartRef.value);
-  pie.setOption({
-    tooltip: {
-      trigger: 'item',
-      backgroundColor: 'rgba(5, 13, 25, 0.9)',
-      borderColor: '#00f2ff',
-      textStyle: { color: '#fff' }
-    },
-    legend: {
-      orient: 'vertical',
-      right: '5%',
-      top: 'center',
-      itemWidth: 10,
-      itemHeight: 10,
-      textStyle: { color: '#ccc', fontSize: 10 }
-    },
-    series: [{
-      name: '警报类型',
-      type: 'pie',
-      // 这里的 radius 第一个参数是内圆，第二个是外圆，形成环形感
-      radius: ['50%', '80%'],
-      // 这里的 center 第一个参数是水平位置，第二个是垂直位置
-      center: ['35%', '50%'],
-      avoidLabelOverlap: false,
-      itemStyle: {
-        borderRadius: 4,
-        borderColor: '#050d19',
-        borderWidth: 2
-      },
-      label: {
-        show: false, // 侧边栏窄，建议隐藏线上文字，改用 Legend
-        position: 'center'
-      },
-      emphasis: {
-        label: {
-          show: true,
-          fontSize: 12,
-          fontWeight: 'bold',
-          color: '#00f2ff'
-        }
-      },
-      labelLine: { show: false },
-      data: [
-        { value: 10, name: '跌倒警报', itemStyle: { color: '#ff4d4f' } },
-        { value: 5, name: '围栏警报', itemStyle: { color: '#ffa940' } },
-        { value: 20, name: '心率预警', itemStyle: { color: '#00f2ff' } }
-      ]
-    }]
-  });
-  charts.push(line, gauge, pie);
-};
-
-onMounted(async () => {
-  await nextTick();
-  initMap();
-  initCharts();
-  window.addEventListener('resize', () => charts.forEach(c => c.resize()));
-});
-
-onUnmounted(() => {
-  charts.forEach(c => c.dispose());
-  if (map.value) map.value.destroy();
-});
 </script>
 
 <style scoped lang="scss">
@@ -440,143 +62,47 @@ onUnmounted(() => {
   padding: 10px;
   font-family: sans-serif;
   overflow: hidden;
-}
 
-.header {
-  height: 60px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(to bottom, #1a2a44, transparent);
-}
+  .header {
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(to bottom, #1a2a44, transparent);
+  }
 
-.title {
-  font-size: 26px;
-  color: #00f2ff;
-  letter-spacing: 4px;
-  text-shadow: 0 0 10px rgba(0, 242, 255, 0.5);
-}
-
-.now-time {
-  position: absolute;
-  left: 20px;
-  color: #00f2ff;
-  letter-spacing: 2px;
-  font-size: 16px;
-}
-
-.main-content {
-  display: grid;
-  grid-template-columns: 320px 1fr 320px;
-  gap: 15px;
-  height: calc(100vh - 90px);
-  margin-top: 10px;
-}
-
-/* 统计项样式 */
-.stat-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-}
-
-.stat-item {
-  background: rgba(0, 242, 255, 0.1);
-  padding: 10px;
-  text-align: center;
-
-  .value {
-    font-size: 22px;
-    font-weight: bold;
+  .title {
+    font-size: 26px;
     color: #00f2ff;
-    display: block;
+    letter-spacing: 4px;
+    text-shadow: 0 0 10px rgba(0, 242, 255, 0.5);
+  }
 
-    &.warning {
-      color: #ff4d4f;
-    }
+  .now-time {
+    position: absolute;
+    left: 20px;
+    color: #00f2ff;
+    letter-spacing: 2px;
+    font-size: 16px;
+  }
+
+  .main-content {
+    display: grid;
+    grid-template-columns: 320px 1fr 320px;
+    gap: 15px;
+    height: calc(100vh - 90px);
+    margin-top: 10px;
   }
 }
 
-
 .chart-box {
-  height: 140px;
-}
-
-.chart-box-small {
   height: 160px;
 }
 
-.video-container {
-  height: 50%;
-  background: #000;
-  border: 1px solid #1a2a44;
-  position: relative;
-  overflow: hidden;
+.chart-box-small {
+  height: 180px;
 }
 
-.video-header {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  z-index: 5;
-  font-size: 12px;
-}
-
-.live-tag {
-  background: #ff4d4f;
-  padding: 2px 5px;
-  border-radius: 2px;
-  animation: blink 1.5s infinite;
-  margin-right: 5px;
-}
-
-.video-placeholder {
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(circle, #1a2a44, #000);
-}
-
-.scanning-line {
-  position: absolute;
-  width: 100%;
-  height: 2px;
-  background: rgba(0, 242, 255, 0.4);
-  animation: scan 4s linear infinite;
-}
-
-.video-overlay-info {
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
-  font-size: 10px;
-  color: #666;
-}
-
-.map-container {
-  flex: 1;
-  position: relative;
-  border: 1px solid rgba(0, 242, 255, 0.3);
-}
-
-#amap-container {
-  width: 100%;
-  height: 100%;
-}
-
-.map-overlay {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  z-index: 10;
-}
-
-.map-status {
-  background: rgba(5, 13, 25, 0.8);
-  padding: 5px 12px;
-  border: 1px solid #00f2ff;
-  font-size: 12px;
-  color: #00f2ff;
-}
 
 .dot {
   display: inline-block;
@@ -586,91 +112,5 @@ onUnmounted(() => {
   border-radius: 50%;
   box-shadow: 0 0 8px #00f2ff;
   margin-right: 5px;
-}
-
-/* 列表样式修复 */
-.scroll-list {
-  flex: 1;
-  overflow-y: auto;
-}
-
-.list-item {
-  display: flex;
-  justify-content: space-between;
-  padding: 8px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  font-size: 13px;
-}
-
-.tag {
-  background: #f5222d;
-  padding: 2px 4px;
-  border-radius: 2px;
-  font-size: 10px;
-}
-
-.clickable:hover {
-  background: rgba(0, 242, 255, 0.1);
-  cursor: pointer;
-}
-
-.hint {
-  font-size: 10px;
-  color: #666;
-  text-align: right;
-  margin-top: 30px;
-}
-
-.alert-list {
-  flex: 1;
-  overflow-y: auto;
-}
-
-.alert-item {
-  background: rgba(245, 34, 45, 0.1);
-  margin-bottom: 8px;
-  padding: 8px;
-  border-left: 3px solid #f5222d;
-}
-
-.alert-header {
-  display: flex;
-  justify-content: space-between;
-  color: #ff4d4f;
-  font-weight: bold;
-  font-size: 14px;
-}
-
-.alert-addr,
-.alert-time {
-  font-size: 13px;
-  margin: 2px 0;
-  color: #ccc;
-}
-
-.device-status {
-  display: flex;
-  justify-content: space-around;
-  text-align: center;
-}
-
-.device-item h2 {
-  margin: 5px 0 0;
-}
-
-@keyframes scan {
-  from {
-    top: 0;
-  }
-
-  to {
-    top: 100%;
-  }
-}
-
-@keyframes blink {
-  50% {
-    opacity: 0;
-  }
 }
 </style>

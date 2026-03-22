@@ -63,6 +63,7 @@ let mapClickHandler: any = null;
 
 const personMarkers = ref<any[]>([]);
 const returnRoutes = ref<any[]>([]);
+let currentDriving: any = null;
 
 const dzwlData = ref<DzwlItem[]>([
   { id: 1, name: '王秀英', time: '13:00:01', lnglat: [116.3974, 39.9092] },
@@ -240,26 +241,79 @@ const clearReturnRoutes = () => {
   returnRoutes.value = [];
 };
 
-const drawReturnRoute = (from: [number, number]) => {
+const drawReturnRoute = async (from: [number, number]) => {
   if (!map.value || !amapLib.value) return;
   const center = map.value.getCenter ? map.value.getCenter() : null;
   const to = center ? [center.getLng?.(), center.getLat?.()] : null;
   if (!to || to.length < 2) return;
+
+  // 清除之前的路线和路径规划
   clearReturnRoutes();
-  const line = new amapLib.value.Polyline({
-    path: [from, to],
-    strokeColor: '#52c41a',
-    strokeWeight: 3,
-    strokeStyle: 'dashed'
-  });
-  map.value.add(line);
-  returnRoutes.value.push(line);
+  if (currentDriving && currentDriving.clear) {
+    currentDriving.clear();
+    currentDriving = null;
+  }
+
+  try {
+    // 加载路径规划服务
+    if (!amapLib.value.Driving) {
+      await AMapLoader.load({
+        key: import.meta.env.VITE_AMAP_KEY,
+        version: '2.0',
+        plugins: ['AMap.Driving']
+      });
+    }
+
+    // 创建驾车规划实例
+    currentDriving = new amapLib.value.Driving({
+      map: map.value,
+      panel: false
+    });
+
+    // 计算路线
+    currentDriving.search(
+      new amapLib.value.LngLat(from[0], from[1]),
+      new amapLib.value.LngLat(to[0], to[1]),
+      (status: string, result: any) => {
+        if (status === 'complete' && result.routes && result.routes.length > 0) {
+          // 获取第一条路线的路径
+          const route = result.routes[0];
+          const path = route.steps.map((step: any) => {
+            return step.path.map((point: any) => {
+              return [point.lng, point.lat];
+            });
+          }).flat();
+
+          // 绘制路线
+          const line = new amapLib.value.Polyline({
+            path: path,
+            strokeColor: '#52c41a',
+            strokeWeight: 3,
+            strokeStyle: 'dashed'
+          });
+          map.value?.add(line);
+          returnRoutes.value.push(line);
+        }
+      }
+    );
+  } catch (error) {
+    console.error('路径规划失败:', error);
+    // 失败时绘制直线作为备选
+    const line = new amapLib.value.Polyline({
+      path: [from, to],
+      strokeColor: '#52c41a',
+      strokeWeight: 3,
+      strokeStyle: 'dashed'
+    });
+    map.value.add(line);
+    returnRoutes.value.push(line);
+  }
 };
 
-const focusElder = (lnglat: [number, number] | null) => {
+const focusElder = async (lnglat: [number, number] | null) => {
   if (!map.value || !lnglat || lnglat.length < 2) return;
   map.value.setZoomAndCenter(18, lnglat, false, 500);
-  drawReturnRoute(lnglat);
+  await drawReturnRoute(lnglat);
 };
 
 onMounted(async () => {

@@ -18,19 +18,19 @@
     <div class="device-status">
       <div class="device-item">
         <p><span class="device-icon">⌚</span>智能手表</p>
-        <h2 style="color: #00f2ff">64</h2>
+        <h2 class="device-num">64</h2>
       </div>
       <div class="device-item">
         <p><span class="device-icon">🚗</span>智能小车</p>
-        <h2 style="color: #00f2ff">32</h2>
+        <h2 class="device-num">32</h2>
       </div>
       <div class="device-item">
         <p><span class="device-icon">💊</span>智能药盒</p>
-        <h2 style="color: #00f2ff">18</h2>
+        <h2 class="device-num">18</h2>
       </div>
       <div class="device-item">
         <p><span class="device-icon">🦯</span>智能拐杖</p>
-        <h2 style="color: #00f2ff">14</h2>
+        <h2 class="device-num">14</h2>
       </div>
     </div>
   </DataCard>
@@ -57,21 +57,30 @@ const goDetail = (item: AlertItem) => {
   font-size: 14px;
 
   .alert-item {
-    background: rgba(245, 34, 45, 0.1);
+    background: var(--alert-item-bg);
     margin-bottom: 8px;
     padding: 8px;
-    border-left: 3px solid #f5222d;
+    border: 1px solid var(--alert-item-border);
+    border-left: 3px solid var(--alert-left-border);
+    border-radius: 4px;
     cursor: pointer;
-    transition: background 0.3s;
+    transition: background 0.3s, transform 0.2s;
 
     &:hover {
-      background: rgba(245, 34, 45, 0.2);
+      background: var(--alert-item-hover);
+      transform: translateX(2px);
     }
 
     .alert-header {
       display: flex;
       justify-content: space-between;
-      color: #ff4d4f;
+      color: var(--alert-header);
+    }
+
+    .alert-addr,
+    .alert-time {
+      color: var(--alert-text);
+      opacity: 0.86;
     }
   }
 }
@@ -83,9 +92,11 @@ const goDetail = (item: AlertItem) => {
   text-align: center;
 
   .device-item {
-    background: rgba(0, 242, 255, 0.1);
+    background: var(--device-item-bg);
     padding: 10px;
-    border-radius: 4px;
+    border: 1px solid var(--device-item-border);
+    box-shadow: var(--device-item-shadow);
+    border-radius: 6px;
 
     p {
       display: flex;
@@ -94,6 +105,12 @@ const goDetail = (item: AlertItem) => {
       gap: 8px;
       margin-bottom: 4px;
       font-weight: 600;
+      color: var(--device-label);
+    }
+
+    .device-num {
+      color: var(--device-value);
+      text-shadow: 0 0 12px var(--device-value-shadow);
     }
 
     .device-icon {

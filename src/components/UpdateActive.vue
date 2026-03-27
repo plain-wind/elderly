@@ -2,7 +2,7 @@
 import { Active, ActiveStatus } from '@/types';
 import { ref } from 'vue';
 import Mask from './Mask.vue';
-import { Plus } from '@element-plus/icons-vue';
+import { Plus, Close } from '@element-plus/icons-vue';
 
 const emit = defineEmits<{
   (e: 'update:isOpen', isOpen: boolean): void;
@@ -22,6 +22,7 @@ const updateActiveForm = ref<Active>({
   date: '',
   position: '',
   personNum: null,
+  description: '',
   status: ActiveStatus.Open,
 });
 
@@ -54,6 +55,11 @@ const onFileChange = (e: Event) => {
 <template>
   <Mask v-show="isOpen">
     <div class="update-active">
+      <div class="close" @click="emit('update:isOpen', false)">
+        <el-icon>
+          <Close />
+        </el-icon>
+      </div>
       <h2>添加活动</h2>
       <!-- 活动名称输入 -->
       <el-input size="large" placeholder="请输入活动名称" v-model="updateActiveForm.activeName" class="input-item" />
@@ -64,12 +70,14 @@ const onFileChange = (e: Event) => {
       </el-icon>
       <input type="file" accept="image/*" style="display: none;" ref="fileInput" @change="onFileChange" />
       <!-- 活动日期输入 -->
-      <el-date-picker size="large" v-model="updateActiveForm.date" value-format="YYYY-MM-DD" type="date" placeholder="请选择活动日期"
-        class="input-item" />
+      <el-date-picker size="large" v-model="updateActiveForm.date" value-format="YYYY-MM-DD" type="date"
+        placeholder="请选择活动日期" class="input-item" />
       <!-- 活动地点输入 -->
       <el-input size="large" placeholder="请输入活动地点" v-model="updateActiveForm.position" class="input-item" />
       <!-- 活动人数输入 -->
       <el-input size="large" placeholder="请输入活动人数" v-model.number="updateActiveForm.personNum" class="input-item" />
+      <!-- 活动介绍输入 -->
+      <el-input size="large" placeholder="请输入活动介绍" v-model="updateActiveForm.description" class="input-item" />
       <!-- 提交按钮 -->
       <el-button size="large" type="primary" @click="submit">提交</el-button>
     </div>
@@ -82,13 +90,30 @@ $img-size: 150px;
 .update-active {
   font-size: 18px;
   width: 450px;
+  height: 600px;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 16px;
   background-color: #fff;
   padding: 30px;
+  padding-top: 40px;
   border-radius: 10px;
+  position: relative;
+
+  .close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    cursor: pointer;
+    color: #999;
+    transition: all 0.3s ease;
+
+    &:hover {
+      color: #666;
+    }
+  }
 
   img {
     width: $img-size;

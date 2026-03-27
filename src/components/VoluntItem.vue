@@ -2,6 +2,7 @@
 import { VoluntStatus } from '@/types';
 
 defineProps<{
+  id: number;
   imgSrc: string;
   activeName: string;
   name: string;
@@ -30,11 +31,7 @@ defineProps<{
           $router.push({
             name: 'voluntDetail',
             query: {
-              imgSrc,
-              activeName,
-              name,
-              position,
-              status,
+              id
             },
           });
         }">查看详情</el-button>

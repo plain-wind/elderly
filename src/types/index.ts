@@ -40,5 +40,6 @@ export interface Active {
   date: string;
   position: string;
   personNum: number | null;
+  description?: string;
   status: ActiveStatus;
 }

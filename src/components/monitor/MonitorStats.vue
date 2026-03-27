@@ -28,18 +28,27 @@ const props = defineProps<{ stats: StatItem[] }>();
 }
 
 .stat-item {
-  background: rgba(0, 242, 255, 0.1);
+  background: var(--stats-item-bg);
+  border: 1px solid var(--stats-item-border);
+  box-shadow: var(--stats-item-shadow);
+  border-radius: 6px;
   padding: 10px;
   text-align: center;
+
+  .label {
+    color: var(--stats-label);
+    font-size: 13px;
+  }
 
   .value {
     font-size: 22px;
     font-weight: bold;
-    color: #00f2ff;
+    color: var(--stats-value);
     display: block;
+    text-shadow: 0 0 12px var(--stats-value-shadow);
 
     &.warning {
-      color: #ff4d4f;
+      color: var(--warning-color);
     }
   }
 }

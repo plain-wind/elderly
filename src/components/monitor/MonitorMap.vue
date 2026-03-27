@@ -1,7 +1,8 @@
 <template>
   <div style="height: 100%;">
     <div class="video-box" v-show="isMonitor">
-      <template v-for="index in 4" :key="index">
+      <Video src="http://localhost:5000/video_feed" />
+      <template v-for="index in 3" :key="index">
         <Video />
       </template>
     </div>
@@ -359,7 +360,10 @@ onUnmounted(() => {
   height: 100%;
   flex: 1;
   position: relative;
-  border: 1px solid rgba(0, 242, 255, 0.3);
+  border: 1px solid var(--map-border);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: var(--map-shadow);
 
   #amap-container {
     width: 100%;
@@ -373,11 +377,13 @@ onUnmounted(() => {
     z-index: 10;
 
     .map-status {
-      background: rgba(5, 13, 25, 0.8);
+      background: var(--map-status-bg);
       padding: 5px 12px;
-      border: 1px solid #00f2ff;
+      border: 1px solid var(--map-status-border);
+      border-radius: 4px;
       font-size: 12px;
-      color: #00f2ff;
+      color: var(--map-status-text);
+      text-shadow: 0 0 10px var(--map-status-shadow);
     }
   }
 
@@ -491,8 +497,9 @@ onUnmounted(() => {
     display: flex;
     justify-content: space-between;
     padding: 8px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid var(--list-border);
     font-size: 13px;
+    color: var(--list-text);
 
     .tag {
       background: #f5222d;
@@ -503,14 +510,14 @@ onUnmounted(() => {
   }
 
   .clickable:hover {
-    background: rgba(0, 242, 255, 0.1);
+    background: var(--list-hover);
     cursor: pointer;
   }
 }
 
 .hint {
   font-size: 10px;
-  color: #666;
+  color: var(--hint-color);
   text-align: right;
   margin-top: 30px;
 }

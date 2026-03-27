@@ -1,4 +1,7 @@
 <script setup lang="ts">
+const props = defineProps<{
+  src?: string;
+}>()
 // --- 摄像头选择功能 ---
 const cameras = ref<Array<{ id: number; label: string; location: string; resolution?: string; codec?: string; fps?: string }>>([
   { id: 1, label: '厅堂摄像头A', location: 'A区大厅', resolution: '1080P', codec: 'H.265', fps: '30FPS' },
@@ -26,7 +29,12 @@ const onCameraChange = (id: number) => {
       </el-select>
     </div>
     <div class="video-placeholder">
-      <div class="scanning-line"></div>
+      <template v-if="src">
+        <img ref="video" :src="src" alt="Video Placeholder" class="video-frame" />
+      </template>
+      <template v-else>
+        <div class="scanning-line"></div>
+      </template>
       <div class="video-overlay-info">{{ currentCamera?.resolution || '1080P' }} | {{ currentCamera?.codec ||
         'H.265' }} | {{ currentCamera?.fps || '30FPS' }}</div>
     </div>
@@ -36,8 +44,10 @@ const onCameraChange = (id: number) => {
 <style scoped lang="scss">
 .video-container {
   height: 100%;
-  background: #000;
-  border: 1px solid #1a2a44;
+  background: var(--video-bg);
+  border: 1px solid var(--video-border);
+  border-radius: 8px;
+  box-shadow: var(--video-shadow);
   position: relative;
   overflow: hidden;
 }
@@ -51,7 +61,8 @@ const onCameraChange = (id: number) => {
 }
 
 .live-tag {
-  background: #ff4d4f;
+  background: #ff8058;
+  color: #fff;
   padding: 2px 5px;
   border-radius: 2px;
   animation: blink 1.5s infinite;
@@ -59,16 +70,28 @@ const onCameraChange = (id: number) => {
 }
 
 .video-placeholder {
+  position: relative;
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle, #1a2a44, #000);
+  background: var(--video-placeholder);
+  overflow: hidden;
+}
+
+.video-frame {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .scanning-line {
   position: absolute;
   width: 100%;
   height: 2px;
-  background: rgba(0, 242, 255, 0.4);
+  background: var(--video-line);
+  box-shadow: 0 0 16px var(--video-line-shadow);
   animation: scan 4s linear infinite;
 }
 
@@ -77,7 +100,8 @@ const onCameraChange = (id: number) => {
   bottom: 10px;
   right: 10px;
   font-size: 10px;
-  color: #666;
+  color: var(--video-info);
+  text-shadow: 0 0 8px var(--video-info-shadow);
 }
 
 @keyframes scan {

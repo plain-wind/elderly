@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import { isTopLevelChange } from '@/utils';
+import type { RouteLocationNormalized } from 'vue-router';
 
 const routes = [
   {
@@ -70,6 +71,10 @@ const routes = [
             path: 'detail',
             name: 'voluntDetail',
             component: () => import('@/views/admin/volunt/Detail.vue'),
+            props: (route: RouteLocationNormalized) => {
+              const id = Number(route.query.id);
+              return { id };
+            },
           },
         ],
       },
@@ -88,6 +93,10 @@ const routes = [
             path: 'detail',
             name: 'activeDetail',
             component: () => import('@/views/admin/active/Detail.vue'),
+            props: (route: RouteLocationNormalized) => {
+              const id = Number(route.query.id);
+              return { id };
+            },
           },
         ],
       },

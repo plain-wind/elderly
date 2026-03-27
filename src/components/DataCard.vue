@@ -15,16 +15,21 @@ defineProps<{
 
 <style scoped lang="scss">
 .data-card {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(0, 242, 255, 0.2);
+  position: relative;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  box-shadow: var(--card-shadow);
   padding: 10px;
-  border-radius: 4px;
+  border-radius: 8px;
+  overflow: hidden;
 
   .card-title {
     font-size: 16px;
     margin-bottom: 10px;
-    border-left: 3px solid #00f2ff;
+    color: var(--card-title);
+    border-left: 3px solid var(--card-title-bar);
     padding-left: 8px;
+    text-shadow: 0 0 10px var(--card-title-shadow);
   }
 }
 </style>

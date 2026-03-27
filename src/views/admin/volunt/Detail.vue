@@ -2,10 +2,19 @@
 import { ArrowLeft, Check, Close, Star, Phone, Location, Calendar, Clock, Medal } from '@element-plus/icons-vue';
 import { VoluntStatus as Status, Volunt } from '@/types';
 import StarRating from '@/components/StarRating.vue';
+import { useVoluntStore } from '@/stores/volunt';
+import { storeToRefs } from 'pinia';
 
-const route = useRoute();
+const { id } = defineProps<{
+  id: number;
+}>();
+
 const router = useRouter();
-const { imgSrc, activeName, name, position, status }: Volunt = route.query as any;
+
+const { voluntList } = storeToRefs(useVoluntStore());
+
+const volunt = voluntList.value.find((v) => v.id === id) as Volunt;
+const { imgSrc, activeName, name, position, status } = toRefs(volunt);
 
 // 模拟额外数据
 const voluntDetails = {
@@ -47,6 +56,14 @@ const getStatusClass = (status: Status) => {
     default:
       return '';
   }
+};
+
+// 处理审核操作
+const handleReview = (newStatus: Status) => {
+  // 这里可以调用 API 更新状态
+  ElMessage.success(`已设置为${getStatusText(newStatus)}`);
+  // 模拟状态更新
+  status.value = newStatus;
 };
 
 // 返回列表页
@@ -194,10 +211,12 @@ const goBack = () => {
       <div class="action-section" v-if="String(status) === Status.Examine">
         <h3>审核操作</h3>
         <div class="action-buttons">
-          <el-button type="success" size="large" :icon="Check" class="action-btn approve">
+          <el-button type="success" size="large" :icon="Check" class="action-btn approve"
+            @click="handleReview(Status.Pass)">
             审核通过
           </el-button>
-          <el-button type="danger" size="large" :icon="Close" class="action-btn reject">
+          <el-button type="danger" size="large" :icon="Close" class="action-btn reject"
+            @click="handleReview(Status.Reject)">
             审核拒绝
           </el-button>
         </div>

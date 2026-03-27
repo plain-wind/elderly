@@ -360,11 +360,11 @@ $text-main: #2c3e50;
 
         .pulse-point {
           position: absolute;
-          width: 10px;
-          height: 10px;
-          background: #f56c6c;
+          width: 15px;
+          height: 15px;
+          background: #e42828;
           border-radius: 50%;
-          animation: pulse-red 2s infinite;
+          animation: pulse-red 1s infinite;
 
           &.headache {
             top: 5%;
@@ -562,15 +562,15 @@ $text-main: #2c3e50;
 
 @keyframes pulse-red {
   0% {
-    box-shadow: 0 0 0 0 rgba(#f56c6c, 0.7);
+    box-shadow: 0 0 0 0 rgba(#e42828, 0.7);
   }
 
   70% {
-    box-shadow: 0 0 0 8px rgba(#f56c6c, 0);
+    box-shadow: 0 0 0 8px rgba(#e42828, 0);
   }
 
   100% {
-    box-shadow: 0 0 0 0 rgba(#f56c6c, 0);
+    box-shadow: 0 0 0 0 rgba(#e42828, 0);
   }
 }
 </style>

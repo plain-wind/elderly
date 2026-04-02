@@ -2,6 +2,25 @@
 const props = defineProps<{
   src?: string;
 }>()
+const videoContainerRef = ref<HTMLElement | null>(null);
+
+const toggleFullscreen = async () => {
+  const el = videoContainerRef.value;
+  if (!el || !document) return;
+
+  const isCurrentFullscreen = document.fullscreenElement === el;
+  try {
+    if (!document.fullscreenElement) {
+      await el.requestFullscreen();
+      return;
+    }
+    if (isCurrentFullscreen) {
+      await document.exitFullscreen();
+    }
+  } catch (err) {
+    console.warn('Fullscreen toggle failed:', err);
+  }
+};
 // --- 摄像头选择功能 ---
 const cameras = ref<Array<{ id: number; label: string; location: string; resolution?: string; codec?: string; fps?: string }>>([
   { id: 1, label: '厅堂摄像头A', location: 'A区大厅', resolution: '1080P', codec: 'H.265', fps: '30FPS' },
@@ -19,7 +38,7 @@ const onCameraChange = (id: number) => {
 </script>
 
 <template>
-  <div class="video-container">
+  <div ref="videoContainerRef" class="video-container" @dblclick="toggleFullscreen">
     <div class="video-header">
       <span class="live-tag">LIVE</span>
       <span class="video-title">实时监控：</span>
@@ -50,6 +69,15 @@ const onCameraChange = (id: number) => {
   box-shadow: var(--video-shadow);
   position: relative;
   overflow: hidden;
+  cursor: zoom-in;
+}
+
+.video-container:fullscreen {
+  width: 100vw;
+  height: 100vh;
+  border-radius: 0;
+  border: none;
+  cursor: zoom-out;
 }
 
 .video-header {

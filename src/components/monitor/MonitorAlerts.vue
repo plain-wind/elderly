@@ -18,19 +18,19 @@
     <div class="device-status">
       <div class="device-item">
         <p><span class="device-icon">⌚</span>智能手表</p>
-        <h2 class="device-num">64</h2>
+        <h2 class="device-num">1</h2>
       </div>
       <div class="device-item">
         <p><span class="device-icon">🚗</span>智能小车</p>
-        <h2 class="device-num">32</h2>
+        <h2 class="device-num">1</h2>
       </div>
       <div class="device-item">
         <p><span class="device-icon">💊</span>智能药盒</p>
-        <h2 class="device-num">18</h2>
+        <h2 class="device-num">1</h2>
       </div>
       <div class="device-item">
         <p><span class="device-icon">🦯</span>智能拐杖</p>
-        <h2 class="device-num">14</h2>
+        <h2 class="device-num">1</h2>
       </div>
     </div>
   </DataCard>

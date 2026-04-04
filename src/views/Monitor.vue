@@ -24,7 +24,7 @@
       </PanelColumn>
 
       <PanelColumn>
-        <MonitorAlerts :jcyjData="jcyjData" />
+        <MonitorAlerts :jcyjData="jcyjData" :theme="theme" />
       </PanelColumn>
     </main>
   </div>

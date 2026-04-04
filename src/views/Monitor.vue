@@ -1,12 +1,9 @@
 <template>
-  <div class="dashboard-container" :class="`theme-${theme}`">
+  <div class="dashboard-container theme-dark">
     <header class="header">
       <div class="now-time">{{ currentTime }}</div>
       <h1 class="title">智护银龄数据监控中心</h1>
       <div class="header-actions">
-        <button class="switch-btn" @click="toggleTheme">
-          {{ theme === 'bright' ? '切换暗色主题' : '切换亮蓝主题' }}
-        </button>
         <button class="switch-btn" @click="isMonitor = !isMonitor">
           {{ isMonitor ? '切换到地图' : '切换到监控' }}
         </button>
@@ -16,7 +13,7 @@
     <main class="main-content">
       <PanelColumn>
         <MonitorStats :stats="stats" />
-        <MonitorCharts :theme="theme" />
+        <MonitorCharts theme="dark" />
       </PanelColumn>
 
       <PanelColumn>
@@ -24,7 +21,7 @@
       </PanelColumn>
 
       <PanelColumn>
-        <MonitorAlerts :jcyjData="jcyjData" :theme="theme" />
+        <MonitorAlerts :jcyjData="jcyjData" theme="dark" />
       </PanelColumn>
     </main>
   </div>
@@ -38,19 +35,10 @@ import MonitorCharts from '@/components/monitor/MonitorCharts.vue';
 import MonitorMap from '@/components/monitor/MonitorMap.vue';
 import MonitorAlerts from '@/components/monitor/MonitorAlerts.vue';
 
-type ThemeMode = 'bright' | 'dark';
-
 const currentTime = ref(new Date().toLocaleString());
 setInterval(() => { currentTime.value = new Date().toLocaleString(); }, 1000);
 
 const isMonitor = ref(true);
-const savedTheme = localStorage.getItem('monitor-theme');
-const theme = ref<ThemeMode>(savedTheme === 'dark' ? 'dark' : 'bright');
-
-const toggleTheme = () => {
-  theme.value = theme.value === 'bright' ? 'dark' : 'bright';
-  localStorage.setItem('monitor-theme', theme.value);
-};
 
 const stats = ref([
   { label: '老年人总数', value: '156' },

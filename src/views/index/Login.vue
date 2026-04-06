@@ -41,15 +41,32 @@ const handleLogin = () => {
       <div class="divider"></div>
     </div>
 
-    <el-form @submit.native.prevent ref="loginFormRef" :model="loginForm" :rules="rules" label-position="top"
-      class="custom-form">
+    <el-form
+      @submit.native.prevent
+      ref="loginFormRef"
+      :model="loginForm"
+      :rules="rules"
+      label-position="top"
+      class="custom-form"
+    >
       <el-form-item label="手机号码" prop="telephone">
-        <el-input v-model="loginForm.telephone" placeholder="请输入您的手机号" required :prefix-icon="User" />
+        <el-input
+          v-model="loginForm.telephone"
+          placeholder="请输入您的手机号"
+          required
+          :prefix-icon="User"
+        />
       </el-form-item>
 
       <el-form-item label="登录密码" prop="password">
-        <el-input v-model="loginForm.password" type="password" show-password placeholder="请输入密码" required
-          :prefix-icon="Lock" />
+        <el-input
+          v-model="loginForm.password"
+          type="password"
+          show-password
+          placeholder="请输入密码"
+          required
+          :prefix-icon="Lock"
+        />
       </el-form-item>
 
       <div class="form-options">

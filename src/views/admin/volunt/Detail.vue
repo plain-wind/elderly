@@ -1,5 +1,15 @@
 <script setup lang="ts">
-import { ArrowLeft, Check, Close, Star, Phone, Location, Calendar, Clock, Medal } from '@element-plus/icons-vue';
+import {
+  ArrowLeft,
+  Check,
+  Close,
+  Star,
+  Phone,
+  Location,
+  Calendar,
+  Clock,
+  Medal,
+} from '@element-plus/icons-vue';
 import { VoluntStatus as Status, Volunt } from '@/types';
 import StarRating from '@/components/StarRating.vue';
 import { useVoluntStore } from '@/stores/volunt';
@@ -18,14 +28,22 @@ const { imgSrc, activeName, name, position, status } = toRefs(volunt);
 
 // 模拟额外数据
 const voluntDetails = {
-  contact: '138' + Math.floor(Math.random() * 100000000).toString().padStart(8, '0'),
+  contact:
+    '138' +
+    Math.floor(Math.random() * 100000000)
+      .toString()
+      .padStart(8, '0'),
   skills: ['打扫卫生', '陪伴聊天', '购物', '维修家电', '做饭'],
   experience: Math.floor(Math.random() * 5) + 1,
   rating: (Math.random() * 2 + 3).toFixed(1),
   totalHours: Math.floor(Math.random() * 200) + 50,
   completedTasks: Math.floor(Math.random() * 50) + 10,
-  joinDate: '2025-' + (Math.floor(Math.random() * 12) + 1).toString().padStart(2, '0') + '-' + (Math.floor(Math.random() * 28) + 1).toString().padStart(2, '0'),
-  description: '热心公益事业，积极参与社区志愿服务，有丰富的老年人照护经验，性格开朗，善于沟通。'
+  joinDate:
+    '2025-' +
+    (Math.floor(Math.random() * 12) + 1).toString().padStart(2, '0') +
+    '-' +
+    (Math.floor(Math.random() * 28) + 1).toString().padStart(2, '0'),
+  description: '热心公益事业，积极参与社区志愿服务，有丰富的老年人照护经验，性格开朗，善于沟通。',
 };
 
 // 获取状态显示文本
@@ -91,7 +109,7 @@ const goBack = () => {
       <div class="info-card">
         <div class="info-header">
           <div class="avatar-section">
-            <img :src="imgSrc" :alt="name" class="volunteer-avatar">
+            <img :src="imgSrc" :alt="name" class="volunteer-avatar" />
             <div class="status-badge" :class="getStatusClass(status)">
               {{ getStatusText(status) }}
             </div>
@@ -150,7 +168,13 @@ const goBack = () => {
           </div>
           <div class="card-content">
             <div class="skills-list">
-              <el-tag v-for="skill in voluntDetails.skills" :key="skill" size="large" effect="plain" class="skill-tag">
+              <el-tag
+                v-for="skill in voluntDetails.skills"
+                :key="skill"
+                size="large"
+                effect="plain"
+                class="skill-tag"
+              >
                 {{ skill }}
               </el-tag>
             </div>
@@ -211,12 +235,22 @@ const goBack = () => {
       <div class="action-section" v-if="String(status) === Status.Examine">
         <h3>审核操作</h3>
         <div class="action-buttons">
-          <el-button type="success" size="large" :icon="Check" class="action-btn approve"
-            @click="handleReview(Status.Pass)">
+          <el-button
+            type="success"
+            size="large"
+            :icon="Check"
+            class="action-btn approve"
+            @click="handleReview(Status.Pass)"
+          >
             审核通过
           </el-button>
-          <el-button type="danger" size="large" :icon="Close" class="action-btn reject"
-            @click="handleReview(Status.Reject)">
+          <el-button
+            type="danger"
+            size="large"
+            :icon="Close"
+            class="action-btn reject"
+            @click="handleReview(Status.Reject)"
+          >
             审核拒绝
           </el-button>
         </div>
@@ -378,7 +412,6 @@ $text-secondary: #666;
         color: $text-secondary;
         margin-bottom: 8px;
       }
-
     }
   }
 }

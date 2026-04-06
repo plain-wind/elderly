@@ -1,7 +1,7 @@
-import { defineStore } from "pinia";
+import { defineStore } from 'pinia';
 import { ActiveStatus as Status, Active } from '@/types';
 
-export const useActiveStore = defineStore("active", () => {
+export const useActiveStore = defineStore('active', () => {
   const status = ref(Status.All);
 
   const activeAll = ref<Active[]>([
@@ -94,9 +94,9 @@ export const useActiveStore = defineStore("active", () => {
     if (val === Status.All) {
       activeList.value = activeAll.value;
     } else {
-      activeList.value = activeAll.value.filter(item => item.status === val);
+      activeList.value = activeAll.value.filter((item) => item.status === val);
     }
-  }
+  };
 
   return {
     status,

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const handleLogin = (e: Event) => {
   e.preventDefault();
-}
+};
 </script>
 
 <template>
@@ -35,20 +35,14 @@ const handleLogin = (e: Event) => {
           </div>
 
           <div class="actions">
-            <label class="remember">
-              <input type="checkbox" /> 记住我
-            </label>
+            <label class="remember"> <input type="checkbox" /> 记住我 </label>
             <a href="#" class="forgot">忘记密码？</a>
           </div>
 
-          <button type="submit" class="login-btn">
-            立即登录
-          </button>
+          <button type="submit" class="login-btn">立即登录</button>
         </form>
 
-        <div class="footer">
-          还没有账号？<a href="#">申请加入</a>
-        </div>
+        <div class="footer">还没有账号？<a href="#">申请加入</a></div>
       </div>
     </div>
   </div>
@@ -154,14 +148,14 @@ const handleLogin = (e: Event) => {
     background: transparent;
     transition: 0.3s;
 
-    &:focus~label,
-    &:valid~label {
+    &:focus ~ label,
+    &:valid ~ label {
       top: -20px;
       font-size: 12px;
       color: #52c41a;
     }
 
-    &:focus~.bar:before {
+    &:focus ~ .bar:before {
       width: 100%;
     }
   }

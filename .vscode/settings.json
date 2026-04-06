@@ -11,7 +11,5 @@
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "dependi.npm.lockFileEnabled": false,
-  "conventionalCommits.scopes": [
-    "api"
-  ]
+  "conventionalCommits.scopes": ["api"]
 }

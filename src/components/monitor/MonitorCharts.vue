@@ -51,7 +51,7 @@ const getPalette = (theme: ThemeMode) => {
       barEnd: '#004a8a',
       bars: ['#00e6ff', '#4fbeff', '#ff4d57', '#ffb53f'],
       pie: ['#19e2f8', '#ff4a57', '#ffb43b'],
-      pieLabel: '#d8f7ff'
+      pieLabel: '#d8f7ff',
     };
   }
 
@@ -66,7 +66,7 @@ const getPalette = (theme: ThemeMode) => {
     barEnd: '#246dd6',
     bars: ['#3adfff', '#4ba9ff', '#ff6672', '#ffbe4f'],
     pie: ['#2edff5', '#ff5f69', '#ffbc45'],
-    pieLabel: '#e2f5ff'
+    pieLabel: '#e2f5ff',
   };
 };
 
@@ -74,12 +74,20 @@ const initCharts = async () => {
   if (!lineChartRef.value || !gaugeChartRef.value || !pieChartRef.value) return;
 
   const checkSize = (el: HTMLDivElement) => el.clientWidth > 0 && el.clientHeight > 0;
-  if (!checkSize(lineChartRef.value) || !checkSize(gaugeChartRef.value) || !checkSize(pieChartRef.value)) {
-    await new Promise(resolve => setTimeout(resolve, 100));
+  if (
+    !checkSize(lineChartRef.value) ||
+    !checkSize(gaugeChartRef.value) ||
+    !checkSize(pieChartRef.value)
+  ) {
+    await new Promise((resolve) => setTimeout(resolve, 100));
     if (!lineChartRef.value || !gaugeChartRef.value || !pieChartRef.value) return;
   }
 
-  if (!checkSize(lineChartRef.value) || !checkSize(gaugeChartRef.value) || !checkSize(pieChartRef.value)) {
+  if (
+    !checkSize(lineChartRef.value) ||
+    !checkSize(gaugeChartRef.value) ||
+    !checkSize(pieChartRef.value)
+  ) {
     console.warn('chart container still zero size');
     return;
   }
@@ -89,9 +97,29 @@ const initCharts = async () => {
   const line = echarts.init(lineChartRef.value);
   line.setOption({
     grid: { top: 30, bottom: 20, left: 30, right: 10 },
-    xAxis: { type: 'category', data: ['03-07', '03-08', '03-09', '03-10', '03-11', '03-12'], axisLabel: { color: palette.axis, fontSize: 10 }, axisLine: { lineStyle: { color: palette.axisLine } } },
-    yAxis: { type: 'value', splitLine: { lineStyle: { color: palette.split } }, axisLabel: { color: palette.axis } },
-    series: [{ data: [2, 5, 3, 8, 4, 5], type: 'line', smooth: true, symbol: 'circle', symbolSize: 8, itemStyle: { color: palette.line }, lineStyle: { width: 3, color: palette.line }, areaStyle: { color: palette.area } }]
+    xAxis: {
+      type: 'category',
+      data: ['03-07', '03-08', '03-09', '03-10', '03-11', '03-12'],
+      axisLabel: { color: palette.axis, fontSize: 10 },
+      axisLine: { lineStyle: { color: palette.axisLine } },
+    },
+    yAxis: {
+      type: 'value',
+      splitLine: { lineStyle: { color: palette.split } },
+      axisLabel: { color: palette.axis },
+    },
+    series: [
+      {
+        data: [2, 5, 3, 8, 4, 5],
+        type: 'line',
+        smooth: true,
+        symbol: 'circle',
+        symbolSize: 8,
+        itemStyle: { color: palette.line },
+        lineStyle: { width: 3, color: palette.line },
+        areaStyle: { color: palette.area },
+      },
+    ],
   });
 
   const activityChart = echarts.init(gaugeChartRef.value);
@@ -99,17 +127,38 @@ const initCharts = async () => {
     grid: { top: 30, bottom: 20, left: 30, right: 10 },
     color: palette.bars,
     tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
-    xAxis: { type: 'category', data: ['散步', '体操', '太极', '唱歌'], axisLine: { lineStyle: { color: palette.axisLine } }, axisLabel: { color: palette.axis } },
-    yAxis: { type: 'value', name: '完成次数', min: 0, nameTextStyle: { color: palette.name }, axisLine: { lineStyle: { color: palette.axisLine } }, splitLine: { lineStyle: { color: palette.split } }, axisLabel: { color: palette.axis } },
-    series: [{
-      name: '今日完成数量',
-      type: 'bar',
-      barMaxWidth: 36,
-      barGap: '25%',
-      data: [26, 18, 14, 10],
-      itemStyle: { borderRadius: [4, 4, 0, 0], color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{ offset: 0, color: palette.barStart }, { offset: 1, color: palette.barEnd }]) },
-      label: { show: true, position: 'top', color: '#fff', fontSize: 11 }
-    }]
+    xAxis: {
+      type: 'category',
+      data: ['散步', '体操', '太极', '唱歌'],
+      axisLine: { lineStyle: { color: palette.axisLine } },
+      axisLabel: { color: palette.axis },
+    },
+    yAxis: {
+      type: 'value',
+      name: '完成次数',
+      min: 0,
+      nameTextStyle: { color: palette.name },
+      axisLine: { lineStyle: { color: palette.axisLine } },
+      splitLine: { lineStyle: { color: palette.split } },
+      axisLabel: { color: palette.axis },
+    },
+    series: [
+      {
+        name: '今日完成数量',
+        type: 'bar',
+        barMaxWidth: 36,
+        barGap: '25%',
+        data: [26, 18, 14, 10],
+        itemStyle: {
+          borderRadius: [4, 4, 0, 0],
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            { offset: 0, color: palette.barStart },
+            { offset: 1, color: palette.barEnd },
+          ]),
+        },
+        label: { show: true, position: 'top', color: '#fff', fontSize: 11 },
+      },
+    ],
   });
 
   highchartsPie = Highcharts.chart(pieChartRef.value as HTMLElement, {
@@ -118,7 +167,7 @@ const initCharts = async () => {
       options3d: { enabled: true, alpha: 45, beta: 0 },
       backgroundColor: 'transparent',
       height: pieChartRef.value.clientHeight,
-      width: pieChartRef.value.clientWidth
+      width: pieChartRef.value.clientWidth,
     },
     title: { text: '' },
     tooltip: { pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>' },
@@ -128,18 +177,25 @@ const initCharts = async () => {
         allowPointSelect: true,
         cursor: 'pointer',
         depth: 35,
-        dataLabels: { enabled: true, format: '{point.name}', color: palette.pieLabel, style: { textOutline: 'none', fontSize: '11px' } }
-      }
+        dataLabels: {
+          enabled: true,
+          format: '{point.name}',
+          color: palette.pieLabel,
+          style: { textOutline: 'none', fontSize: '11px' },
+        },
+      },
     },
-    series: [{
-      name: 'Share',
-      type: 'pie',
-      data: [
-        ['跌倒警报', 10],
-        ['围栏警报', 5],
-        ['心率预警', 17]
-      ]
-    }]
+    series: [
+      {
+        name: 'Share',
+        type: 'pie',
+        data: [
+          ['跌倒警报', 10],
+          ['围栏警报', 5],
+          ['心率预警', 17],
+        ],
+      },
+    ],
   });
 
   charts = [line, activityChart];
@@ -148,23 +204,26 @@ const initCharts = async () => {
 onMounted(() => {
   initCharts();
   window.addEventListener('resize', () => {
-    charts.forEach(c => c.resize());
+    charts.forEach((c) => c.resize());
     if (highchartsPie) highchartsPie.reflow();
   });
 });
 
-watch(() => props.theme, () => {
-  charts.forEach(c => c.dispose());
-  charts = [];
-  if (highchartsPie) {
-    highchartsPie.destroy();
-    highchartsPie = null;
+watch(
+  () => props.theme,
+  () => {
+    charts.forEach((c) => c.dispose());
+    charts = [];
+    if (highchartsPie) {
+      highchartsPie.destroy();
+      highchartsPie = null;
+    }
+    initCharts();
   }
-  initCharts();
-});
+);
 
 onUnmounted(() => {
-  charts.forEach(c => c.dispose());
+  charts.forEach((c) => c.dispose());
   if (highchartsPie) {
     highchartsPie.destroy();
     highchartsPie = null;

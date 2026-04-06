@@ -25,7 +25,13 @@ import { useRouter } from 'vue-router';
 import * as echarts from 'echarts';
 import DataCard from '@/components/DataCard.vue';
 
-interface AlertItem { id: number; title: string; name: string; address: string; time: string; }
+interface AlertItem {
+  id: number;
+  title: string;
+  name: string;
+  address: string;
+  time: string;
+}
 type ThemeMode = 'bright' | 'dark';
 const props = defineProps<{ jcyjData: AlertItem[]; theme: ThemeMode }>();
 
@@ -34,20 +40,23 @@ const deviceChartRef = ref<HTMLDivElement | null>(null);
 let deviceChart: echarts.ECharts | null = null;
 
 const goDetail = (item: AlertItem) => {
-  router.push({ name: 'detail', query: { name: item.name, address: item.address, phone: 13745678901, sonphone: 13745678902 } });
+  router.push({
+    name: 'detail',
+    query: { name: item.name, address: item.address, phone: 13745678901, sonphone: 13745678902 },
+  });
 };
 
 const getPieColors = (theme: ThemeMode) => {
   if (theme === 'dark') {
     return {
       colors: ['#00f2ff', '#7cb5ec', '#2f7dcf', '#4de27a'],
-      label: '#d8f7ff'
+      label: '#d8f7ff',
     };
   }
 
   return {
     colors: ['#73d8ff', '#4cc6ff', '#5c96ff', '#74dca2'],
-    label: '#e2f5ff'
+    label: '#e2f5ff',
   };
 };
 
@@ -73,7 +82,7 @@ const initDeviceChart = async () => {
       itemWidth: 8,
       itemHeight: 8,
       itemGap: 8,
-      textStyle: { color: palette.label, fontSize: 12 }
+      textStyle: { color: palette.label, fontSize: 12 },
     },
     series: [
       {
@@ -89,10 +98,10 @@ const initDeviceChart = async () => {
           { value: 1, name: '智能手表' },
           { value: 1, name: '智能小车' },
           { value: 1, name: '智能药盒' },
-          { value: 1, name: '智能拐杖' }
-        ]
-      }
-    ]
+          { value: 1, name: '智能拐杖' },
+        ],
+      },
+    ],
   });
 };
 
@@ -139,7 +148,9 @@ onUnmounted(() => {
     border-left: 3px solid var(--alert-left-border);
     border-radius: 4px;
     cursor: pointer;
-    transition: background 0.3s, transform 0.2s;
+    transition:
+      background 0.3s,
+      transform 0.2s;
 
     &::before {
       content: '';
@@ -148,10 +159,7 @@ onUnmounted(() => {
       left: 0;
       width: 100%;
       height: 100%;
-      background: linear-gradient(90deg,
-          transparent,
-          rgba(240, 59, 59, 0.15),
-          transparent);
+      background: linear-gradient(90deg, transparent, rgba(240, 59, 59, 0.15), transparent);
       transform: translateX(-100%);
       animation: waveMove 2s linear infinite;
       pointer-events: none;

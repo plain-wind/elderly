@@ -1,36 +1,39 @@
 <template>
-  <div class="monitor-map-container">
-    <div class="video-box">
-      <Video src="http://localhost:5000/video_feed" />
-      <Video />
-    </div>
-
-    <div class="map-container">
-      <div id="amap-container"></div>
-      <div class="map-overlay">
-        <div class="map-status"><span class="dot"></span> 电子围栏监控：活跃</div>
-        <div class="map-controls">
-          <el-button size="small" type="primary" @click="startFourSelect" v-if="!isFourSelecting">四点围栏</el-button>
-          <el-button size="small" type="success" @click="confirmFour" v-if="isFourSelecting">保存</el-button>
-          <el-button size="small" type="warning" @click="cancelFour" v-if="isFourSelecting">取消</el-button>
-        </div>
+  <div class="map-container">
+    <div id="amap-container"></div>
+    <div class="map-overlay">
+      <div class="map-status"><span class="dot"></span> 电子围栏监控：活跃</div>
+      <div class="map-controls">
+        <el-button size="small" type="primary" @click="startFourSelect" v-if="!isFourSelecting"
+          >四点围栏</el-button
+        >
+        <el-button size="small" type="success" @click="confirmFour" v-if="isFourSelecting"
+          >保存</el-button
+        >
+        <el-button size="small" type="warning" @click="cancelFour" v-if="isFourSelecting"
+          >取消</el-button
+        >
       </div>
     </div>
-
-    <teleport v-if="hasTeleportTarget" to="#geofence-records-target">
-      <DataCard title="电子围栏实时记录">
-        <div class=" scroll-list">
-          <div v-for="item in dzwlDisplayData" :key="item.id" class="list-item clickable"
-            @click="focusElder(item.lnglat)">
-            <span class="tag tag--outside">越界</span>
-            <span class="name">{{ item.name }}</span>
-            <span class="time">{{ item.time }}</span>
-          </div>
-        </div>
-        <p class="hint">点击记录快速定位</p>
-      </DataCard>
-    </teleport>
   </div>
+
+  <teleport v-if="hasTeleportTarget" to="#geofence-records-target">
+    <DataCard title="电子围栏实时记录">
+      <div class="scroll-list">
+        <div
+          v-for="item in dzwlDisplayData"
+          :key="item.id"
+          class="list-item clickable"
+          @click="focusElder(item.lnglat)"
+        >
+          <span class="tag tag--outside">越界</span>
+          <span class="name">{{ item.name }}</span>
+          <span class="time">{{ item.time }}</span>
+        </div>
+      </div>
+      <p class="hint">点击记录快速定位</p>
+    </DataCard>
+  </teleport>
 </template>
 
 <script setup lang="ts">
@@ -40,7 +43,12 @@ import Video from '@/components/Video.vue';
 import { userApi } from '@/api';
 import { useGeofenceStore } from '@/stores/geofence';
 
-interface DzwlItem { id: number; name: string; time: string; lnglat: [number, number]; }
+interface DzwlItem {
+  id: number;
+  name: string;
+  time: string;
+  lnglat: [number, number];
+}
 
 const map = ref<AMap.Map | null>(null);
 const amapLib = ref<any>(null);
@@ -62,7 +70,7 @@ let currentWalking: any = null;
 const dzwlData = ref<DzwlItem[]>([]);
 
 const dzwlDisplayData = computed<DzwlItem[]>(() => {
-  return dzwlData.value.filter(item => !geofenceStore.isInsideFence(item.lnglat));
+  return dzwlData.value.filter((item) => !geofenceStore.isInsideFence(item.lnglat));
 });
 
 const formatDisplayTime = (timeText: string | null | undefined) => {
@@ -85,7 +93,7 @@ const loadUserPositions = async () => {
           id: Number(item.userId),
           name: item.username || `用户${item.userId}`,
           time: formatDisplayTime(item.updateTime),
-          lnglat: [lng, lat] as [number, number]
+          lnglat: [lng, lat] as [number, number],
         };
       })
       .filter(Boolean) as DzwlItem[];
@@ -110,22 +118,18 @@ const normalizePoint = (point: any): [number, number] | null => {
 
 const getPathCenter = (path: any[] | null | undefined): [number, number] | null => {
   if (!path?.length) return null;
-  const points = path
-    .map((p: any) => normalizePoint(p))
-    .filter(Boolean) as [number, number][];
+  const points = path.map((p: any) => normalizePoint(p)).filter(Boolean) as [number, number][];
   if (!points.length) return null;
-  const sum = points.reduce(
-    (acc, cur) => [acc[0] + cur[0], acc[1] + cur[1]],
-    [0, 0] as [number, number]
-  );
+  const sum = points.reduce((acc, cur) => [acc[0] + cur[0], acc[1] + cur[1]], [0, 0] as [
+    number,
+    number,
+  ]);
   return [sum[0] / points.length, sum[1] / points.length];
 };
 
 const toLngLatPath = (path: any[] | null | undefined): [number, number][] => {
   if (!path?.length) return [];
-  return path
-    .map((p: any) => normalizePoint(p))
-    .filter(Boolean) as [number, number][];
+  return path.map((p: any) => normalizePoint(p)).filter(Boolean) as [number, number][];
 };
 
 const getGeofenceCenter = (): [number, number] | null => {
@@ -138,10 +142,10 @@ const replaceGeofence = (
 ) => {
   if (!map.value || !amapLib.value || path.length < 3) return;
 
-  geofences.value.forEach(fence => {
+  geofences.value.forEach((fence) => {
     try {
       fence.polygon?.setMap(null);
-    } catch (e) { }
+    } catch (e) {}
   });
   geofences.value = [];
 
@@ -159,7 +163,7 @@ const initMap = async () => {
   }
 
   if (!container.clientWidth || !container.clientHeight) {
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise((resolve) => setTimeout(resolve, 100));
   }
 
   if (!container.clientWidth || !container.clientHeight) {
@@ -170,9 +174,20 @@ const initMap = async () => {
   window._AMapSecurityConfig = { securityJsCode: import.meta.env.VITE_AMAP_SECURITY };
   const AMap = await AMapLoader.load({ key: import.meta.env.VITE_AMAP_KEY, version: '2.0' });
   amapLib.value = AMap;
-  map.value = new AMap.Map('amap-container', { viewMode: '3D', pitch: 45, zoom: 17, center: [116.3974, 39.9092], theme: 'amap://styles/darkblue' });
+  map.value = new AMap.Map('amap-container', {
+    viewMode: '3D',
+    pitch: 45,
+    zoom: 17,
+    center: [116.3974, 39.9092],
+    theme: 'amap://styles/darkblue',
+  });
   const initialFencePath = [...geofenceStore.fencePoints];
-  replaceGeofence(initialFencePath, { strokeColor: '#00f2ff', fillColor: '#00f2ff', fillOpacity: 0.1, strokeStyle: 'dashed' });
+  replaceGeofence(initialFencePath, {
+    strokeColor: '#00f2ff',
+    fillColor: '#00f2ff',
+    fillOpacity: 0.1,
+    strokeStyle: 'dashed',
+  });
   renderPersonMarkers();
 };
 
@@ -187,7 +202,11 @@ const getLngLatFromEvent = (e: any) => {
 };
 
 const clearPersonMarkers = () => {
-  personMarkers.value.forEach(m => { try { m.setMap(null); } catch (e) { } });
+  personMarkers.value.forEach((m) => {
+    try {
+      m.setMap(null);
+    } catch (e) {}
+  });
   personMarkers.value = [];
 };
 
@@ -206,33 +225,41 @@ const renderPersonMarkers = () => {
     </div>
   `;
 
-  dzwlData.value.forEach(item => {
+  dzwlData.value.forEach((item) => {
     if (!item.lnglat || item.lnglat.length < 2) return;
     const marker = new amapLib.value.Marker({
       position: item.lnglat,
       content: runnerHtml,
-      title: item.name
+      title: item.name,
     });
     marker.setMap(map.value!);
     personMarkers.value.push(marker);
   });
 };
 
-watch(dzwlData, () => {
-  renderPersonMarkers();
-}, { deep: false });
+watch(
+  dzwlData,
+  () => {
+    renderPersonMarkers();
+  },
+  { deep: false }
+);
 
 const startFourSelect = async () => {
   if (!map.value) return;
   isFourSelecting.value = true;
-  if (!amapLib.value) { amapLib.value = await AMapLoader.load({ key: import.meta.env.VITE_AMAP_KEY, version: '2.0' }); }
+  if (!amapLib.value) {
+    amapLib.value = await AMapLoader.load({ key: import.meta.env.VITE_AMAP_KEY, version: '2.0' });
+  }
   cleanupFourTemp();
   mapClickHandler = (e: any) => {
     const lnglat = getLngLatFromEvent(e) as [number, number];
     if (!lnglat) return;
     addFourMarker(lnglat);
   };
-  try { map.value.on('click', mapClickHandler); } catch (err) { }
+  try {
+    map.value.on('click', mapClickHandler);
+  } catch (err) {}
 };
 
 const addFourMarker = (lnglat: [number, number]) => {
@@ -242,19 +269,31 @@ const addFourMarker = (lnglat: [number, number]) => {
   marker.on('dragend', () => updateFourPolygon());
   fourMarkers.value.push(marker);
   updateFourPolygon();
-  if (fourMarkers.value.length === 4) { try { map.value.off('click', mapClickHandler); } catch (err) { } mapClickHandler = null; }
+  if (fourMarkers.value.length === 4) {
+    try {
+      map.value.off('click', mapClickHandler);
+    } catch (err) {}
+    mapClickHandler = null;
+  }
 };
 
 const updateFourPolygon = () => {
   if (!map.value) return;
-  const path = fourMarkers.value.map(m => {
-    const p = m.getPosition ? m.getPosition() : (m.getLngLat ? m.getLngLat() : null);
-    if (!p) return null;
-    return Array.isArray(p) ? p : [p.lng ?? p.getLng?.(), p.lat ?? p.getLat?.()];
-  }).filter(Boolean) as [number, number][];
+  const path = fourMarkers.value
+    .map((m) => {
+      const p = m.getPosition ? m.getPosition() : m.getLngLat ? m.getLngLat() : null;
+      if (!p) return null;
+      return Array.isArray(p) ? p : [p.lng ?? p.getLng?.(), p.lat ?? p.getLat?.()];
+    })
+    .filter(Boolean) as [number, number][];
   if (!path.length) return;
   if (!fourPolygon.value) {
-    fourPolygon.value = new amapLib.value.Polygon({ path, strokeColor: '#00ff88', fillColor: '#00ff88', fillOpacity: 0.12 });
+    fourPolygon.value = new amapLib.value.Polygon({
+      path,
+      strokeColor: '#00ff88',
+      fillColor: '#00ff88',
+      fillOpacity: 0.12,
+    });
     map.value.add(fourPolygon.value);
   } else {
     fourPolygon.value.setPath(path);
@@ -268,26 +307,47 @@ const confirmFour = () => {
     const normalizedPath = toLngLatPath(path);
     if (normalizedPath.length === 4) {
       geofenceStore.setFencePoints(normalizedPath);
-      replaceGeofence(normalizedPath, { strokeColor: '#ff4d4f', fillColor: '#ff4d4f', fillOpacity: 0.12 });
+      replaceGeofence(normalizedPath, {
+        strokeColor: '#ff4d4f',
+        fillColor: '#ff4d4f',
+        fillOpacity: 0.12,
+      });
     }
   }
   cleanupFourTemp();
   isFourSelecting.value = false;
 };
 
-const cancelFour = () => { cleanupFourTemp(); isFourSelecting.value = false; };
+const cancelFour = () => {
+  cleanupFourTemp();
+  isFourSelecting.value = false;
+};
 
 const cleanupFourTemp = () => {
-  try { if (map.value && mapClickHandler) map.value.off('click', mapClickHandler); } catch (err) { }
+  try {
+    if (map.value && mapClickHandler) map.value.off('click', mapClickHandler);
+  } catch (err) {}
   mapClickHandler = null;
-  fourMarkers.value.forEach(m => { try { m.setMap(null); } catch (e) { } });
+  fourMarkers.value.forEach((m) => {
+    try {
+      m.setMap(null);
+    } catch (e) {}
+  });
   fourMarkers.value = [];
-  if (fourPolygon.value) { try { fourPolygon.value.setMap(null); } catch (e) { } }
+  if (fourPolygon.value) {
+    try {
+      fourPolygon.value.setMap(null);
+    } catch (e) {}
+  }
   fourPolygon.value = null;
 };
 
 const clearReturnRoutes = () => {
-  returnRoutes.value.forEach(r => { try { r.setMap(null); } catch (e) { } });
+  returnRoutes.value.forEach((r) => {
+    try {
+      r.setMap(null);
+    } catch (e) {}
+  });
   returnRoutes.value = [];
 };
 
@@ -309,14 +369,14 @@ const drawReturnRoute = async (from: [number, number]) => {
       await AMapLoader.load({
         key: import.meta.env.VITE_AMAP_KEY,
         version: '2.0',
-        plugins: ['AMap.Walking']
+        plugins: ['AMap.Walking'],
       });
     }
 
     // 创建步行规划实例
     currentWalking = new amapLib.value.Walking({
       map: map.value,
-      panel: false
+      panel: false,
     });
 
     // 计算路线
@@ -327,18 +387,20 @@ const drawReturnRoute = async (from: [number, number]) => {
         if (status === 'complete' && result.routes && result.routes.length > 0) {
           // 获取第一条路线的路径
           const route = result.routes[0];
-          const path = route.steps.map((step: any) => {
-            return step.path.map((point: any) => {
-              return [point.lng, point.lat];
-            });
-          }).flat();
+          const path = route.steps
+            .map((step: any) => {
+              return step.path.map((point: any) => {
+                return [point.lng, point.lat];
+              });
+            })
+            .flat();
 
           // 绘制路线
           const line = new amapLib.value.Polyline({
             path: path,
             strokeColor: '#52c41a',
             strokeWeight: 3,
-            strokeStyle: 'dashed'
+            strokeStyle: 'dashed',
           });
           map.value?.add(line);
           returnRoutes.value.push(line);
@@ -352,7 +414,7 @@ const drawReturnRoute = async (from: [number, number]) => {
       path: [from, to],
       strokeColor: '#52c41a',
       strokeWeight: 3,
-      strokeStyle: 'dashed'
+      strokeStyle: 'dashed',
     });
     map.value.add(line);
     returnRoutes.value.push(line);
@@ -397,13 +459,6 @@ onUnmounted(() => {
 </script>
 
 <style lang="scss" scoped>
-.monitor-map-container {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  gap: 10px;
-}
-
 .video-box {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -529,7 +584,6 @@ onUnmounted(() => {
   }
 
   @keyframes run {
-
     0%,
     100% {
       transform: translateY(0);
@@ -544,6 +598,7 @@ onUnmounted(() => {
 /* 列表样式修复 */
 .scroll-list {
   flex: 1;
+  height: 100%;
   overflow-y: auto;
 
   .list-item {
@@ -564,7 +619,6 @@ onUnmounted(() => {
       background: #f5222d;
       color: #fff;
     }
-
   }
 
   .clickable:hover {

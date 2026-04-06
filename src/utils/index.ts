@@ -15,14 +15,16 @@ const validateTelephone = (rule: any, value: string, callback: any) => {
 
 type QueryParser<T> = (value: string | undefined) => T;
 
-const normalizeQueryValue = (value: LocationQueryValue | LocationQueryValue[] | undefined): string | undefined => {
+const normalizeQueryValue = (
+  value: LocationQueryValue | LocationQueryValue[] | undefined
+): string | undefined => {
   const single = Array.isArray(value) ? value[0] : value;
   return single ?? undefined;
 };
 
 const parseRouteQuery = <T extends Record<string, QueryParser<any>>>(
   query: LocationQuery,
-  schema: T,
+  schema: T
 ): { [K in keyof T]: ReturnType<T[K]> } => {
   const result = {} as { [K in keyof T]: ReturnType<T[K]> };
 
@@ -58,6 +60,5 @@ const asBoolean = (fallback = false): QueryParser<boolean> => {
     return value === 'true' || value === '1';
   };
 };
-
 
 export { isTopLevelChange, validateTelephone, parseRouteQuery, asString, asNumber, asBoolean };

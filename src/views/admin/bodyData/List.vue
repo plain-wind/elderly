@@ -63,15 +63,23 @@
         </el-table-column>
         <el-table-column prop="do" label="操作">
           <template #default="{ row }">
-            <el-button link type="primary" size="default" @click="$router.push({
-              name: 'detail',
-              query: {
-                name: row.name,
-                address: row.address,
-                phone: row.phone,
-                sonphone: row.sonphone,
-              }
-            })" class="detail-btn">
+            <el-button
+              link
+              type="primary"
+              size="default"
+              @click="
+                $router.push({
+                  name: 'detail',
+                  query: {
+                    name: row.name,
+                    address: row.address,
+                    phone: row.phone,
+                    sonphone: row.sonphone,
+                  },
+                })
+              "
+              class="detail-btn"
+            >
               查看详情
             </el-button>
           </template>
@@ -84,7 +92,7 @@
 <script setup lang="ts">
 import { Search, User, CircleCheck, Warning } from '@element-plus/icons-vue';
 
-let searchInput = ref('')
+let searchInput = ref('');
 
 const tableData = [
   {
@@ -151,8 +159,7 @@ const tableData = [
     sonphone: '13821110008',
     tzsj: '正常',
   },
-]
-
+];
 </script>
 
 <style scoped lang="scss">
@@ -373,12 +380,12 @@ const tableData = [
 
 // 选项样式
 :deep(.el-option) {
-  &[data-value="异常"] {
+  &[data-value='异常'] {
     color: #df1616 !important;
     font-weight: 500;
   }
 
-  &[data-value="正常"] {
+  &[data-value='正常'] {
     color: #44803f !important;
     font-weight: 500;
   }

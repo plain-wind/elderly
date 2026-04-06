@@ -14,27 +14,30 @@ defineProps<{
 <template>
   <div class="volunteer-item">
     <div class="volunteer-img">
-      <img :src="imgSrc" alt="">
+      <img :src="imgSrc" alt="" />
     </div>
     <div class="volunteer-info">
       <div class="volunteer-active-name">
         {{ activeName }}
       </div>
-      <div class="volunteer-name">
-        发布人：{{ name }}
-      </div>
-      <div class="volunteer-position">
-        任务地点：{{ position }}
-      </div>
+      <div class="volunteer-name">发布人：{{ name }}</div>
+      <div class="volunteer-position">任务地点：{{ position }}</div>
       <div class="volunteer-btn">
-        <el-button type="primary" size="large" @click="() => {
-          $router.push({
-            name: 'voluntDetail',
-            query: {
-              id
-            },
-          });
-        }">查看详情</el-button>
+        <el-button
+          type="primary"
+          size="large"
+          @click="
+            () => {
+              $router.push({
+                name: 'voluntDetail',
+                query: {
+                  id,
+                },
+              });
+            }
+          "
+          >查看详情</el-button
+        >
       </div>
     </div>
   </div>

@@ -106,7 +106,7 @@ const routes = [
 
 const router = createRouter({
   history: createWebHistory(),
-  routes
+  routes,
 });
 
 // 路由加载状态管理

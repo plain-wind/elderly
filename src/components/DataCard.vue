@@ -1,7 +1,7 @@
 <script setup lang="ts">
 defineProps<{
-  title?: string
-}>()
+  title?: string;
+}>();
 </script>
 
 <template>
@@ -21,6 +21,7 @@ defineProps<{
   box-shadow: var(--card-shadow);
   padding: 10px;
   border-radius: 8px;
+  height: 300px;
   overflow: hidden;
 
   .card-title {

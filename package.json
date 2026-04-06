@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "dev": "vite",
-    "build": "vite build"
+    "build": "vite build",
+    "format": "prettier . --write",
+    "format:check": "prettier . --check"
   },
   "keywords": [],
   "author": "",
@@ -26,6 +28,7 @@
     "@amap/amap-jsapi-types": "^0.0.15",
     "@types/node": "^25.0.10",
     "@vitejs/plugin-vue": "^6.0.3",
+    "prettier": "^3.8.1",
     "sass": "^1.97.3",
     "unplugin-auto-import": "^21.0.0",
     "unplugin-vue-components": "^31.0.0",

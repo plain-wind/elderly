@@ -1,5 +1,17 @@
 <script setup lang="ts">
-import { ArrowLeft, Calendar, Location, User, Clock, Star, Phone, ChatDotRound, Document, Share, Star as Bookmark } from '@element-plus/icons-vue';
+import {
+  ArrowLeft,
+  Calendar,
+  Location,
+  User,
+  Clock,
+  Star,
+  Phone,
+  ChatDotRound,
+  Document,
+  Share,
+  Star as Bookmark,
+} from '@element-plus/icons-vue';
 import { ActiveStatus as Status, Active } from '@/types';
 
 const route = useRoute();
@@ -11,54 +23,67 @@ const { id, imgSrc, activeName, date, position, personNum, status }: Active = ro
 // 模拟额外数据
 const activeDetails = {
   organizer: '社区服务中心',
-  contact: '138' + Math.floor(Math.random() * 100000000).toString().padStart(8, '0'),
-  description: '本次活动旨在丰富老年人的精神文化生活，提供一个交流互动的平台。活动内容包括专业讲座、互动游戏和集体合影等环节，希望通过这样的活动让老年人感受到社区的温暖和关怀。',
+  contact:
+    '138' +
+    Math.floor(Math.random() * 100000000)
+      .toString()
+      .padStart(8, '0'),
+  description:
+    '本次活动旨在丰富老年人的精神文化生活，提供一个交流互动的平台。活动内容包括专业讲座、互动游戏和集体合影等环节，希望通过这样的活动让老年人感受到社区的温暖和关怀。',
   schedule: [
     {
       time: '09:00-09:30',
-      content: '签到入场'
+      content: '签到入场',
     },
     {
       time: '09:30-10:00',
-      content: '开场致辞'
+      content: '开场致辞',
     },
     {
       time: '10:00-11:00',
-      content: '主题活动'
+      content: '主题活动',
     },
     {
       time: '11:00-11:30',
-      content: '互动交流'
+      content: '互动交流',
     },
     {
       time: '11:30-12:00',
-      content: '合影留念'
-    }
+      content: '合影留念',
+    },
   ],
   requirements: [
     '请提前15分钟到场签到',
     '穿着舒适的服装和鞋子',
     '可自带水杯和小点心',
-    '如有特殊需求请提前告知'
+    '如有特殊需求请提前告知',
   ],
   participants: [
-    '张阿姨', '李大爷', '王奶奶', '赵爷爷', '刘阿姨',
-    '陈大爷', '杨奶奶', '黄爷爷', '周阿姨', '吴大爷'
+    '张阿姨',
+    '李大爷',
+    '王奶奶',
+    '赵爷爷',
+    '刘阿姨',
+    '陈大爷',
+    '杨奶奶',
+    '黄爷爷',
+    '周阿姨',
+    '吴大爷',
   ],
   rating: (Math.random() * 2 + 3).toFixed(1),
   reviews: [
     {
       name: '张阿姨',
       content: '活动非常精彩，组织者很用心，认识了很多新朋友！',
-      rating: 5
+      rating: 5,
     },
     {
       name: '李大爷',
       content: '内容丰富，安排合理，希望以后能多举办这样的活动。',
-      rating: 4
-    }
+      rating: 4,
+    },
   ],
-  shareUrl: window.location.href
+  shareUrl: window.location.href,
 };
 
 // 获取状态显示文本
@@ -98,14 +123,13 @@ const shareActivity = () => {
     navigator.share({
       title: activeName,
       text: activeDetails.description,
-      url: activeDetails.shareUrl
+      url: activeDetails.shareUrl,
     });
   } else {
     // 复制链接到剪贴板
-    navigator.clipboard.writeText(activeDetails.shareUrl)
-      .then(() => {
-        ElMessage.success('链接已复制到剪贴板');
-      });
+    navigator.clipboard.writeText(activeDetails.shareUrl).then(() => {
+      ElMessage.success('链接已复制到剪贴板');
+    });
   }
 };
 </script>
@@ -129,7 +153,7 @@ const shareActivity = () => {
       <div class="info-card">
         <div class="info-header">
           <div class="activity-image">
-            <img :src="imgSrc" :alt="activeName" class="event-image">
+            <img :src="imgSrc" :alt="activeName" class="event-image" />
             <div class="status-badge" :class="getStatusClass(status)">
               {{ getStatusText(status) }}
             </div>
@@ -211,7 +235,11 @@ const shareActivity = () => {
           </div>
           <div class="card-content">
             <div class="schedule-list">
-              <div class="schedule-item" v-for="(item, index) in activeDetails.schedule" :key="index">
+              <div
+                class="schedule-item"
+                v-for="(item, index) in activeDetails.schedule"
+                :key="index"
+              >
                 <div class="schedule-time">{{ item.time }}</div>
                 <div class="schedule-content">{{ item.content }}</div>
               </div>
@@ -246,8 +274,13 @@ const shareActivity = () => {
           </div>
           <div class="card-content">
             <div class="participants-grid">
-              <el-tag v-for="(participant, index) in activeDetails.participants" :key="index" size="large"
-                effect="plain" class="participant-tag">
+              <el-tag
+                v-for="(participant, index) in activeDetails.participants"
+                :key="index"
+                size="large"
+                effect="plain"
+                class="participant-tag"
+              >
                 {{ participant }}
               </el-tag>
             </div>
@@ -264,7 +297,11 @@ const shareActivity = () => {
           </div>
           <div class="card-content">
             <div class="reviews-list">
-              <div class="review-item" v-for="(review, index) in activeDetails.reviews" :key="index">
+              <div
+                class="review-item"
+                v-for="(review, index) in activeDetails.reviews"
+                :key="index"
+              >
                 <div class="review-header">
                   <span class="reviewer-name">{{ review.name }}</span>
                   <div class="review-rating">

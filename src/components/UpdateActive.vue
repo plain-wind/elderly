@@ -62,22 +62,54 @@ const onFileChange = (e: Event) => {
       </div>
       <h2>添加活动</h2>
       <!-- 活动名称输入 -->
-      <el-input size="large" placeholder="请输入活动名称" v-model="updateActiveForm.activeName" class="input-item" />
+      <el-input
+        size="large"
+        placeholder="请输入活动名称"
+        v-model="updateActiveForm.activeName"
+        class="input-item"
+      />
       <!-- 活动图片输入 -->
-      <img v-if="updateActiveForm.imgSrc" :src="updateActiveForm.imgSrc" alt="活动图片">
+      <img v-if="updateActiveForm.imgSrc" :src="updateActiveForm.imgSrc" alt="活动图片" />
       <el-icon v-else class="img-icon" @click="fileInput?.click()">
         <Plus />
       </el-icon>
-      <input type="file" accept="image/*" style="display: none;" ref="fileInput" @change="onFileChange" />
+      <input
+        type="file"
+        accept="image/*"
+        style="display: none"
+        ref="fileInput"
+        @change="onFileChange"
+      />
       <!-- 活动日期输入 -->
-      <el-date-picker size="large" v-model="updateActiveForm.date" value-format="YYYY-MM-DD" type="date"
-        placeholder="请选择活动日期" class="input-item" />
+      <el-date-picker
+        size="large"
+        v-model="updateActiveForm.date"
+        value-format="YYYY-MM-DD"
+        type="date"
+        placeholder="请选择活动日期"
+        class="input-item"
+      />
       <!-- 活动地点输入 -->
-      <el-input size="large" placeholder="请输入活动地点" v-model="updateActiveForm.position" class="input-item" />
+      <el-input
+        size="large"
+        placeholder="请输入活动地点"
+        v-model="updateActiveForm.position"
+        class="input-item"
+      />
       <!-- 活动人数输入 -->
-      <el-input size="large" placeholder="请输入活动人数" v-model.number="updateActiveForm.personNum" class="input-item" />
+      <el-input
+        size="large"
+        placeholder="请输入活动人数"
+        v-model.number="updateActiveForm.personNum"
+        class="input-item"
+      />
       <!-- 活动介绍输入 -->
-      <el-input size="large" placeholder="请输入活动介绍" v-model="updateActiveForm.description" class="input-item" />
+      <el-input
+        size="large"
+        placeholder="请输入活动介绍"
+        v-model="updateActiveForm.description"
+        class="input-item"
+      />
       <!-- 提交按钮 -->
       <el-button size="large" type="primary" @click="submit">提交</el-button>
     </div>

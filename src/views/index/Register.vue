@@ -7,7 +7,7 @@ const registerForm = ref<Register>({
   telephone: '',
   password: '',
   confirmPassword: '',
-  role: 'elderly' // 默认角色：长辈
+  role: 'elderly', // 默认角色：长辈
 });
 
 const handleRegister = () => {
@@ -38,7 +38,12 @@ const handleRegister = () => {
       </el-form-item>
 
       <el-form-item label="确认密码">
-        <el-input v-model="registerForm.confirmPassword" type="password" placeholder="重复密码" required />
+        <el-input
+          v-model="registerForm.confirmPassword"
+          type="password"
+          placeholder="重复密码"
+          required
+        />
       </el-form-item>
 
       <!-- <el-form-item label="您的身份" class="full">
@@ -49,7 +54,9 @@ const handleRegister = () => {
         </el-radio-group>
       </el-form-item> -->
 
-      <el-button class="submit-btn full" type="primary" @click="handleRegister">开启智慧康养生活</el-button>
+      <el-button class="submit-btn full" type="primary" @click="handleRegister"
+        >开启智慧康养生活</el-button
+      >
     </el-form>
   </div>
 </template>
@@ -104,7 +111,9 @@ const handleRegister = () => {
 
       &.is-focus {
         background-color: #fff;
-        box-shadow: 0 0 0 1px #44803f inset, 0 8px 20px rgba(68, 128, 63, 0.1) !important;
+        box-shadow:
+          0 0 0 1px #44803f inset,
+          0 8px 20px rgba(68, 128, 63, 0.1) !important;
       }
     }
   }

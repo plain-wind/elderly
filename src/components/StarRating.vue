@@ -2,7 +2,7 @@
 import { Star } from '@element-plus/icons-vue';
 defineProps<{
   rating: number;
-}>()
+}>();
 </script>
 
 <template>

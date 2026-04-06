@@ -1,6 +1,6 @@
 <template>
   <div class="detail">
-    <el-button size="large" style="margin-bottom: 10px;" @click="$router.back()" plain>
+    <el-button size="large" style="margin-bottom: 10px" @click="$router.back()" plain>
       <el-icon>
         <ArrowLeft />
       </el-icon>
@@ -10,7 +10,7 @@
       <div class="left-column">
         <div class="user-info-card shadow-sm">
           <div class="avatar-wrapper">
-            <img src="/imgs/older.png" alt="头像">
+            <img src="/imgs/older.png" alt="头像" />
             <div class="status-badge">在线</div>
           </div>
           <div class="info-content">
@@ -22,17 +22,20 @@
               <div class="contact-item">
                 <el-icon>
                   <Location />
-                </el-icon> {{ address }}
+                </el-icon>
+                {{ address }}
               </div>
               <div class="contact-item">
                 <el-icon>
                   <Phone />
-                </el-icon> {{ phone }}
+                </el-icon>
+                {{ phone }}
               </div>
               <div class="contact-item highlight">
                 <el-icon>
                   <Warning />
-                </el-icon> 急救: {{ sonphone }}
+                </el-icon>
+                急救: {{ sonphone }}
               </div>
             </div>
           </div>
@@ -41,9 +44,10 @@
         <div class="health-map shadow-sm">
           <div class="card-title">
             <div class="title-left">
-              <span class="icon-circle"><el-icon>
-                  <FirstAidKit />
-                </el-icon></span>
+              <span class="icon-circle"
+                ><el-icon>
+                  <FirstAidKit /> </el-icon
+              ></span>
               <h3>症状分布图</h3>
             </div>
             <el-button type="primary" link size="small">
@@ -56,7 +60,7 @@
           <div class="map-content">
             <div class="body-projection">
               <div class="body-img-wrapper">
-                <img src="/imgs/body.png" alt="人体示意" class="human-svg">
+                <img src="/imgs/body.png" alt="人体示意" class="human-svg" />
                 <div class="pulse-point headache"></div>
                 <div class="pulse-point backache"></div>
               </div>
@@ -89,26 +93,38 @@
         <div class="vitals-section shadow-sm">
           <div class="card-title">
             <div class="title-left">
-              <span class="icon-circle"><el-icon>
-                  <Monitor />
-                </el-icon></span>
+              <span class="icon-circle"
+                ><el-icon>
+                  <Monitor /> </el-icon
+              ></span>
               <h3>体征数据监测</h3>
             </div>
-            <el-date-picker v-model="selectedDate" type="date" size="default" :clearable="false" style="width: 140px" />
+            <el-date-picker
+              v-model="selectedDate"
+              type="date"
+              size="default"
+              :clearable="false"
+              style="width: 140px"
+            />
           </div>
 
           <div class="vitals-grid">
             <div class="vital-card">
-              <div class="vital-icon-bg"><img src="/imgs/bodyData/ydbs.gif"></div>
+              <div class="vital-icon-bg"><img src="/imgs/bodyData/ydbs.gif" /></div>
               <div class="vital-info">
                 <label>今日运动</label>
                 <div class="value-unit"><span class="val">6,432</span>步</div>
-                <el-progress :percentage="70" :show-text="false" :stroke-width="4" color="#44803f" />
+                <el-progress
+                  :percentage="70"
+                  :show-text="false"
+                  :stroke-width="4"
+                  color="#44803f"
+                />
               </div>
             </div>
 
             <div class="vital-card">
-              <div class="vital-icon-bg"><img src="/imgs/bodyData/xl.gif"></div>
+              <div class="vital-icon-bg"><img src="/imgs/bodyData/xl.gif" /></div>
               <div class="vital-info">
                 <label>实时心率</label>
                 <div class="value-unit"><span class="val">76</span>bpm</div>
@@ -117,7 +133,7 @@
             </div>
 
             <div class="vital-card">
-              <div class="vital-icon-bg"><img src="/imgs/bodyData/xy.gif"></div>
+              <div class="vital-icon-bg"><img src="/imgs/bodyData/xy.gif" /></div>
               <div class="vital-info">
                 <label>血氧饱和度</label>
                 <div class="value-unit"><span class="val">98</span>%</div>
@@ -126,7 +142,7 @@
             </div>
 
             <div class="vital-card">
-              <div class="vital-icon-bg"><img src="/imgs/bodyData/smsc.gif"></div>
+              <div class="vital-icon-bg"><img src="/imgs/bodyData/smsc.gif" /></div>
               <div class="vital-info">
                 <label>昨晚睡眠</label>
                 <div class="value-unit"><span class="val">7.5</span>h</div>
@@ -135,7 +151,7 @@
             </div>
 
             <div class="vital-card">
-              <div class="vital-icon-bg"><img src="/imgs/bodyData/ysl.gif"></div>
+              <div class="vital-icon-bg"><img src="/imgs/bodyData/ysl.gif" /></div>
               <div class="vital-info">
                 <label>累计饮水</label>
                 <div class="value-unit"><span class="val">1,200</span>ml</div>
@@ -144,7 +160,7 @@
             </div>
 
             <div class="vital-card">
-              <div class="vital-icon-bg"><img src="/imgs/bodyData/qs.gif"></div>
+              <div class="vital-icon-bg"><img src="/imgs/bodyData/qs.gif" /></div>
               <div class="vital-info">
                 <label>今日情绪</label>
                 <div class="value-unit"><span class="val">愉悦</span></div>
@@ -157,9 +173,10 @@
         <div class="reports-section shadow-sm">
           <div class="card-title">
             <div class="title-left">
-              <span class="icon-circle"><el-icon>
-                  <Document />
-                </el-icon></span>
+              <span class="icon-circle"
+                ><el-icon>
+                  <Document /> </el-icon
+              ></span>
               <h3>健康检查报告</h3>
             </div>
             <el-button link type="primary">更多</el-button>
@@ -167,17 +184,20 @@
           <div class="report-container">
             <div v-for="i in 3" :key="i" class="report-file-item">
               <div class="file-info">
-                <div class="pdf-icon"><el-icon>
+                <div class="pdf-icon">
+                  <el-icon>
                     <Files />
-                  </el-icon></div>
+                  </el-icon>
+                </div>
                 <div class="file-text">
                   <span class="file-name">2025年度复检报告_0{{ i }}.pdf</span>
                   <span class="file-meta">2025-09-{{ 20 + i }}</span>
                 </div>
               </div>
-              <el-button link type="primary"><el-icon>
-                  <Download />
-                </el-icon></el-button>
+              <el-button link type="primary"
+                ><el-icon>
+                  <Download /> </el-icon
+              ></el-button>
             </div>
           </div>
         </div>
@@ -189,9 +209,16 @@
 <script setup lang="ts">
 // 导入所有用到的图标
 import {
-  Location, Phone, Warning, FirstAidKit,
-  ArrowRight, Monitor, Document, Files, Download,
-  ArrowLeft
+  Location,
+  Phone,
+  Warning,
+  FirstAidKit,
+  ArrowRight,
+  Monitor,
+  Document,
+  Files,
+  Download,
+  ArrowLeft,
 } from '@element-plus/icons-vue';
 
 const { name, address, phone, sonphone } = useRoute().query;
@@ -335,7 +362,6 @@ $text-main: #2c3e50;
 
 // 症状分布图 - 核心调整
 .health-map {
-
   .map-content {
     display: flex;
     gap: 20px;

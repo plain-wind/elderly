@@ -31,25 +31,29 @@ import MonitorMap from '@/components/monitor/MonitorMap.vue';
 import MonitorAlerts from '@/components/monitor/MonitorAlerts.vue';
 
 const currentTime = ref(new Date().toLocaleString());
-setInterval(() => { currentTime.value = new Date().toLocaleString(); }, 1000);
+setInterval(() => {
+  currentTime.value = new Date().toLocaleString();
+}, 1000);
 
 const stats = ref([
   { label: '老年人总数', value: '156' },
   { label: '管理员总数', value: '1' },
   { label: '监护人总数', value: '240' },
-  { label: '体征异常人数', value: '5', warning: true }
+  { label: '体征异常人数', value: '5', warning: true },
 ]);
 
 const jcyjData = ref([
   { id: 1, title: '检测到跌倒', name: '王秀英', address: '5号楼3单元301', time: '13:00:01' },
   { id: 2, title: '检测到烟雾', name: '李明', address: '8号楼3单元201', time: '13:15:20' },
-  { id: 3, title: '心率异常', name: '刘志强', address: '8号楼2单元202', time: '13:45:10' }
+  { id: 3, title: '心率异常', name: '刘志强', address: '8号楼2单元202', time: '13:45:10' },
 ]);
 </script>
 
 <style scoped lang="scss">
 .dashboard-container {
-  --dashboard-bg: radial-gradient(circle at 50% -10%, rgba(115, 194, 255, 0.24), transparent 45%), linear-gradient(180deg, #0c2a88 0%, #0a2375 35%, #07195a 100%);
+  --dashboard-bg:
+    radial-gradient(circle at 50% -10%, rgba(115, 194, 255, 0.24), transparent 45%),
+    linear-gradient(180deg, #0c2a88 0%, #0a2375 35%, #07195a 100%);
   --dashboard-text: #d9eeff;
   --grid-line: rgba(124, 183, 255, 0.08);
   --grid-opacity: 0.28;
@@ -135,7 +139,7 @@ const jcyjData = ref([
   color: var(--dashboard-text);
   min-height: 100vh;
   padding: 10px 12px 12px;
-  font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+  font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
   overflow: hidden;
 
   &.theme-dark {
@@ -226,8 +230,20 @@ const jcyjData = ref([
     position: absolute;
     inset: 0;
     background:
-      repeating-linear-gradient(0deg, var(--grid-line) 0, var(--grid-line) 1px, transparent 1px, transparent 32px),
-      repeating-linear-gradient(90deg, var(--grid-line) 0, var(--grid-line) 1px, transparent 1px, transparent 32px);
+      repeating-linear-gradient(
+        0deg,
+        var(--grid-line) 0,
+        var(--grid-line) 1px,
+        transparent 1px,
+        transparent 32px
+      ),
+      repeating-linear-gradient(
+        90deg,
+        var(--grid-line) 0,
+        var(--grid-line) 1px,
+        transparent 1px,
+        transparent 32px
+      );
     opacity: var(--grid-opacity);
     pointer-events: none;
   }
@@ -293,7 +309,6 @@ const jcyjData = ref([
 .chart-box-small {
   height: 180px;
 }
-
 
 .dot {
   display: inline-block;

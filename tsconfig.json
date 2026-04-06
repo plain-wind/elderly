@@ -9,23 +9,11 @@
     "target": "ESNext",
     "ignoreDeprecations": "6.0",
     "baseUrl": ".",
-    "lib": [
-      "DOM",
-      "ESNext"
-    ],
+    "lib": ["DOM", "ESNext"],
     "paths": {
-      "@/*": [
-        "src/*"
-      ]
+      "@/*": ["src/*"]
     },
-    "types": [
-      "@amap/amap-jsapi-types",
-    ]
+    "types": ["@amap/amap-jsapi-types"]
   },
-  "include": [
-    "src/**/*",
-    "components.d.ts",
-    "auto-imports.d.ts",
-    "vite-env.d.ts"
-  ],
+  "include": ["src/**/*", "components.d.ts", "auto-imports.d.ts", "vite-env.d.ts"]
 }

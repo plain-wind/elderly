@@ -2,7 +2,9 @@
   <DataCard class="stat-grid">
     <div class="stat-item" v-for="(item, index) in stats" :key="item.label">
       <span class="label">{{ item.label }}</span>
-      <span class="value" :class="{ warning: item.warning }">{{ animatedValues[index] ?? item.value }}</span>
+      <span class="value" :class="{ warning: item.warning }">{{
+        animatedValues[index] ?? item.value
+      }}</span>
     </div>
   </DataCard>
 </template>

@@ -22,8 +22,16 @@ handleStatusChange(status.value);
       </el-radio-group>
     </div>
     <div class="content">
-      <volunt-item v-for="item in voluntList" :key="item.id" :id="item.id" :imgSrc="item.imgSrc"
-        :activeName="item.activeName" :name="item.name" :position="item.position" :status="item.status" />
+      <volunt-item
+        v-for="item in voluntList"
+        :key="item.id"
+        :id="item.id"
+        :imgSrc="item.imgSrc"
+        :activeName="item.activeName"
+        :name="item.name"
+        :position="item.position"
+        :status="item.status"
+      />
     </div>
   </div>
 </template>

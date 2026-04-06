@@ -1,7 +1,7 @@
-import { defineStore } from "pinia";
+import { defineStore } from 'pinia';
 import { VoluntStatus as Status, Volunt } from '@/types';
 
-export const useVoluntStore = defineStore("volunt", () => {
+export const useVoluntStore = defineStore('volunt', () => {
   const status = ref<Status>(Status.All);
   const voluntAll = ref<Volunt[]>([
     {
@@ -68,9 +68,9 @@ export const useVoluntStore = defineStore("volunt", () => {
     if (val === Status.All) {
       voluntList.value = voluntAll.value;
     } else {
-      voluntList.value = voluntAll.value.filter(item => item.status === val);
+      voluntList.value = voluntAll.value.filter((item) => item.status === val);
     }
-  }
+  };
 
   return { status, voluntList, handleStatusChange };
 });

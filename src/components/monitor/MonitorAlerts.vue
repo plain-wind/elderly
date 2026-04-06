@@ -130,6 +130,8 @@ onUnmounted(() => {
   font-size: 14px;
 
   .alert-item {
+    position: relative;
+    overflow: hidden;
     background: var(--alert-item-bg);
     margin-bottom: 8px;
     padding: 8px;
@@ -138,6 +140,28 @@ onUnmounted(() => {
     border-radius: 4px;
     cursor: pointer;
     transition: background 0.3s, transform 0.2s;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg,
+          transparent,
+          rgba(240, 59, 59, 0.15),
+          transparent);
+      transform: translateX(-100%);
+      animation: waveMove 2s linear infinite;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    >* {
+      position: relative;
+      z-index: 1;
+    }
 
     &:hover {
       background: var(--alert-item-hover);
@@ -160,5 +184,15 @@ onUnmounted(() => {
 
 .device-status-chart {
   height: 220px;
+}
+
+@keyframes waveMove {
+  0% {
+    transform: translateX(-100%) skewX(-15deg);
+  }
+
+  100% {
+    transform: translateX(200%) skewX(-15deg);
+  }
 }
 </style>

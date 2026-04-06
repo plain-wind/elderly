@@ -3,11 +3,6 @@
     <header class="header">
       <div class="now-time">{{ currentTime }}</div>
       <h1 class="title">智护银龄数据监控中心</h1>
-      <div class="header-actions">
-        <button class="switch-btn" @click="isMonitor = !isMonitor">
-          {{ isMonitor ? '切换到地图' : '切换到监控' }}
-        </button>
-      </div>
     </header>
 
     <main class="main-content">
@@ -17,7 +12,7 @@
       </PanelColumn>
 
       <PanelColumn>
-        <MonitorMap :isMonitor="isMonitor" />
+        <MonitorMap />
       </PanelColumn>
 
       <PanelColumn>
@@ -37,8 +32,6 @@ import MonitorAlerts from '@/components/monitor/MonitorAlerts.vue';
 
 const currentTime = ref(new Date().toLocaleString());
 setInterval(() => { currentTime.value = new Date().toLocaleString(); }, 1000);
-
-const isMonitor = ref(true);
 
 const stats = ref([
   { label: '老年人总数', value: '156' },
@@ -273,25 +266,6 @@ const jcyjData = ref([
     color: var(--time-color);
     letter-spacing: 2px;
     font-size: 14px;
-  }
-
-  .header-actions {
-    position: absolute;
-    right: 20px;
-    display: flex;
-    gap: 10px;
-  }
-
-  .switch-btn {
-    padding: 8px 14px;
-    background: var(--switch-bg);
-    color: var(--switch-color);
-    border: 1px solid var(--switch-border);
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 14px;
-    letter-spacing: 1px;
-    box-shadow: 0 0 14px var(--switch-shadow);
   }
 
   .main-content {

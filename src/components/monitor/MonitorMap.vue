@@ -1,13 +1,11 @@
 <template>
-  <div style="height: 100%;">
-    <div class="video-box" v-show="isMonitor">
+  <div class="monitor-map-container">
+    <div class="video-box">
       <Video src="http://localhost:5000/video_feed" />
-      <template v-for="index in 3" :key="index">
-        <Video />
-      </template>
+      <Video />
     </div>
 
-    <div v-show="!isMonitor" class="map-container">
+    <div class="map-container">
       <div id="amap-container"></div>
       <div class="map-overlay">
         <div class="map-status"><span class="dot"></span> 电子围栏监控：活跃</div>
@@ -36,15 +34,12 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref, nextTick, watch } from 'vue';
 import AMapLoader from '@amap/amap-jsapi-loader';
 import DataCard from '@/components/DataCard.vue';
 import Video from '@/components/Video.vue';
 import { useGeofenceStore } from '@/stores/geofence';
 
 interface DzwlItem { id: number; name: string; time: string; lnglat: [number, number]; }
-
-const props = defineProps<{ isMonitor: boolean; }>();
 
 const map = ref<AMap.Map | null>(null);
 const amapLib = ref<any>(null);
@@ -350,16 +345,7 @@ onMounted(async () => {
   }, 100);
 
   await nextTick();
-  if (!props.isMonitor) {
-    await initMap();
-  }
-});
-
-watch(() => props.isMonitor, async (value) => {
-  if (!value) {
-    await nextTick();
-    await initMap();
-  }
+  await initMap();
 });
 
 onUnmounted(() => {
@@ -371,20 +357,25 @@ onUnmounted(() => {
 </script>
 
 <style lang="scss" scoped>
-.video-box {
+.monitor-map-container {
+  display: flex;
+  flex-direction: column;
   height: 100%;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
   gap: 10px;
 }
 
+.video-box {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  flex: 1;
+}
+
 .map-container {
-  height: 100%;
   flex: 1;
   position: relative;
   border: 1px solid var(--map-border);
   border-radius: 8px;
-  overflow: hidden;
   box-shadow: var(--map-shadow);
 
   #amap-container {

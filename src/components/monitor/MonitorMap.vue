@@ -37,6 +37,7 @@
 import AMapLoader from '@amap/amap-jsapi-loader';
 import DataCard from '@/components/DataCard.vue';
 import Video from '@/components/Video.vue';
+import { userApi } from '@/api';
 import { useGeofenceStore } from '@/stores/geofence';
 
 interface DzwlItem { id: number; name: string; time: string; lnglat: [number, number]; }
@@ -46,6 +47,7 @@ const amapLib = ref<any>(null);
 const geofences = ref<any[]>([]);
 const hasTeleportTarget = ref(false);
 let targetCheckTimer: number | null = null;
+let locationRefreshTimer: number | null = null;
 const isFourSelecting = ref(false);
 const fourMarkers = ref<any[]>([]);
 const fourPolygon = ref<any>(null);
@@ -57,15 +59,40 @@ const personMarkers = ref<any[]>([]);
 const returnRoutes = ref<any[]>([]);
 let currentWalking: any = null;
 
-const dzwlData = ref<DzwlItem[]>([
-  { id: 1, name: '王秀英', time: '13:00:01', lnglat: [116.3974, 39.9092] },
-  { id: 2, name: '李大爷', time: '14:20:05', lnglat: [116.3980, 39.9100] },
-  { id: 3, name: '张婆婆', time: '15:10:32', lnglat: [116.3965, 39.9085] }
-]);
+const dzwlData = ref<DzwlItem[]>([]);
 
 const dzwlDisplayData = computed<DzwlItem[]>(() => {
   return dzwlData.value.filter(item => !geofenceStore.isInsideFence(item.lnglat));
 });
+
+const formatDisplayTime = (timeText: string | null | undefined) => {
+  if (!timeText) return '--:--:--';
+  const dt = new Date(timeText);
+  if (Number.isNaN(dt.getTime())) return '--:--:--';
+  const pad = (n: number) => String(n).padStart(2, '0');
+  return `${pad(dt.getHours())}:${pad(dt.getMinutes())}:${pad(dt.getSeconds())}`;
+};
+
+const loadUserPositions = async () => {
+  try {
+    const positions = await userApi.getPositions();
+    dzwlData.value = positions
+      .map((item) => {
+        const lng = Number(item.longitude);
+        const lat = Number(item.latitude);
+        if (!Number.isFinite(lng) || !Number.isFinite(lat)) return null;
+        return {
+          id: Number(item.userId),
+          name: item.username || `用户${item.userId}`,
+          time: formatDisplayTime(item.updateTime),
+          lnglat: [lng, lat] as [number, number]
+        };
+      })
+      .filter(Boolean) as DzwlItem[];
+  } catch (error) {
+    console.error('获取用户位置失败:', error);
+  }
+};
 
 const normalizePoint = (point: any): [number, number] | null => {
   if (!point) return null;
@@ -190,6 +217,10 @@ const renderPersonMarkers = () => {
     personMarkers.value.push(marker);
   });
 };
+
+watch(dzwlData, () => {
+  renderPersonMarkers();
+}, { deep: false });
 
 const startFourSelect = async () => {
   if (!map.value) return;
@@ -344,14 +375,23 @@ onMounted(async () => {
     }
   }, 100);
 
+  await loadUserPositions();
+
   await nextTick();
   await initMap();
+  console.log(dzwlData.value);
+
+  locationRefreshTimer = window.setInterval(() => {
+    loadUserPositions();
+  }, 10000);
 });
 
 onUnmounted(() => {
   if (targetCheckTimer !== null) window.clearInterval(targetCheckTimer);
+  if (locationRefreshTimer !== null) window.clearInterval(locationRefreshTimer);
   cleanupFourTemp();
   clearReturnRoutes();
+  clearPersonMarkers();
   if (map.value) map.value.destroy();
 });
 </script>

@@ -10,5 +10,8 @@
   },
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "dependi.npm.lockFileEnabled": false
+  "dependi.npm.lockFileEnabled": false,
+  "conventionalCommits.scopes": [
+    "api"
+  ]
 }

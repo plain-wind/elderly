@@ -3,7 +3,7 @@ import type { userPositionRes } from '@/types/response';
 
 export const userApi = {
   getPositions: async () => {
-    const userIds = Array.from({ length: 156 }, (_, i) => i + 1);
+    const userIds = Array.from({ length: 20 }, (_, i) => i + 1);
     const ans = [];
     for (const id of userIds) {
       const { userId, username, latitude, longitude, updateTime } = (await request.get(

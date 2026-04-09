@@ -1,22 +1,24 @@
 <template>
-  <DataCard title="实时监测预警">
-    <div class="alert-list">
-      <div v-for="item in jcyjData" :key="item.id" class="alert-item" @click="goDetail(item)">
-        <div class="alert-header">
-          <span class="alert-type">{{ item.title }}</span>
-          <span class="alert-name">{{ item.name }}</span>
+  <div class="alerts-column">
+    <DataCard class="alerts-card" title="实时监测预警">
+      <div class="alert-list">
+        <div v-for="item in jcyjData" :key="item.id" class="alert-item" @click="goDetail(item)">
+          <div class="alert-header">
+            <span class="alert-type">{{ item.title }}</span>
+            <span class="alert-name">{{ item.name }}</span>
+          </div>
+          <p class="alert-addr">{{ item.address }}</p>
+          <p class="alert-time">{{ item.time }}</p>
         </div>
-        <p class="alert-addr">{{ item.address }}</p>
-        <p class="alert-time">{{ item.time }}</p>
       </div>
-    </div>
-  </DataCard>
+    </DataCard>
 
-  <div id="geofence-records-target"></div>
+    <div id="geofence-records-target" class="geofence-records-target"></div>
 
-  <DataCard title="智能设备状态">
-    <div ref="deviceChartRef" class="device-status-chart"></div>
-  </DataCard>
+    <DataCard class="device-card" title="智能设备状态">
+      <div ref="deviceChartRef" class="device-status-chart"></div>
+    </DataCard>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -133,8 +135,24 @@ onUnmounted(() => {
 </script>
 
 <style scoped lang="scss">
+.alerts-column {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  height: 100%;
+  min-height: 0;
+}
+
+.alerts-card {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 180px;
+}
+
 .alert-list {
   flex: 1;
+  min-height: 0;
   overflow-y: auto;
   font-size: 14px;
 
@@ -190,8 +208,36 @@ onUnmounted(() => {
   }
 }
 
+.geofence-records-target {
+  flex: 1;
+  min-height: 180px;
+  max-height: 320px;
+  min-width: 0;
+  overflow: hidden;
+
+  :deep(.data-card) {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+  }
+
+  :deep(.scroll-list) {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+  }
+}
+
+.device-card {
+  flex: 0 0 260px;
+  display: flex;
+  flex-direction: column;
+}
+
 .device-status-chart {
-  height: 220px;
+  flex: 1;
+  min-height: 0;
 }
 
 @keyframes waveMove {

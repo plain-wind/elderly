@@ -12,6 +12,7 @@
       </PanelColumn>
 
       <PanelColumn>
+        <MonitorVideos />
         <MonitorMap />
       </PanelColumn>
 
@@ -28,6 +29,7 @@ import PanelColumn from '@/components/PanelColumn.vue';
 import MonitorStats from '@/components/monitor/MonitorStats.vue';
 import MonitorCharts from '@/components/monitor/MonitorCharts.vue';
 import MonitorMap from '@/components/monitor/MonitorMap.vue';
+import MonitorVideos from '@/components/monitor/MonitorVideos.vue';
 import MonitorAlerts from '@/components/monitor/MonitorAlerts.vue';
 
 const currentTime = ref(new Date().toLocaleString());
@@ -230,20 +232,16 @@ const jcyjData = ref([
     position: absolute;
     inset: 0;
     background:
-      repeating-linear-gradient(
-        0deg,
+      repeating-linear-gradient(0deg,
         var(--grid-line) 0,
         var(--grid-line) 1px,
         transparent 1px,
-        transparent 32px
-      ),
-      repeating-linear-gradient(
-        90deg,
+        transparent 32px),
+      repeating-linear-gradient(90deg,
         var(--grid-line) 0,
         var(--grid-line) 1px,
         transparent 1px,
-        transparent 32px
-      );
+        transparent 32px);
     opacity: var(--grid-opacity);
     pointer-events: none;
   }
@@ -291,13 +289,14 @@ const jcyjData = ref([
     grid-template-columns: 320px 1fr 320px;
     gap: 15px;
     height: calc(100vh - 90px);
+    min-height: 0;
     margin-top: 10px;
   }
 
   @media (max-width: 1366px) {
     .main-content {
       grid-template-columns: 280px 1fr 280px;
-      gap: 10px;
+      row-gap: 10px;
     }
   }
 }

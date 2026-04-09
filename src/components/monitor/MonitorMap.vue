@@ -4,28 +4,18 @@
     <div class="map-overlay">
       <div class="map-status"><span class="dot"></span> 电子围栏监控：活跃</div>
       <div class="map-controls">
-        <el-button size="small" type="primary" @click="startFourSelect" v-if="!isFourSelecting"
-          >四点围栏</el-button
-        >
-        <el-button size="small" type="success" @click="confirmFour" v-if="isFourSelecting"
-          >保存</el-button
-        >
-        <el-button size="small" type="warning" @click="cancelFour" v-if="isFourSelecting"
-          >取消</el-button
-        >
+        <el-button size="small" type="primary" @click="startFourSelect" v-if="!isFourSelecting">四点围栏</el-button>
+        <el-button size="small" type="success" @click="confirmFour" v-if="isFourSelecting">保存</el-button>
+        <el-button size="small" type="warning" @click="cancelFour" v-if="isFourSelecting">取消</el-button>
       </div>
     </div>
   </div>
 
   <teleport v-if="hasTeleportTarget" to="#geofence-records-target">
-    <DataCard title="电子围栏实时记录">
+    <DataCard class="geofence-records-card" title="电子围栏实时记录">
       <div class="scroll-list">
-        <div
-          v-for="item in dzwlDisplayData"
-          :key="item.id"
-          class="list-item clickable"
-          @click="focusElder(item.lnglat)"
-        >
+        <div v-for="item in dzwlDisplayData" :key="item.id" class="list-item clickable"
+          @click="focusElder(item.lnglat)">
           <span class="tag tag--outside">越界</span>
           <span class="name">{{ item.name }}</span>
           <span class="time">{{ item.time }}</span>
@@ -39,7 +29,6 @@
 <script setup lang="ts">
 import AMapLoader from '@amap/amap-jsapi-loader';
 import DataCard from '@/components/DataCard.vue';
-import Video from '@/components/Video.vue';
 import { userApi } from '@/api';
 import { useGeofenceStore } from '@/stores/geofence';
 
@@ -145,7 +134,7 @@ const replaceGeofence = (
   geofences.value.forEach((fence) => {
     try {
       fence.polygon?.setMap(null);
-    } catch (e) {}
+    } catch (e) { }
   });
   geofences.value = [];
 
@@ -205,7 +194,7 @@ const clearPersonMarkers = () => {
   personMarkers.value.forEach((m) => {
     try {
       m.setMap(null);
-    } catch (e) {}
+    } catch (e) { }
   });
   personMarkers.value = [];
 };
@@ -259,7 +248,7 @@ const startFourSelect = async () => {
   };
   try {
     map.value.on('click', mapClickHandler);
-  } catch (err) {}
+  } catch (err) { }
 };
 
 const addFourMarker = (lnglat: [number, number]) => {
@@ -272,7 +261,7 @@ const addFourMarker = (lnglat: [number, number]) => {
   if (fourMarkers.value.length === 4) {
     try {
       map.value.off('click', mapClickHandler);
-    } catch (err) {}
+    } catch (err) { }
     mapClickHandler = null;
   }
 };
@@ -326,18 +315,18 @@ const cancelFour = () => {
 const cleanupFourTemp = () => {
   try {
     if (map.value && mapClickHandler) map.value.off('click', mapClickHandler);
-  } catch (err) {}
+  } catch (err) { }
   mapClickHandler = null;
   fourMarkers.value.forEach((m) => {
     try {
       m.setMap(null);
-    } catch (e) {}
+    } catch (e) { }
   });
   fourMarkers.value = [];
   if (fourPolygon.value) {
     try {
       fourPolygon.value.setMap(null);
-    } catch (e) {}
+    } catch (e) { }
   }
   fourPolygon.value = null;
 };
@@ -346,7 +335,7 @@ const clearReturnRoutes = () => {
   returnRoutes.value.forEach((r) => {
     try {
       r.setMap(null);
-    } catch (e) {}
+    } catch (e) { }
   });
   returnRoutes.value = [];
 };
@@ -459,13 +448,6 @@ onUnmounted(() => {
 </script>
 
 <style lang="scss" scoped>
-.video-box {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  flex: 1;
-}
-
 .map-container {
   flex: 1;
   position: relative;
@@ -584,6 +566,7 @@ onUnmounted(() => {
   }
 
   @keyframes run {
+
     0%,
     100% {
       transform: translateY(0);
@@ -598,7 +581,7 @@ onUnmounted(() => {
 /* 列表样式修复 */
 .scroll-list {
   flex: 1;
-  height: 100%;
+  min-height: 0;
   overflow-y: auto;
 
   .list-item {
@@ -631,6 +614,13 @@ onUnmounted(() => {
   font-size: 10px;
   color: var(--hint-color);
   text-align: right;
-  margin-top: 30px;
+  margin-top: 8px;
+}
+
+.geofence-records-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
 }
 </style>

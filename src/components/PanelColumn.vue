@@ -10,5 +10,7 @@
   flex-direction: column;
   gap: 12px;
   height: 100%;
+  min-height: 0;
+  overflow: hidden;
 }
 </style>

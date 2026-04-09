@@ -10,7 +10,13 @@
 <style scoped lang="scss">
 .container {
   display: flex;
+  flex-direction: row;
   gap: 10px;
-  height: 100%;
+  flex: 1;
+  min-height: 260px;
+
+  :deep(.video-container) {
+    flex: 1;
+  }
 }
 </style>

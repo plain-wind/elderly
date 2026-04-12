@@ -1,7 +1,7 @@
 import axios, { type AxiosError, type AxiosResponse } from 'axios';
 
 const request = axios.create({
-  baseURL: import.meta.env.VITE_BASE_API,
+  baseURL: import.meta.env.VITE_BASE_API || '/api',
   timeout: 30000,
   headers: {
     'Content-Type': 'application/json',

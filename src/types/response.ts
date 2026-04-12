@@ -7,3 +7,31 @@ export interface userPositionRes {
   createTime: string;
   updateTime: string;
 }
+
+export interface activityRes {
+  id: number;
+  name: string;
+  phone: string;
+  image: string;
+  place: string;
+  publisher: string;
+  numberOfApplicants: number;
+  credit: number;
+  description: string;
+  startTime: string;
+  endTime: string;
+  applicants: string[];
+}
+
+export interface activityListRes {
+  list: activityRes[];
+  total: number;
+  pageNum: number;
+  pageSize: number;
+  totalPages: number;
+  hasNext: boolean;
+  hasPrevious: boolean;
+  navigatePages: number[];
+  firstPage: boolean;
+  lastPage: boolean;
+}

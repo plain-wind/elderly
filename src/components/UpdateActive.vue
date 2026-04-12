@@ -3,6 +3,8 @@ import { Active, ActiveStatus } from '@/types';
 import { ref } from 'vue';
 import Mask from './Mask.vue';
 import { Plus, Close } from '@element-plus/icons-vue';
+import { activeApi } from '@/api';
+import type { activityReq } from '@/types/request';
 
 const emit = defineEmits<{
   (e: 'update:isOpen', isOpen: boolean): void;
@@ -19,26 +21,50 @@ const updateActiveForm = ref<Active>({
   id: 0,
   imgSrc: '',
   activeName: '',
-  date: '',
+  startTime: '',
+  endTime: '',
   position: '',
   personNum: null,
   description: '',
   status: ActiveStatus.Open,
 });
 
-const submit = () => {
-  emit('update:isOpen', false);
-  emit('update', updateActiveForm.value);
-  // 这里可以添加表单验证和提交逻辑
+const resetForm = () => {
   updateActiveForm.value = {
     id: 0,
     imgSrc: '',
     activeName: '',
-    date: '',
+    startTime: '',
+    endTime: '',
     position: '',
     personNum: null,
+    description: '',
     status: ActiveStatus.Open,
   };
+};
+
+const submit = () => {
+  emit('update:isOpen', false);
+  emit('update', updateActiveForm.value);
+  // 这里可以添加表单验证和提交逻辑
+  const param: activityReq = {
+    id: Math.floor(Math.random() * 10000), // 生成随机 ID，实际应用中应由后端生成
+    name: updateActiveForm.value.activeName,
+    image: updateActiveForm.value.imgSrc,
+    place: updateActiveForm.value.position,
+    numberOfApplicants: updateActiveForm.value.personNum ?? 0,
+    credit: updateActiveForm.value.personNum ?? 0,
+    description: updateActiveForm.value.description,
+    startTime: updateActiveForm.value.startTime,
+    endTime: updateActiveForm.value.endTime,
+    applicants: []
+  };
+  try {
+    activeApi.addActivity(param);
+  } catch (error) {
+    console.error('添加活动失败:', error);
+  }
+  resetForm();
 };
 
 const onFileChange = (e: Event) => {
@@ -62,54 +88,24 @@ const onFileChange = (e: Event) => {
       </div>
       <h2>添加活动</h2>
       <!-- 活动名称输入 -->
-      <el-input
-        size="large"
-        placeholder="请输入活动名称"
-        v-model="updateActiveForm.activeName"
-        class="input-item"
-      />
+      <el-input size="large" placeholder="请输入活动名称" v-model="updateActiveForm.activeName" class="input-item" />
       <!-- 活动图片输入 -->
       <img v-if="updateActiveForm.imgSrc" :src="updateActiveForm.imgSrc" alt="活动图片" />
       <el-icon v-else class="img-icon" @click="fileInput?.click()">
         <Plus />
       </el-icon>
-      <input
-        type="file"
-        accept="image/*"
-        style="display: none"
-        ref="fileInput"
-        @change="onFileChange"
-      />
+      <input type="file" accept="image/*" style="display: none" ref="fileInput" @change="onFileChange" />
       <!-- 活动日期输入 -->
-      <el-date-picker
-        size="large"
-        v-model="updateActiveForm.date"
-        value-format="YYYY-MM-DD"
-        type="date"
-        placeholder="请选择活动日期"
-        class="input-item"
-      />
+      <el-date-picker size="large" v-model="updateActiveForm.startTime" value-format="YYYY-MM-DD" type="date"
+        placeholder="请选择开始日期" class="input-item" />
+      <el-date-picker size="large" v-model="updateActiveForm.endTime" value-format="YYYY-MM-DD" type="date"
+        placeholder="请选择结束日期" class="input-item" />
       <!-- 活动地点输入 -->
-      <el-input
-        size="large"
-        placeholder="请输入活动地点"
-        v-model="updateActiveForm.position"
-        class="input-item"
-      />
+      <el-input size="large" placeholder="请输入活动地点" v-model="updateActiveForm.position" class="input-item" />
       <!-- 活动人数输入 -->
-      <el-input
-        size="large"
-        placeholder="请输入活动人数"
-        v-model.number="updateActiveForm.personNum"
-        class="input-item"
-      />
+      <el-input size="large" placeholder="请输入活动人数" v-model.number="updateActiveForm.personNum" class="input-item" />
       <!-- 活动介绍输入 -->
-      <el-input
-        size="large"
-        placeholder="请输入活动介绍"
-        v-model="updateActiveForm.description"
-        class="input-item"
-      />
+      <el-input size="large" placeholder="请输入活动介绍" v-model="updateActiveForm.description" class="input-item" />
       <!-- 提交按钮 -->
       <el-button size="large" type="primary" @click="submit">提交</el-button>
     </div>
@@ -122,7 +118,7 @@ $img-size: 150px;
 .update-active {
   font-size: 18px;
   width: 450px;
-  height: 600px;
+  height: 700px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;

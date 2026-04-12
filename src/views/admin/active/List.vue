@@ -30,16 +30,9 @@ handleStatusChange(status.value);
     </div>
 
     <div class="content">
-      <active-item
-        v-for="item in activeList"
-        :key="item.id"
-        :imgSrc="item.imgSrc"
-        :activeName="item.activeName"
-        :date="item.date"
-        :position="item.position"
-        :personNum.number="Number(item.personNum)"
-        :status="item.status"
-      />
+      <active-item v-for="item in activeList" :key="item.id" :imgSrc="item.imgSrc" :activeName="item.activeName"
+        :startTime="item.startTime" :endTime="item.endTime" :position="item.position"
+        :personNum.number="Number(item.personNum)" :status="item.status" />
     </div>
 
     <teleport to="#app">

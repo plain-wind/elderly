@@ -18,7 +18,7 @@ const route = useRoute();
 const router = useRouter();
 
 // 接收路由参数
-const { id, imgSrc, activeName, date, position, personNum, status }: Active = route.query as any;
+const { id, imgSrc, activeName, startTime, endTime, position, personNum, status }: Active = route.query as any;
 
 // 模拟额外数据
 const activeDetails = {
@@ -165,7 +165,7 @@ const shareActivity = () => {
                 <el-icon>
                   <Calendar />
                 </el-icon>
-                <span>{{ date }}</span>
+                <span>{{ startTime }} - {{ endTime }}</span>
               </div>
               <div class="info-item">
                 <el-icon>
@@ -226,7 +226,7 @@ const shareActivity = () => {
         </div>
 
         <!-- 活动流程 -->
-        <div class="detail-card">
+        <!-- <div class="detail-card">
           <div class="card-header">
             <el-icon>
               <Clock />
@@ -245,10 +245,10 @@ const shareActivity = () => {
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
 
         <!-- 注意事项 -->
-        <div class="detail-card">
+        <!-- <div class="detail-card">
           <div class="card-header">
             <el-icon>
               <Star />
@@ -262,7 +262,7 @@ const shareActivity = () => {
               </li>
             </ul>
           </div>
-        </div>
+        </div> -->
 
         <!-- 参与者名单 -->
         <div class="detail-card">
@@ -274,13 +274,8 @@ const shareActivity = () => {
           </div>
           <div class="card-content">
             <div class="participants-grid">
-              <el-tag
-                v-for="(participant, index) in activeDetails.participants"
-                :key="index"
-                size="large"
-                effect="plain"
-                class="participant-tag"
-              >
+              <el-tag v-for="(participant, index) in activeDetails.participants" :key="index" size="large"
+                effect="plain" class="participant-tag">
                 {{ participant }}
               </el-tag>
             </div>
@@ -288,7 +283,7 @@ const shareActivity = () => {
         </div>
 
         <!-- 活动评价 -->
-        <div class="detail-card">
+        <!-- <div class="detail-card">
           <div class="card-header">
             <el-icon>
               <ChatDotRound />
@@ -297,11 +292,7 @@ const shareActivity = () => {
           </div>
           <div class="card-content">
             <div class="reviews-list">
-              <div
-                class="review-item"
-                v-for="(review, index) in activeDetails.reviews"
-                :key="index"
-              >
+              <div class="review-item" v-for="(review, index) in activeDetails.reviews" :key="index">
                 <div class="review-header">
                   <span class="reviewer-name">{{ review.name }}</span>
                   <div class="review-rating">
@@ -315,7 +306,7 @@ const shareActivity = () => {
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>

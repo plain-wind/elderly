@@ -4,7 +4,8 @@ import { ActiveStatus } from '@/types';
 defineProps<{
   imgSrc: string;
   activeName: string;
-  date: string;
+  startTime: string;
+  endTime: string;
   position: string;
   personNum: number;
   status: ActiveStatus;
@@ -20,30 +21,26 @@ defineProps<{
       <div class="active-active-name">
         {{ activeName }}
       </div>
-      <div class="active-date">活动日期：{{ date }}</div>
+      <div class="active-date">活动日期：{{ startTime }} - {{ endTime }}</div>
       <div class="active-position">活动地点：{{ position }}</div>
       <div class="active-person-num">活动人数：{{ personNum }}</div>
       <div class="active-btn">
-        <el-button
-          type="primary"
-          size="large"
-          @click="
-            () => {
-              $router.push({
-                name: 'activeDetail',
-                query: {
-                  imgSrc,
-                  activeName,
-                  date,
-                  position,
-                  personNum,
-                  status,
-                },
-              });
-            }
-          "
-          >查看详情</el-button
-        >
+        <el-button type="primary" size="large" @click="
+          () => {
+            $router.push({
+              name: 'activeDetail',
+              query: {
+                imgSrc,
+                activeName,
+                startTime,
+                endTime,
+                position,
+                personNum,
+                status,
+              },
+            });
+          }
+        ">查看详情</el-button>
       </div>
     </div>
   </div>

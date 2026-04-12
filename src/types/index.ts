@@ -1,3 +1,5 @@
+import { applicant } from "./request";
+
 export interface Login {
   username: string;
   password: string;
@@ -35,9 +37,10 @@ export interface Active {
   id: number;
   imgSrc: string;
   activeName: string;
-  date: string;
+  startTime: string;
+  endTime: string;
   position: string;
   personNum: number | null;
-  description?: string;
+  description: string;
   status: ActiveStatus;
 }

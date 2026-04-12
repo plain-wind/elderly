@@ -19,51 +19,63 @@ defineProps<{
 
 const updateActiveForm = ref<Active>({
   id: 0,
-  imgSrc: '',
-  activeName: '',
+  image: '',
+  name: '',
   startTime: '',
   endTime: '',
-  position: '',
-  personNum: null,
+  place: '',
+  numberOfApplicants: 0,
+  credit: 0,
   description: '',
+  phone: '',
+  publisher: '',
+  applicants: [],
   status: ActiveStatus.Open,
 });
 
 const resetForm = () => {
   updateActiveForm.value = {
     id: 0,
-    imgSrc: '',
-    activeName: '',
+    image: '',
+    name: '',
     startTime: '',
     endTime: '',
-    position: '',
-    personNum: null,
+    place: '',
+    numberOfApplicants: 0,
+    credit: 0,
     description: '',
+    phone: '',
+    publisher: '',
+    applicants: [],
     status: ActiveStatus.Open,
   };
 };
 
-const submit = () => {
+const submit = async () => {
   emit('update:isOpen', false);
   emit('update', updateActiveForm.value);
   // 这里可以添加表单验证和提交逻辑
   const param: activityReq = {
     id: Math.floor(Math.random() * 10000), // 生成随机 ID，实际应用中应由后端生成
-    name: updateActiveForm.value.activeName,
-    image: updateActiveForm.value.imgSrc,
-    place: updateActiveForm.value.position,
-    numberOfApplicants: updateActiveForm.value.personNum ?? 0,
-    credit: updateActiveForm.value.personNum ?? 0,
+    name: updateActiveForm.value.name,
+    image: updateActiveForm.value.image,
+    place: updateActiveForm.value.place,
+    numberOfApplicants: updateActiveForm.value.numberOfApplicants ?? 0,
+    credit: updateActiveForm.value.credit ?? 0,
     description: updateActiveForm.value.description,
     startTime: updateActiveForm.value.startTime,
     endTime: updateActiveForm.value.endTime,
     applicants: []
   };
+  console.log(param);
   try {
-    activeApi.addActivity(param);
+    await activeApi.add(param);
   } catch (error) {
     console.error('添加活动失败:', error);
+    ElMessage.error('添加活动失败');
+    return;
   }
+  ElMessage.success('添加活动成功');
   resetForm();
 };
 
@@ -72,7 +84,7 @@ const onFileChange = (e: Event) => {
   if (!file) return;
   const reader = new FileReader();
   reader.onload = () => {
-    updateActiveForm.value.imgSrc = String(reader.result ?? '');
+    updateActiveForm.value.image = String(reader.result ?? '');
   };
   reader.readAsDataURL(file);
 };
@@ -88,22 +100,23 @@ const onFileChange = (e: Event) => {
       </div>
       <h2>添加活动</h2>
       <!-- 活动名称输入 -->
-      <el-input size="large" placeholder="请输入活动名称" v-model="updateActiveForm.activeName" class="input-item" />
+      <el-input size="large" placeholder="请输入活动名称" v-model="updateActiveForm.name" class="input-item" />
       <!-- 活动图片输入 -->
-      <img v-if="updateActiveForm.imgSrc" :src="updateActiveForm.imgSrc" alt="活动图片" />
+      <img v-if="updateActiveForm.image" :src="updateActiveForm.image" alt="活动图片" />
       <el-icon v-else class="img-icon" @click="fileInput?.click()">
         <Plus />
       </el-icon>
       <input type="file" accept="image/*" style="display: none" ref="fileInput" @change="onFileChange" />
       <!-- 活动日期输入 -->
-      <el-date-picker size="large" v-model="updateActiveForm.startTime" value-format="YYYY-MM-DD" type="date"
-        placeholder="请选择开始日期" class="input-item" />
-      <el-date-picker size="large" v-model="updateActiveForm.endTime" value-format="YYYY-MM-DD" type="date"
+      <el-date-picker size="large" v-model="updateActiveForm.startTime" value-format="YYYY-MM-DD HH:mm:ss"
+        type="datetime" placeholder="请选择开始日期" class="input-item" />
+      <el-date-picker size="large" v-model="updateActiveForm.endTime" value-format="YYYY-MM-DD HH:mm:ss" type="datetime"
         placeholder="请选择结束日期" class="input-item" />
       <!-- 活动地点输入 -->
-      <el-input size="large" placeholder="请输入活动地点" v-model="updateActiveForm.position" class="input-item" />
+      <el-input size="large" placeholder="请输入活动地点" v-model="updateActiveForm.place" class="input-item" />
       <!-- 活动人数输入 -->
-      <el-input size="large" placeholder="请输入活动人数" v-model.number="updateActiveForm.personNum" class="input-item" />
+      <el-input size="large" placeholder="请输入活动人数" v-model.number="updateActiveForm.numberOfApplicants"
+        class="input-item" />
       <!-- 活动介绍输入 -->
       <el-input size="large" placeholder="请输入活动介绍" v-model="updateActiveForm.description" class="input-item" />
       <!-- 提交按钮 -->

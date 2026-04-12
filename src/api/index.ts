@@ -18,15 +18,18 @@ export const userApi = {
 };
 
 export const activeApi = {
-  getActivities: async () => {
+  get: async () => {
     const { list } = await request.get('/admin/activity/list') as activityListRes;
     return list;
   },
-  getActivityDetail: async (id: number) => {
+  getDetail: async (id: number) => {
     const res = await request.get('/admin/activity/detail', { params: { id } }) as activityRes;
     return res;
   },
-  addActivity: async (data: activityReq) => {
+  add: async (data: activityReq) => {
     await request.post('/admin/activity/add', data);
-  }
+  },
+  remove: async (id: number) => {
+    await request.delete('/admin/activity/delete', { params: { id } });
+  },
 };

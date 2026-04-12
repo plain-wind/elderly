@@ -1,3 +1,5 @@
+import { applicant } from '@/types';
+
 export interface userPositionRes {
   id: number;
   userId: number;
@@ -20,7 +22,7 @@ export interface activityRes {
   description: string;
   startTime: string;
   endTime: string;
-  applicants: string[];
+  applicants: applicant[];
 }
 
 export interface activityListRes {

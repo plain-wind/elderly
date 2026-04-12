@@ -1,5 +1,3 @@
-import { applicant } from "./request";
-
 export interface Login {
   username: string;
   password: string;
@@ -33,14 +31,24 @@ export interface Volunt {
   status: VoluntStatus;
 }
 
+export interface applicant {
+  name: string;
+  phone: string;
+  community: string;
+}
+
 export interface Active {
   id: number;
-  imgSrc: string;
-  activeName: string;
+  name: string;
+  phone: string;
+  image: string;
+  place: string;
+  publisher: string;
+  numberOfApplicants: number;
+  credit: number;
+  description: string;
   startTime: string;
   endTime: string;
-  position: string;
-  personNum: number | null;
-  description: string;
+  applicants: applicant[];
   status: ActiveStatus;
 }

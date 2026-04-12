@@ -1,9 +1,4 @@
-
-export interface applicant {
-  name: string;
-  phone: string;
-  community: string;
-}
+import { applicant } from '@/types';
 
 export interface activityReq {
   id: number;

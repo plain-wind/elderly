@@ -1,46 +1,63 @@
 <script setup lang="ts">
-import { ActiveStatus } from '@/types';
+import { activeApi } from '@/api';
+import { useActiveStore } from '@/stores/active';
+import { storeToRefs } from 'pinia';
 
 defineProps<{
-  imgSrc: string;
-  activeName: string;
+  id: number;
+  image: string;
+  name: string;
   startTime: string;
   endTime: string;
-  position: string;
-  personNum: number;
-  status: ActiveStatus;
+  place: string;
+  numberOfApplicants: number;
 }>();
+
+const activeStore = useActiveStore();
+const { handleStatusChange } = activeStore;
+const { activeAll, status } = storeToRefs(activeStore);
+
+const removeHandle = async (id: number) => {
+  try {
+    await activeApi.remove(id);
+    // 更新本地数据
+    activeAll.value = activeAll.value.filter((item) => item.id !== id);
+    handleStatusChange(status.value);
+    ElMessage.success('删除成功');
+  } catch (error) {
+    ElMessage.error('删除失败');
+  }
+};
 </script>
 
 <template>
   <div class="active-item">
     <div class="active-img">
-      <img :src="imgSrc" alt="" />
+      <img :src="image" alt="" />
     </div>
     <div class="active-info">
       <div class="active-active-name">
-        {{ activeName }}
+        {{ name }}
       </div>
       <div class="active-date">活动日期：{{ startTime }} - {{ endTime }}</div>
-      <div class="active-position">活动地点：{{ position }}</div>
-      <div class="active-person-num">活动人数：{{ personNum }}</div>
+      <div class="active-position">活动地点：{{ place }}</div>
+      <div class="active-person-num">活动人数：{{ numberOfApplicants }}</div>
       <div class="active-btn">
         <el-button type="primary" size="large" @click="
           () => {
             $router.push({
               name: 'activeDetail',
               query: {
-                imgSrc,
-                activeName,
-                startTime,
-                endTime,
-                position,
-                personNum,
-                status,
+                id,
               },
             });
           }
-        ">查看详情</el-button>
+        ">
+          查看详情
+        </el-button>
+        <el-button type="danger" size="large" @click="removeHandle(id)">
+          删除活动
+        </el-button>
       </div>
     </div>
   </div>

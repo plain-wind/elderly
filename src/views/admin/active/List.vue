@@ -6,14 +6,17 @@ import type { Active } from '@/types';
 import { storeToRefs } from 'pinia';
 
 const activeStore = useActiveStore();
-const { handleStatusChange } = activeStore;
+const { handleStatusChange, getActiveAll } = activeStore;
 const { status, activeList, activeAll } = storeToRefs(activeStore);
 
 // 添加活动弹窗控制变量
 const isOpen = ref(false);
 
 // 初始化时根据 status 过滤数据
-handleStatusChange(status.value);
+onMounted(async () => {
+  await getActiveAll();
+  handleStatusChange(status.value);
+});
 </script>
 
 <template>
@@ -30,9 +33,9 @@ handleStatusChange(status.value);
     </div>
 
     <div class="content">
-      <active-item v-for="item in activeList" :key="item.id" :imgSrc="item.imgSrc" :activeName="item.activeName"
-        :startTime="item.startTime" :endTime="item.endTime" :position="item.position"
-        :personNum.number="Number(item.personNum)" :status="item.status" />
+      <active-item v-for="item in activeList" :key="item.id" :id="item.id" :image="item.image" :name="item.name"
+        :startTime="item.startTime" :endTime="item.endTime" :place="item.place"
+        :numberOfApplicants="Number(item.numberOfApplicants)" />
     </div>
 
     <teleport to="#app">

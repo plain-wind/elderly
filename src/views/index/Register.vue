@@ -3,11 +3,9 @@ import { Register } from '@/types';
 
 const router = useRouter();
 const registerForm = ref<Register>({
-  name: '',
-  telephone: '',
+  username: '',
   password: '',
   confirmPassword: '',
-  role: 'elderly', // 默认角色：长辈
 });
 
 const handleRegister = () => {
@@ -25,12 +23,8 @@ const handleRegister = () => {
     </div>
 
     <el-form label-position="top" class="register-grid">
-      <el-form-item label="真实姓名" class="full">
-        <el-input v-model="registerForm.name" placeholder="请输入姓名" required />
-      </el-form-item>
-
-      <el-form-item label="手机号码" class="full">
-        <el-input v-model="registerForm.telephone" placeholder="请输入手机号" required />
+      <el-form-item label="用户名" class="full">
+        <el-input v-model="registerForm.username" placeholder="请输入用户名" required />
       </el-form-item>
 
       <el-form-item label="设置密码">
@@ -38,25 +32,10 @@ const handleRegister = () => {
       </el-form-item>
 
       <el-form-item label="确认密码">
-        <el-input
-          v-model="registerForm.confirmPassword"
-          type="password"
-          placeholder="重复密码"
-          required
-        />
+        <el-input v-model="registerForm.confirmPassword" type="password" placeholder="重复密码" required />
       </el-form-item>
 
-      <!-- <el-form-item label="您的身份" class="full">
-        <el-radio-group v-model="registerForm.role" class="custom-radio-group">
-          <el-radio-button label="elderly" value="elderly">长辈</el-radio-button>
-          <el-radio-button label="family" value="family">家属</el-radio-button>
-          <el-radio-button label="staff" value="staff">医护</el-radio-button>
-        </el-radio-group>
-      </el-form-item> -->
-
-      <el-button class="submit-btn full" type="primary" @click="handleRegister"
-        >开启智慧康养生活</el-button
-      >
+      <el-button class="submit-btn full" type="primary" @click="handleRegister">开启智慧康养生活</el-button>
     </el-form>
   </div>
 </template>

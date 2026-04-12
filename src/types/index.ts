@@ -1,14 +1,12 @@
 export interface Login {
-  telephone: string;
+  username: string;
   password: string;
 }
 
 export interface Register {
-  name: string;
-  telephone: string;
+  username: string;
   password: string;
   confirmPassword: string;
-  role: string;
 }
 
 export enum VoluntStatus {

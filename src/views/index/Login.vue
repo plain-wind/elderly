@@ -1,16 +1,15 @@
 <script setup lang="ts">
 import { User, Lock } from '@element-plus/icons-vue';
 import type { FormInstance, FormRules } from 'element-plus';
-import { validateTelephone } from '@/utils';
+import { Login } from '@/types';
 
-const loginForm = ref({ telephone: '', password: '' });
+const loginForm = ref<Login>({ username: '', password: '' });
 const router = useRouter();
 const loginFormRef = ref<FormInstance>();
 
 const rules = reactive<FormRules<typeof loginForm.value>>({
-  telephone: [
-    { required: true, message: '请输入手机号码', trigger: 'blur' },
-    { validator: validateTelephone, message: '请输入正确的手机号码', trigger: 'blur' },
+  username: [
+    { required: true, message: '请输入用户名', trigger: 'blur' },
   ],
   password: [
     { required: true, message: '请输入登录密码', trigger: 'blur' },
@@ -41,32 +40,15 @@ const handleLogin = () => {
       <div class="divider"></div>
     </div>
 
-    <el-form
-      @submit.native.prevent
-      ref="loginFormRef"
-      :model="loginForm"
-      :rules="rules"
-      label-position="top"
-      class="custom-form"
-    >
-      <el-form-item label="手机号码" prop="telephone">
-        <el-input
-          v-model="loginForm.telephone"
-          placeholder="请输入您的手机号"
-          required
-          :prefix-icon="User"
-        />
+    <el-form @submit.native.prevent ref="loginFormRef" :model="loginForm" :rules="rules" label-position="top"
+      class="custom-form">
+      <el-form-item label="用户名" prop="username">
+        <el-input v-model="loginForm.username" placeholder="请输入您的用户名" required :prefix-icon="User" />
       </el-form-item>
 
       <el-form-item label="登录密码" prop="password">
-        <el-input
-          v-model="loginForm.password"
-          type="password"
-          show-password
-          placeholder="请输入密码"
-          required
-          :prefix-icon="Lock"
-        />
+        <el-input v-model="loginForm.password" type="password" show-password placeholder="请输入密码" required
+          :prefix-icon="Lock" />
       </el-form-item>
 
       <div class="form-options">

@@ -48,38 +48,30 @@
     </div>
     <!-- 表格 -->
     <div class="bdm-table">
-      <el-table :data="tableData" border stripe class="data-table">
+      <el-table :data="userList" border stripe class="data-table">
         <el-table-column prop="name" label="患者名称" />
-        <el-table-column prop="age" label="年龄" />
-        <el-table-column prop="address" label="住址" width="300" />
-        <el-table-column prop="phone" label="联系方式" />
-        <el-table-column prop="sonphone" label="监护人联系方式" />
-        <el-table-column prop="tzsj" label="体征数据">
+        <el-table-column prop="address" label="住址" width="300">
           <template #default="{ row }">
-            <span :class="row.tzsj == '异常' ? 'status-badge warning' : 'status-badge success'">
-              {{ row.tzsj }}
-            </span>
+            <span>{{ row.provinceOrCity + row.county + row.community }}</span>
           </template>
         </el-table-column>
+        <el-table-column prop="phone" label="联系方式" />
+        <el-table-column prop="guardianName" label="监护人姓名" />
+        <el-table-column prop="guardianPhone" label="监护人联系方式" />
         <el-table-column prop="do" label="操作">
           <template #default="{ row }">
-            <el-button
-              link
-              type="primary"
-              size="default"
-              @click="
-                $router.push({
-                  name: 'detail',
-                  query: {
-                    name: row.name,
-                    address: row.address,
-                    phone: row.phone,
-                    sonphone: row.sonphone,
-                  },
-                })
-              "
-              class="detail-btn"
-            >
+            <el-button link type="primary" size="default" @click="
+              $router.push({
+                name: 'detail',
+                query: {
+                  name: row.name,
+                  address: row.address,
+                  phone: row.phone,
+                  guardianName: row.guardianName,
+                  guardianPhone: row.guardianPhone,
+                },
+              })
+              " class="detail-btn">
               查看详情
             </el-button>
           </template>
@@ -91,75 +83,20 @@
 
 <script setup lang="ts">
 import { Search, User, CircleCheck, Warning } from '@element-plus/icons-vue';
+import { userRes } from '@/types/response';
+import { userApi } from '@/api';
 
 let searchInput = ref('');
 
-const tableData = [
-  {
-    name: '刘志强',
-    age: '78',
-    address: '天津市西青区檀园嘉苑',
-    phone: '13811110001',
-    sonphone: '13821110001',
-    tzsj: '正常',
-  },
-  {
-    name: '张桂兰',
-    age: '65',
-    address: '天津市西青区檀园嘉苑',
-    phone: '13811110002',
-    sonphone: '13821110002',
-    tzsj: '正常',
-  },
-  {
-    name: '李明',
-    age: '86',
-    address: '天津市西青区檀园嘉苑',
-    phone: '13811110003',
-    sonphone: '13821110003',
-    tzsj: '异常',
-  },
-  {
-    name: '王秀英',
-    age: '71',
-    address: '天津市西青区檀园嘉苑',
-    phone: '13811110004',
-    sonphone: '13821110004',
-    tzsj: '异常',
-  },
-  {
-    name: '赵国华',
-    age: '69',
-    address: '天津市西青区檀园嘉苑',
-    phone: '13811110005',
-    sonphone: '13821110005',
-    tzsj: '正常',
-  },
-  {
-    name: '陈桂芳',
-    age: '75',
-    address: '天津市西青区檀园嘉苑',
-    phone: '13811110006',
-    sonphone: '13821110006',
-    tzsj: '正常',
-  },
-  {
-    name: '孙建国',
-    age: '63',
-    address: '天津市西青区檀园嘉苑',
-    phone: '13811110007',
-    sonphone: '13821110007',
-    tzsj: '正常',
-  },
-  {
-    name: '周玉珍',
-    age: '86',
-    address: '天津市西青区檀园嘉苑',
-    phone: '13811110008',
-    sonphone: '13821110008',
-    tzsj: '正常',
-  },
-];
+const userList = ref<userRes[]>([]);
+onMounted(async () => {
+  try {
+    userList.value = await userApi.getAll();
+  } catch (error) {
+    ElMessage.error('加载用户数据失败');
+  }
+});
+
 </script>
 
 <style scoped lang="scss">

@@ -35,7 +35,8 @@ export interface Active {
   id: number;
   imgSrc: string;
   activeName: string;
-  date: string;
+  startTime: string;  // YYYY-MM-DD HH:mm:ss
+  endTime: string;    // YYYY-MM-DD HH:mm:ss
   position: string;
   personNum: number | null;
   description?: string;

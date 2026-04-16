@@ -93,10 +93,7 @@ const routes = [
             path: 'detail',
             name: 'activeDetail',
             component: () => import('@/views/admin/active/Detail.vue'),
-            props: (route: RouteLocationNormalized) => {
-              const id = Number(route.query.id);
-              return { id };
-            },
+            props: (route: RouteLocationNormalized) => route.query
           },
         ],
       },

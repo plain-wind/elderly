@@ -28,5 +28,12 @@ export default defineConfig({
   },
   server: {
     host: '0.0.0.0',
+    proxy: {
+      '/api': {
+        target: 'http://81.70.59.160:8080',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      },
+    },
   },
 });

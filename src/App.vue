@@ -4,7 +4,11 @@ import LoadingSpinner from '@/components/LoadingSpinner.vue';
 </script>
 
 <template>
-  <router-view></router-view>
+  <router-view #default="{ Component }">
+    <keep-alive>
+      <component :is="Component" />
+    </keep-alive>
+  </router-view>
   <LoadingSpinner v-if="routerLoading" loading-text="加载中..." />
 </template>
 

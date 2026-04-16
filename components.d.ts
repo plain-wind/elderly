@@ -33,6 +33,7 @@ declare module 'vue' {
     ElTable: typeof import('element-plus/es')['ElTable']
     ElTableColumn: typeof import('element-plus/es')['ElTableColumn']
     ElTag: typeof import('element-plus/es')['ElTag']
+    ElTimePicker: typeof import('element-plus/es')['ElTimePicker']
     LoadingSpinner: typeof import('./src/components/LoadingSpinner.vue')['default']
     Mask: typeof import('./src/components/Mask.vue')['default']
     MonitorAlerts: typeof import('./src/components/monitor/MonitorAlerts.vue')['default']

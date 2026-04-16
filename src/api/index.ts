@@ -1,17 +1,61 @@
 import request from '@/api/request';
-import type { userPositionRes } from '@/types/response';
+import type { userPositionRes, userRes, ActivityItem, ActivityListResponse } from '@/types/response';
+import type { AddActivityRequest } from '@/types/request';
 
 export const userApi = {
-  getPositions: async () => {
-    const userIds = Array.from({ length: 20 }, (_, i) => i + 1);
+  getAll: async (): Promise<userRes[]> => {
+    return await request.get('/user/list');
+  },
+  getPositions: async (): Promise<userPositionRes[]> => {
+    const userIds = (await userApi.getAll()).map(item => item.id);
     const ans = [];
     for (const id of userIds) {
-      const { userId, username, latitude, longitude, updateTime } = (await request.get(
+      const position = (await request.get(
         '/user/location/get',
         { params: { userId: id } }
       )) as userPositionRes;
-      ans.push({ userId, username, latitude, longitude, updateTime });
+      position && ans.push(position);
     }
     return ans;
   },
 };
+
+// 活动相关API
+export const activityApi = {
+  // 获取活动列表
+  getList: async (): Promise<ActivityListResponse> => {
+    return await request.get('/admin/activity/list');
+  },
+
+  // 获取活动详情
+  getDetail: async (id: string): Promise<ActivityItem> => {
+    return await request.get('/admin/activity/detail', { params: { id } });
+  },
+
+  // 添加（创建）活动
+  add: async (activity: AddActivityRequest): Promise<string> => {
+    return await request.post('/admin/activity/add', activity);
+  },
+
+  // 更新活动
+  update: async (activity: AddActivityRequest & { id: string }): Promise<string> => {
+    return await request.put('/admin/activity/update', activity);
+  },
+
+  // 删除活动
+  delete: async (id: string): Promise<string> => {
+    return await request.delete('/admin/activity/delete', { params: { id } });
+  },
+
+  // 上传图片获取URL
+  uploadImage: async (file: File, type: number = 1): Promise<string> => {
+    const formData = new FormData();
+    formData.append('image', file);
+    formData.append('type', String(type));
+
+    return await request.post('/uploadImage', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+  },
+};
+

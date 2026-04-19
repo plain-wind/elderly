@@ -1,7 +1,6 @@
 import request from '@/api/request';
 import type { userPositionRes, userRes, ActivityItem, ActivityListResponse, VoluntaryListResponse } from '@/types/response';
 import type { AddActivityRequest } from '@/types/request';
-import { get } from 'node_modules/axios/index.cjs';
 
 // 用户相关API
 export const userApi = {
@@ -18,6 +17,32 @@ export const userApi = {
       )) as userPositionRes;
       position && ans.push(position);
     }
+    console.log(ans);
+    ans.push(...[{
+      id: Math.floor(Math.random() * 100),
+      userId: Math.floor(Math.random() * 100),
+      username: '刘爷爷',
+      latitude: 39.061144 + Math.random() * 0.01,
+      longitude: 117.134399 + Math.random() * 0.01,
+      createTime: new Date().toISOString(),
+      updateTime: new Date().toISOString(),
+    }, {
+      id: Math.floor(Math.random() * 100),
+      userId: Math.floor(Math.random() * 100),
+      username: '章奶奶',
+      latitude: 39.061144 + Math.random() * 0.01,
+      longitude: 117.134399 + Math.random() * 0.01,
+      createTime: new Date().toISOString(),
+      updateTime: new Date().toISOString(),
+    }, {
+      id: Math.floor(Math.random() * 100),
+      userId: Math.floor(Math.random() * 100),
+      username: '王爷爷',
+      latitude: 39.061144 + Math.random() * 0.01,
+      longitude: 117.134399 + Math.random() * 0.01,
+      createTime: new Date().toISOString(),
+      updateTime: new Date().toISOString(),
+    }]);
     return ans;
   },
 };

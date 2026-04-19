@@ -24,7 +24,7 @@ defineProps<{
   overflow: hidden;
 
   .card-title {
-    font-size: 16px;
+    font-size: 18px;
     margin-bottom: 10px;
     color: var(--card-title);
     border-left: 3px solid var(--card-title-bar);

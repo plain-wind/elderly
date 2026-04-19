@@ -4,7 +4,7 @@
       <span class="label">{{ item.label }}</span>
       <span class="value" :class="{ warning: item.warning }">{{
         animatedValues[index] ?? item.value
-      }}</span>
+        }}</span>
     </div>
   </DataCard>
 </template>
@@ -92,6 +92,7 @@ onBeforeUnmount(() => {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
+  min-height: 150px;
 }
 
 .stat-item {
@@ -99,7 +100,7 @@ onBeforeUnmount(() => {
   border: 1px solid var(--stats-item-border);
   box-shadow: var(--stats-item-shadow);
   border-radius: 6px;
-  padding: 10px;
+  padding: 3px;
   text-align: center;
 
   .label {

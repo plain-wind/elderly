@@ -8,7 +8,7 @@ defineProps<{
 
 const person = {
   name: '王磊',
-  account: '13115569855',
+  account: 'root',
   password: '123456',
 };
 </script>

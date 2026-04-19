@@ -23,7 +23,7 @@ export enum ActiveStatus {
 }
 
 export interface Volunt {
-  id: number;
+  id: string;
   imgSrc: string;
   activeName: string;
   name: string;
@@ -32,7 +32,7 @@ export interface Volunt {
 }
 
 export interface Active {
-  id: number;
+  id: string;
   imgSrc: string;
   activeName: string;
   startTime: string;  // YYYY-MM-DD HH:mm:ss

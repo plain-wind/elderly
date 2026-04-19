@@ -14,7 +14,7 @@ import type { AddActivityRequest } from '@/types/request';
  */
 export function convertActivityItemToActive(item: ActivityItem): Active {
   return {
-    id: item.id,
+    id: item.id.toString(),
     imgSrc: item.image || '',
     activeName: item.name,
     startTime: item.startTime.split('T')[0] + ' ' + item.startTime.split('T')[1].split('.')[0], // 转换为 YYYY-MM-DD HH:mm:ss 格式

@@ -2,7 +2,6 @@
 import ActiveItem from '@/components/ActiveItem.vue';
 import UpdateActive from '@/components/UpdateActive.vue';
 import { useActiveStore } from '@/stores/active';
-import type { Active } from '@/types';
 import { storeToRefs } from 'pinia';
 
 const activeStore = useActiveStore();
@@ -13,8 +12,9 @@ const { handleStatusChange, fetchActivities } = activeStore;
 const isOpen = ref(false);
 
 // 挂载时加载数据
-onMounted(() => {
-  fetchActivities();
+onMounted(async () => {
+  await fetchActivities();
+  console.log('活动列表:', activeList.value);
 });
 
 // 处理添加活动完成

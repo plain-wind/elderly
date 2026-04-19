@@ -1,3 +1,5 @@
+import { s } from "vue-router/dist/router-CWoNjPRp.mjs";
+
 export interface userPositionRes {
   id: number;
   userId: number;
@@ -45,9 +47,36 @@ export interface ActivityItem {
   applicants?: ApplicantInfo[];
 }
 
-// 活动列表響應
+// 活动列表
 export interface ActivityListResponse {
   list: ActivityItem[];
+  total: number;
+  pageNum: number;
+  pageSize: number;
+  totalPages: number;
+  hasNext: boolean;
+  hasPrevious: boolean;
+  navigatePages: number[];
+  firstPage: boolean;
+  lastPage: boolean;
+}
+
+
+// 志愿信息
+export interface voluntaryItem {
+  id: string;
+  name: string;
+  image: string | null;
+  userName: string;
+  place: string;
+  startTime: string;
+  endTime: string;
+  hasPass: number;
+}
+
+// 志愿列表
+export interface VoluntaryListResponse {
+  list: voluntaryItem[];
   total: number;
   pageNum: number;
   pageSize: number;

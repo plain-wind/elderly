@@ -56,10 +56,10 @@ const currentCamera = computed(
   () => cameras.value.find((c) => c.id === selectedCamera.value) || cameras.value[0]
 );
 
-const onCameraChange = (id: number) => {
-  // 这里可扩展为切换实际视频流（例如更新 video 元素的 src 或调用后端接口）
-  selectedCamera.value = id;
-};
+// const onCameraChange = (id: number) => {
+//   // 这里可扩展为切换实际视频流（例如更新 video 元素的 src 或调用后端接口）
+//   selectedCamera.value = id;
+// };
 </script>
 
 <template>
@@ -67,7 +67,7 @@ const onCameraChange = (id: number) => {
     <div class="video-header">
       <span class="live-tag">LIVE</span>
       <span class="video-title">实时监控：</span>
-      <el-select
+      <!-- <el-select
         v-model="selectedCamera"
         size="small"
         placeholder="选择摄像头"
@@ -80,7 +80,7 @@ const onCameraChange = (id: number) => {
           :label="cam.label + ' - ' + cam.location"
           :value="cam.id"
         />
-      </el-select>
+      </el-select> -->
     </div>
     <div class="video-placeholder">
       <template v-if="src">

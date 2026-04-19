@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { ActiveStatus } from '@/types';
+import { useActiveStore } from '@/stores/active';
 
 defineProps<{
-  id: number;
+  id: string;
   imgSrc: string;
   activeName: string;
   startTime: string;
@@ -11,6 +12,22 @@ defineProps<{
   personNum: number;
   status: ActiveStatus;
 }>();
+
+const activeStore = useActiveStore();
+const { deleteActivity, fetchActivities } = activeStore;
+
+const handleDelete = async (id: string) => {
+  try {
+    await deleteActivity(id);
+    ElMessage.success('活动删除成功');
+    // 这里可以触发父组件刷新列表，例如通过 emit 或直接调用 store 方法
+    // emit('refresh'); // 如果使用事件
+    await fetchActivities(); // 直接调用 store 方法刷新列表
+  } catch (err) {
+    console.error('删除活动失败:', err);
+    ElMessage.error('活动删除失败');
+  }
+};
 </script>
 
 <template>
@@ -37,6 +54,7 @@ defineProps<{
             });
           }
         ">查看详情</el-button>
+        <el-button type="danger" size="large" @click="handleDelete(id)">删除活动</el-button>
       </div>
     </div>
   </div>
@@ -60,12 +78,15 @@ defineProps<{
 
   .active-img {
     flex-shrink: 0;
+    width: 200px;
     height: 250px;
     overflow: hidden;
     border-radius: 10px;
 
     img {
-      width: 200px;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
   }
 

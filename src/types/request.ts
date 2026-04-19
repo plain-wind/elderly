@@ -12,7 +12,7 @@ export interface ApplicantInfo {
 
 // 添加/更新活动请求体
 export interface AddActivityRequest {
-  id?: number; // 更新时需要
+  id?: string; // 更新时需要
   name: string; // 活动名称
   image: string | null; // 活动图片URL
   place: string; // 活动地点

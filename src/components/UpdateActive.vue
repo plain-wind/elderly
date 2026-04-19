@@ -22,7 +22,7 @@ defineProps<{
 }>();
 
 const updateActiveForm = ref<Active>({
-  id: 0,
+  id: '0',
   imgSrc: '',
   activeName: '',
   startTime: '',
@@ -92,7 +92,7 @@ const submit = async () => {
 
 const resetForm = () => {
   updateActiveForm.value = {
-    id: 0,
+    id: '0',
     imgSrc: '',
     activeName: '',
     startTime: '',
@@ -191,12 +191,12 @@ const onDrop = async (e: DragEvent) => {
         :disabled="isUploading" />
 
       <!-- 活动开始时间输入 -->
-      <el-time-picker size="large" v-model="updateActiveForm.startTime" placeholder="请选择开始时间" class="input-item"
-        value-format="YYYY-MM-DD HH:mm:ss" />
+      <el-date-picker size="large" v-model="updateActiveForm.startTime" placeholder="请选择开始时间" class="input-item"
+        type="datetime" value-format="YYYY-MM-DD HH:mm:ss" />
 
       <!-- 活动结束时间输入 -->
-      <el-time-picker size="large" v-model="updateActiveForm.endTime" placeholder="请选择结束时间" class="input-item"
-        value-format="YYYY-MM-DD HH:mm:ss" />
+      <el-date-picker size="large" v-model="updateActiveForm.endTime" placeholder="请选择结束时间" class="input-item"
+        type="datetime" value-format="YYYY-MM-DD HH:mm:ss" />
 
       <!-- 活动地点输入 -->
       <el-input size="large" placeholder="请输入活动地点" v-model="updateActiveForm.position" class="input-item" />

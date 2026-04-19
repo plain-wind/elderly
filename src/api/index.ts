@@ -1,7 +1,9 @@
 import request from '@/api/request';
-import type { userPositionRes, userRes, ActivityItem, ActivityListResponse } from '@/types/response';
+import type { userPositionRes, userRes, ActivityItem, ActivityListResponse, VoluntaryListResponse } from '@/types/response';
 import type { AddActivityRequest } from '@/types/request';
+import { get } from 'node_modules/axios/index.cjs';
 
+// 用户相关API
 export const userApi = {
   getAll: async (): Promise<userRes[]> => {
     return await request.get('/user/list');
@@ -59,3 +61,18 @@ export const activityApi = {
   },
 };
 
+
+// 志愿相关API
+export const voluntaryApi = {
+  // 获取志愿列表
+  getList: async (): Promise<VoluntaryListResponse> => {
+    const waitCheckList = await request.get('/admin/voluntary2/list/waitCheck') as VoluntaryListResponse;
+    const checkedList = await request.get('/admin/voluntary2/list/hasCheck') as VoluntaryListResponse;
+    return { ...waitCheckList, list: [...waitCheckList.list, ...checkedList.list] };
+  },
+
+  // 获取志愿详情
+  getDetail: async (id: string) => {
+    return await request.get('/admin/voluntary2/detail', { params: { id } });
+  }
+};

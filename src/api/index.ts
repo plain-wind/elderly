@@ -18,28 +18,72 @@ export const userApi = {
       position && ans.push(position);
     }
     console.log(ans);
+    ans.pop()
+    const latitudeBase = 39.061144;
+    const longitudeBase = 117.134399;
+    const nearbyOffset = () => (Math.random() - 0.5) * 0.002;
     ans.push(...[{
       id: Math.floor(Math.random() * 100),
       userId: Math.floor(Math.random() * 100),
-      username: '刘爷爷',
-      latitude: 39.061144 + Math.random() * 0.01,
-      longitude: 117.134399 + Math.random() * 0.01,
+      username: '刘志强',
+      latitude: latitudeBase + nearbyOffset(),
+      longitude: longitudeBase + nearbyOffset(),
       createTime: new Date().toISOString(),
       updateTime: new Date().toISOString(),
     }, {
       id: Math.floor(Math.random() * 100),
       userId: Math.floor(Math.random() * 100),
-      username: '章奶奶',
-      latitude: 39.061144 + Math.random() * 0.01,
-      longitude: 117.134399 + Math.random() * 0.01,
+      username: '张桂兰',
+      latitude: latitudeBase + nearbyOffset(),
+      longitude: longitudeBase + nearbyOffset(),
       createTime: new Date().toISOString(),
       updateTime: new Date().toISOString(),
     }, {
       id: Math.floor(Math.random() * 100),
       userId: Math.floor(Math.random() * 100),
-      username: '王爷爷',
-      latitude: 39.061144 + Math.random() * 0.01,
-      longitude: 117.134399 + Math.random() * 0.01,
+      username: '李明',
+      latitude: latitudeBase + nearbyOffset(),
+      longitude: longitudeBase + nearbyOffset(),
+      createTime: new Date().toISOString(),
+      updateTime: new Date().toISOString(),
+    }, {
+      id: Math.floor(Math.random() * 100),
+      userId: Math.floor(Math.random() * 100),
+      username: '王秀英',
+      latitude: latitudeBase + nearbyOffset(),
+      longitude: longitudeBase + nearbyOffset(),
+      createTime: new Date().toISOString(),
+      updateTime: new Date().toISOString(),
+    }, {
+      id: Math.floor(Math.random() * 100),
+      userId: Math.floor(Math.random() * 100),
+      username: '赵国华',
+      latitude: latitudeBase + nearbyOffset(),
+      longitude: longitudeBase + nearbyOffset(),
+      createTime: new Date().toISOString(),
+      updateTime: new Date().toISOString(),
+    }, {
+      id: Math.floor(Math.random() * 100),
+      userId: Math.floor(Math.random() * 100),
+      username: '陈桂芳',
+      latitude: latitudeBase + nearbyOffset(),
+      longitude: longitudeBase + nearbyOffset(),
+      createTime: new Date().toISOString(),
+      updateTime: new Date().toISOString(),
+    }, {
+      id: Math.floor(Math.random() * 100),
+      userId: Math.floor(Math.random() * 100),
+      username: '孙建国',
+      latitude: latitudeBase + nearbyOffset(),
+      longitude: longitudeBase + nearbyOffset(),
+      createTime: new Date().toISOString(),
+      updateTime: new Date().toISOString(),
+    }, {
+      id: Math.floor(Math.random() * 100),
+      userId: Math.floor(Math.random() * 100),
+      username: '周玉珍',
+      latitude: latitudeBase + nearbyOffset(),
+      longitude: longitudeBase + nearbyOffset(),
       createTime: new Date().toISOString(),
       updateTime: new Date().toISOString(),
     }]);

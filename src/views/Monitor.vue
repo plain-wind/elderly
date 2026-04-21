@@ -34,9 +34,9 @@ const currentTime = ref(new Date().toLocaleString());
 setInterval(() => { currentTime.value = new Date().toLocaleString(); }, 1000);
 
 const stats = ref([
-  { label: '老年人总数', value: '156' },
+  { label: '老年人总数', value: '8' },
   { label: '管理员总数', value: '1' },
-  { label: '监护人总数', value: '240' },
+  { label: '监护人总数', value: '10' },
   { label: '体征异常人数', value: '5', warning: true }
 ]);
 

@@ -3,14 +3,13 @@ import { User, Lock } from '@element-plus/icons-vue';
 import type { FormInstance, FormRules } from 'element-plus';
 import { validateTelephone } from '@/utils';
 
-const loginForm = ref({ telephone: '', password: '' });
+const loginForm = ref({ name: '', password: '' });
 const router = useRouter();
 const loginFormRef = ref<FormInstance>();
 
 const rules = reactive<FormRules<typeof loginForm.value>>({
-  telephone: [
-    { required: true, message: '请输入手机号码', trigger: 'blur' },
-    { validator: validateTelephone, message: '请输入正确的手机号码', trigger: 'blur' },
+  name: [
+    { required: true, message: '请输入用户名', trigger: 'blur' },
   ],
   password: [
     { required: true, message: '请输入登录密码', trigger: 'blur' },
@@ -43,8 +42,8 @@ const handleLogin = () => {
 
     <el-form @submit.native.prevent ref="loginFormRef" :model="loginForm" :rules="rules" label-position="top"
       class="custom-form">
-      <el-form-item label="手机号码" prop="telephone">
-        <el-input v-model="loginForm.telephone" placeholder="请输入您的手机号" required :prefix-icon="User" />
+      <el-form-item label="用户名" prop="name">
+        <el-input v-model="loginForm.name" placeholder="请输入您的用户名" required :prefix-icon="User" />
       </el-form-item>
 
       <el-form-item label="登录密码" prop="password">

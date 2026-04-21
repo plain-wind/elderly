@@ -196,7 +196,7 @@ import {
 
 const { name, address, phone, sonphone } = useRoute().query;
 
-const selectedDate = ref('2025-09-29');
+const selectedDate = ref(new Date().toISOString().substr(0, 10));
 </script>
 
 <style scoped lang="scss">

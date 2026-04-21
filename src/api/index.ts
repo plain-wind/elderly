@@ -1,5 +1,12 @@
 import request from '@/api/request';
-import type { userPositionRes, userRes, ActivityItem, ActivityListResponse, VoluntaryListResponse } from '@/types/response';
+import type {
+  userPositionRes,
+  userRes,
+  ActivityItem,
+  ActivityListResponse,
+  VoluntaryListResponse,
+  userWatchRes
+} from '@/types/response';
 import type { AddActivityRequest } from '@/types/request';
 
 // 用户相关API
@@ -89,7 +96,10 @@ export const userApi = {
     }]);
     return ans;
   },
-};
+  getWatchData: async (): Promise<userWatchRes> => {
+    return await request.get('/watchdata/read');
+  }
+}
 
 // 活动相关API
 export const activityApi = {

@@ -2,8 +2,8 @@
 
 # --- 变量配置 ---
 IMG_NAME="elderly-app"
-SERVER="root@110.42.96.105"
-PORT="50312" # SSH 端口
+SERVER="root@60.205.210.214"
+PORT="22" # SSH 端口
 EXT_PORT="8080" # 对外访问端口
 INT_PORT="80" # 容器内部端口
 TAR_NAME="${IMG_NAME}.tar"

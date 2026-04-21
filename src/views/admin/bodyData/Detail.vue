@@ -44,10 +44,9 @@
         <div class="health-map shadow-sm">
           <div class="card-title">
             <div class="title-left">
-              <span class="icon-circle"
-                ><el-icon>
-                  <FirstAidKit /> </el-icon
-              ></span>
+              <span class="icon-circle"><el-icon>
+                  <FirstAidKit />
+                </el-icon></span>
               <h3>症状分布图</h3>
             </div>
             <el-button type="primary" link size="small">
@@ -93,19 +92,12 @@
         <div class="vitals-section shadow-sm">
           <div class="card-title">
             <div class="title-left">
-              <span class="icon-circle"
-                ><el-icon>
-                  <Monitor /> </el-icon
-              ></span>
+              <span class="icon-circle"><el-icon>
+                  <Monitor />
+                </el-icon></span>
               <h3>体征数据监测</h3>
             </div>
-            <el-date-picker
-              v-model="selectedDate"
-              type="date"
-              size="default"
-              :clearable="false"
-              style="width: 140px"
-            />
+            <el-date-picker v-model="selectedDate" type="date" size="default" :clearable="false" style="width: 140px" />
           </div>
 
           <div class="vitals-grid">
@@ -114,12 +106,7 @@
               <div class="vital-info">
                 <label>今日运动</label>
                 <div class="value-unit"><span class="val">6,432</span>步</div>
-                <el-progress
-                  :percentage="70"
-                  :show-text="false"
-                  :stroke-width="4"
-                  color="#44803f"
-                />
+                <el-progress :percentage="70" :show-text="false" :stroke-width="4" color="#44803f" />
               </div>
             </div>
 
@@ -173,10 +160,9 @@
         <div class="reports-section shadow-sm">
           <div class="card-title">
             <div class="title-left">
-              <span class="icon-circle"
-                ><el-icon>
-                  <Document /> </el-icon
-              ></span>
+              <span class="icon-circle"><el-icon>
+                  <Document />
+                </el-icon></span>
               <h3>健康检查报告</h3>
             </div>
             <el-button link type="primary">更多</el-button>
@@ -194,10 +180,9 @@
                   <span class="file-meta">2025-09-{{ 20 + i }}</span>
                 </div>
               </div>
-              <el-button link type="primary"
-                ><el-icon>
-                  <Download /> </el-icon
-              ></el-button>
+              <el-button link type="primary"><el-icon>
+                  <Download />
+                </el-icon></el-button>
             </div>
           </div>
         </div>

@@ -21,6 +21,10 @@ echo "🚚 正在上传到服务器 (免密模式)..."
 scp -P $PORT $TAR_NAME $SERVER:/tmp/
 echo "✅ 镜像上传服务器成功！"
 
+echo "📦 正在清理本地临时文件..."
+rm $TAR_NAME
+echo "✅ 本地临时文件清理完成！"
+
 echo "🚀 远程部署中..."
 # 这里使用 << EOF 模式，后续命令都会在远程执行
 ssh -p $PORT $SERVER << EOF

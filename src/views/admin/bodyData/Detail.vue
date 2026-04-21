@@ -35,7 +35,7 @@
                 <el-icon>
                   <Warning />
                 </el-icon>
-                急救: {{ sonphone }}
+                急救: {{ guardianPhone }}
               </div>
             </div>
           </div>
@@ -105,8 +105,10 @@
               <div class="vital-icon-bg"><img src="/imgs/bodyData/ydbs.gif" /></div>
               <div class="vital-info">
                 <label>今日运动</label>
-                <div class="value-unit"><span class="val">6,432</span>步</div>
-                <el-progress :percentage="70" :show-text="false" :stroke-width="4" color="#44803f" />
+                <div class="value-unit"><span class="val">{{ watchData.stepCount || '--' }}</span>步
+                </div>
+                <el-progress :percentage="watchData.stepCount / 10 || 0" :show-text="false" :stroke-width="4"
+                  color="#44803f" />
               </div>
             </div>
 
@@ -114,7 +116,7 @@
               <div class="vital-icon-bg"><img src="/imgs/bodyData/xl.gif" /></div>
               <div class="vital-info">
                 <label>实时心率</label>
-                <div class="value-unit"><span class="val">76</span>bpm</div>
+                <div class="value-unit"><span class="val">{{ watchData.heartRate || '--' }}</span>bpm</div>
                 <span class="status-text safe">正常范围</span>
               </div>
             </div>
@@ -123,12 +125,12 @@
               <div class="vital-icon-bg"><img src="/imgs/bodyData/xy.gif" /></div>
               <div class="vital-info">
                 <label>血氧饱和度</label>
-                <div class="value-unit"><span class="val">98</span>%</div>
+                <div class="value-unit"><span class="val">{{ watchData.bloodOxygen || '--' }}</span>%</div>
                 <span class="status-text safe">呼吸顺畅</span>
               </div>
             </div>
 
-            <div class="vital-card">
+            <!-- <div class="vital-card">
               <div class="vital-icon-bg"><img src="/imgs/bodyData/smsc.gif" /></div>
               <div class="vital-info">
                 <label>昨晚睡眠</label>
@@ -144,7 +146,7 @@
                 <div class="value-unit"><span class="val">1,200</span>ml</div>
                 <span class="status-text warning">缺 300ml</span>
               </div>
-            </div>
+            </div> -->
 
             <div class="vital-card">
               <div class="vital-icon-bg"><img src="/imgs/bodyData/qs.gif" /></div>
@@ -205,10 +207,29 @@ import {
   Download,
   ArrowLeft,
 } from '@element-plus/icons-vue';
+import { userApi } from '@/api';
 
-const { name, address, phone, sonphone } = useRoute().query;
+const { name, address, phone, guardianPhone } = useRoute().query;
 
-const selectedDate = ref('2025-09-29');
+const selectedDate = ref(new Date().toISOString().substr(0, 10));
+
+const watchData = ref({
+  stepCount: 0,
+  heartRate: 0,
+  bloodOxygen: 0,
+});
+
+onMounted(async () => {
+  // 模拟获取手表数据
+  const res = await userApi.getWatchData();
+  watchData.value = res;
+});
+
+setInterval(async () => {
+  const res = await userApi.getWatchData();
+  watchData.value = res;
+  console.log('更新手表数据:', res);
+}, 5000);
 </script>
 
 <style scoped lang="scss">

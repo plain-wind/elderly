@@ -28,11 +28,12 @@ const activeDetails = ref<ActivityItem>({
   applicants: [],
   description: '',
 });
-const status = Date.now() < new Date(activeDetails.value?.endTime || '').getTime() ? Status.Open : Status.Close;
+const status = ref<Status>(Status.Close);
 
 onMounted(async () => {
   try {
     activeDetails.value = await activityApi.getDetail(props.id);
+    status.value = Date.now() < new Date(activeDetails.value.endTime).getTime() ? Status.Open : Status.Close;
     console.log('活动详情', activeDetails.value);
   } catch (error) {
     ElMessage.error('加载活动详情失败');

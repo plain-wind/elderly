@@ -1,3 +1,5 @@
+import { s } from "vue-router/dist/router-CWoNjPRp.mjs";
+
 export interface userPositionRes {
   id: number;
   userId: number;
@@ -24,8 +26,7 @@ export interface userRes {
 
 // 手表数据
 export interface userWatchRes {
-  userId: number;
-  username: string;
+  userId: string;
   stepCount: number;
   heartRate: number;
   bloodOxygen: number;

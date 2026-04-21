@@ -97,7 +97,7 @@ export const userApi = {
     return ans;
   },
   getWatchData: async (): Promise<userWatchRes> => {
-    return await request.get('/watchdata/read');
+    return await request.get('/watchdata/read', { params: { userId: "user001" } }) as userWatchRes;
   }
 }
 

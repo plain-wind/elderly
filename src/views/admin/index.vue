@@ -4,6 +4,7 @@
       <el-header>
         <!-- logo -->
         <div class="header-logo">
+          <img src="/imgs/logo.png" alt="logo">
           <span>智护银龄</span>
         </div>
         <el-button style="padding: 24px; font-size: 16px;" type="danger" size="large"
@@ -69,6 +70,12 @@ const isOpen = ref(false);
       .header-logo {
         display: flex;
         align-items: center;
+
+        img {
+          width: 60px;
+          margin-right: 15px;
+          border-radius: 15px;
+        }
 
         span {
           font-size: 24px;

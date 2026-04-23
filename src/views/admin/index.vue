@@ -4,15 +4,11 @@
       <el-header>
         <!-- logo -->
         <div class="header-logo">
-          <span>慧暖夕阳</span>
+          <img src="/imgs/logo.png" alt="Logo">
+          <span>智护银龄</span>
         </div>
-        <el-button
-          style="padding: 24px; font-size: 16px"
-          type="danger"
-          size="large"
-          @click="$router.push('/monitor')"
-          >进入监控界面</el-button
-        >
+        <el-button style="padding: 24px; font-size: 16px" type="danger" size="large"
+          @click="$router.push('/monitor')">进入监控界面</el-button>
         <!-- 用户 -->
         <div class="header-user" @click="isOpen = true">
           <img src="/imgs/user.webp" alt="用户头像" width="48px" />
@@ -74,6 +70,12 @@ const isOpen = ref(false);
       .header-logo {
         display: flex;
         align-items: center;
+
+        img {
+          width: 60px;
+          margin-right: 15px;
+          border-radius: 15px;
+        }
 
         span {
           font-size: 24px;

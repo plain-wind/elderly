@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { ActiveStatus } from '@/types';
-
+import { useActiveStore } from '@/stores/active';
+const activeStore = useActiveStore();
+const { deleteActive } = activeStore;
 defineProps<{
+  id: number;
   imgSrc: string;
   activeName: string;
   date: string;
@@ -9,6 +12,12 @@ defineProps<{
   personNum: number;
   status: ActiveStatus;
 }>();
+
+
+const handleDelete = (id: number) => {
+  deleteActive(id);
+  ElMessage.success('活动已删除');
+};
 </script>
 
 <template>
@@ -43,6 +52,7 @@ defineProps<{
             },
           });
         }">查看详情</el-button>
+        <el-button type="danger" size="large" @click="handleDelete(id)">删除活动</el-button>
       </div>
     </div>
   </div>

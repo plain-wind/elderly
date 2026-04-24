@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { Active, ActiveStatus } from '@/types';
-import { ref } from 'vue';
 import Mask from './Mask.vue';
 import { Plus, Close } from '@element-plus/icons-vue';
 

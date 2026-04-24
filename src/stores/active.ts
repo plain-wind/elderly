@@ -98,10 +98,16 @@ export const useActiveStore = defineStore("active", () => {
     }
   }
 
+  const deleteActive = (id: number) => {
+    activeAll.value = activeAll.value.filter(item => item.id !== id);
+    activeList.value = activeList.value.filter(item => item.id !== id);
+  }
+
   return {
     status,
     activeList,
     activeAll,
+    deleteActive,
     handleStatusChange,
   };
 });

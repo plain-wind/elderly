@@ -171,8 +171,8 @@
                     <Files />
                   </el-icon></div>
                 <div class="file-text">
-                  <span class="file-name">2025年度复检报告_0{{ i }}.pdf</span>
-                  <span class="file-meta">2025-09-{{ 20 + i }}</span>
+                  <span class="file-name">2026年度复检报告_0{{ i }}.pdf</span>
+                  <span class="file-meta">2026-04-0{{ i }}</span>
                 </div>
               </div>
               <el-button link type="primary" @click="downloadReport(i)"><el-icon>
@@ -205,7 +205,7 @@ function downloadReport(index: number) {
   // 模拟下载链接
   if (downloadRef.value) {
     downloadRef.value.href = 'https://1111-1371592723.cos.ap-beijing.myqcloud.com/medical/4638e71baaf5439280bbe0f242eb54d3.pdf';
-    downloadRef.value.download = `2025年度复检报告_0${index}.pdf`;
+    downloadRef.value.download = `2026年度复检报告_0${index}.pdf`;
     downloadRef.value.click();
   }
 }

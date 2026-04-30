@@ -1,8 +1,8 @@
 <template>
   <div class="monitor-map-container">
     <div class="video-box">
-      <Video />
-      <Video />
+      <Video src="/diedao.mp4" />
+      <Video src="/fire.mp4" />
     </div>
 
     <div class="map-container">

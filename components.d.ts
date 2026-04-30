@@ -39,6 +39,7 @@ declare module 'vue' {
     MonitorCharts: typeof import('./src/components/monitor/MonitorCharts.vue')['default']
     MonitorMap: typeof import('./src/components/monitor/MonitorMap.vue')['default']
     MonitorStats: typeof import('./src/components/monitor/MonitorStats.vue')['default']
+    MonitorVideos: typeof import('./src/components/monitor/MonitorVideos.vue')['default']
     PanelColumn: typeof import('./src/components/PanelColumn.vue')['default']
     PersonDetail: typeof import('./src/components/PersonDetail.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']

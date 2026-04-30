@@ -175,13 +175,14 @@
                   <span class="file-meta">2025-09-{{ 20 + i }}</span>
                 </div>
               </div>
-              <el-button link type="primary"><el-icon>
+              <el-button link type="primary" @click="downloadReport(i)"><el-icon>
                   <Download />
                 </el-icon></el-button>
             </div>
           </div>
         </div>
       </div>
+      <a ref="downloadRef" download style="display: none;"></a>
     </div>
   </div>
 </template>
@@ -197,6 +198,17 @@ import {
 const { name, address, phone, sonphone } = useRoute().query;
 
 const selectedDate = ref(new Date().toISOString().substr(0, 10));
+
+const downloadRef = ref<HTMLAnchorElement | null>(null);
+
+function downloadReport(index: number) {
+  // 模拟下载链接
+  if (downloadRef.value) {
+    downloadRef.value.href = 'https://1111-1371592723.cos.ap-beijing.myqcloud.com/medical/4638e71baaf5439280bbe0f242eb54d3.pdf';
+    downloadRef.value.download = `2025年度复检报告_0${index}.pdf`;
+    downloadRef.value.click();
+  }
+}
 </script>
 
 <style scoped lang="scss">

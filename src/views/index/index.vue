@@ -10,7 +10,7 @@
       </div>
 
       <div class="brand-content">
-        <h1 class="floating-text">智护银龄</h1>
+        <h1 class="floating-text">智颐安联</h1>
         <p class="fade-in-text">让科技更有温度，让晚年更自在</p>
       </div>
     </div>

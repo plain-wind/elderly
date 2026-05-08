@@ -2,7 +2,7 @@
   <div class="dashboard-container theme-dark">
     <header class="header">
       <div class="now-time">{{ currentTime }}</div>
-      <h1 class="title">智护银龄数据监控中心</h1>
+      <h1 class="title">智颐安联数据监控中心</h1>
     </header>
 
     <main class="main-content">

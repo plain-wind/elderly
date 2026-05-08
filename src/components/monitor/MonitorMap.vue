@@ -1,8 +1,8 @@
 <template>
   <div class="monitor-map-container">
     <div class="video-box">
-      <Video src="/videos/diedao.mp4" />
-      <Video src="/videos/fire.mp4" />
+      <video id="v" src="/videos/diedao.webm" autoplay muted />
+      <video src="/videos/fire.mp4" autoplay muted style="transform: scaleY(1.2);" />
     </div>
 
     <div class="map-container">
@@ -38,6 +38,12 @@ import AMapLoader from '@amap/amap-jsapi-loader';
 import DataCard from '@/components/DataCard.vue';
 import Video from '@/components/Video.vue';
 import { useGeofenceStore } from '@/stores/geofence';
+
+
+
+
+
+
 
 interface DzwlItem { id: number; name: string; time: string; lnglat: [number, number]; }
 
@@ -346,6 +352,20 @@ onMounted(async () => {
 
   await nextTick();
   await initMap();
+
+  const v = document.getElementById('v');
+  // 两分12到两分22
+  const start = 120 + 12, end = 120 + 22;
+  // 初始跳转到开始时间
+  v.currentTime = start;
+
+  // 监听播放，超出范围就暂停/循环
+  v.addEventListener('timeupdate', () => {
+    if (v.currentTime >= end) {
+      v.pause();         // 到点暂停
+      v.currentTime = start; // 如需循环，打开这行
+    }
+  });
 });
 
 onUnmounted(() => {
@@ -369,6 +389,16 @@ onUnmounted(() => {
   grid-template-columns: 1fr 1fr;
   gap: 10px;
   flex: 1;
+  overflow: hidden;
+
+  video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border: 1px solid var(--video-border);
+    border-radius: 8px;
+    box-shadow: var(--video-shadow);
+  }
 }
 
 .map-container {

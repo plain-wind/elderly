@@ -8,7 +8,7 @@ defineProps<{
 
 const person = {
   name: '王磊',
-  account: '13115569855',
+  username: 'root',
   password: '123456',
 }
 </script>
@@ -25,7 +25,7 @@ const person = {
         <h2>个人信息</h2>
         <img src="/imgs/user.webp" alt="用户头像" width="60px">
         <p><strong>姓名：</strong>{{ person.name }}</p>
-        <p><strong>账号：</strong>{{ person.account }}</p>
+        <p><strong>用户名：</strong>{{ person.username }}</p>
         <p><strong>密码：</strong>{{ person.password }}</p>
       </div>
     </div>

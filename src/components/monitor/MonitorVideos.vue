@@ -3,10 +3,10 @@
 <template>
   <div class="container">
     <Video src="http://localhost:5000/video_feed" />
-    <!-- <Video /> -->
-    <div class="video-container">
+    <Video />
+    <!-- <div class="video-container">
       <video src="/videos/video.mp4" autoplay muted loop />
-    </div>
+    </div> -->
   </div>
 </template>
 

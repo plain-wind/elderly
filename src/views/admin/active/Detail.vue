@@ -164,7 +164,7 @@ const goBack = () => {
             <div class="participants-grid">
               <el-tag v-for="(participant, index) in activeDetails.applicants" :key="index" size="large" effect="plain"
                 class="participant-tag">
-                {{ participant }}
+                {{ participant.name }}
               </el-tag>
             </div>
           </div>

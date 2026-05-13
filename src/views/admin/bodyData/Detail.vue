@@ -49,11 +49,11 @@
                 </el-icon></span>
               <h3>症状分布图</h3>
             </div>
-            <el-button type="primary" link size="small">
+            <!-- <el-button type="primary" link size="small">
               历史记录<el-icon class="el-icon--right">
                 <ArrowRight />
               </el-icon>
-            </el-button>
+            </el-button> -->
           </div>
 
           <div class="map-content">
@@ -167,7 +167,7 @@
                 </el-icon></span>
               <h3>健康检查报告</h3>
             </div>
-            <el-button link type="primary">更多</el-button>
+            <!-- <el-button link type="primary">更多</el-button> -->
           </div>
           <div class="report-container">
             <div v-for="i in 3" :key="i" class="report-file-item">

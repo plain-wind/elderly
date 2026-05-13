@@ -5,7 +5,7 @@
         <!-- logo -->
         <div class="header-logo">
           <img src="/imgs/logo.png" alt="Logo">
-          <span>智护银龄</span>
+          <span>智颐安联</span>
         </div>
         <el-button style="padding: 24px; font-size: 16px" type="danger" size="large"
           @click="$router.push('/monitor')">进入监控界面</el-button>

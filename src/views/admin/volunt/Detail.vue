@@ -1,50 +1,25 @@
 <script setup lang="ts">
 import {
   ArrowLeft,
-  Check,
-  Close,
-  Star,
-  Phone,
   Location,
   Calendar,
+  Document,
+  User,
   Clock,
-  Medal,
+  Check,
+  Close,
 } from '@element-plus/icons-vue';
-import { VoluntStatus as Status, Volunt } from '@/types';
-import StarRating from '@/components/StarRating.vue';
-import { useVoluntStore } from '@/stores/volunt';
-import { storeToRefs } from 'pinia';
+import { VoluntStatus as Status } from '@/types';
+import { voluntaryApi } from '@/api';
+import type { voluntaryItem } from '@/types/response';
 
 const { id } = defineProps<{
   id: number;
 }>();
 
 const router = useRouter();
-
-const { voluntList } = storeToRefs(useVoluntStore());
-
-const volunt = voluntList.value.find((v) => v.id === id) as Volunt;
-const { imgSrc, activeName, name, position, status } = toRefs(volunt);
-
-// 模拟额外数据
-const voluntDetails = {
-  contact:
-    '138' +
-    Math.floor(Math.random() * 100000000)
-      .toString()
-      .padStart(8, '0'),
-  skills: ['打扫卫生', '陪伴聊天', '购物', '维修家电', '做饭'],
-  experience: Math.floor(Math.random() * 5) + 1,
-  rating: (Math.random() * 2 + 3).toFixed(1),
-  totalHours: Math.floor(Math.random() * 200) + 50,
-  completedTasks: Math.floor(Math.random() * 50) + 10,
-  joinDate:
-    '2025-' +
-    (Math.floor(Math.random() * 12) + 1).toString().padStart(2, '0') +
-    '-' +
-    (Math.floor(Math.random() * 28) + 1).toString().padStart(2, '0'),
-  description: '热心公益事业，积极参与社区志愿服务，有丰富的老年人照护经验，性格开朗，善于沟通。',
-};
+const voluntDetail = ref<voluntaryItem | null>(null);
+const status = ref<Status>(Status.All);
 
 // 获取状态显示文本
 const getStatusText = (status: Status) => {
@@ -76,18 +51,48 @@ const getStatusClass = (status: Status) => {
   }
 };
 
-// 处理审核操作
-const handleReview = (newStatus: Status) => {
-  // 这里可以调用 API 更新状态
-  ElMessage.success(`已设置为${getStatusText(newStatus)}`);
-  // 模拟状态更新
-  status.value = newStatus;
+const formatDateTime = (value?: string | null) => {
+  if (!value) return '--';
+  const [date, timeWithZone] = value.split('T');
+  if (!timeWithZone) return value;
+  return `${date} ${timeWithZone.split('.')[0]}`;
 };
 
 // 返回列表页
 const goBack = () => {
   router.back();
 };
+
+const mapStatus = (hasPass: number) => {
+  if (hasPass === 1) return Status.Pass;
+  if (hasPass === 2) return Status.Reject;
+  return Status.Examine;
+};
+
+const handleReview = async (nextStatus: Status) => {
+  if (!voluntDetail.value) return;
+  const hasPass = nextStatus === Status.Pass ? '1' : '2';
+
+  try {
+    await voluntaryApi.check(String(voluntDetail.value.id), hasPass);
+    console.log('审核结果:', { id: voluntDetail.value.id, hasPass });
+    status.value = nextStatus;
+    voluntDetail.value.hasPass = Number(hasPass);
+    ElMessage.success(`已设置为${getStatusText(nextStatus)}`);
+  } catch (error) {
+    ElMessage.error('审核操作失败');
+  }
+};
+
+onMounted(async () => {
+  try {
+    const detail = await voluntaryApi.getDetail(String(id));
+    voluntDetail.value = detail;
+    status.value = mapStatus(Number(voluntDetail.value?.hasPass ?? 0));
+  } catch (error) {
+    ElMessage.error('加载志愿详情失败');
+  }
+});
 </script>
 
 <template>
@@ -105,152 +110,74 @@ const goBack = () => {
 
     <!-- 主要内容 -->
     <div class="detail-content">
-      <!-- 基本信息卡片 -->
-      <div class="info-card">
+      <div class="info-card" v-if="voluntDetail">
         <div class="info-header">
           <div class="avatar-section">
-            <img :src="imgSrc" :alt="name" class="volunteer-avatar" />
+            <img :src="voluntDetail.image || ''" :alt="voluntDetail.name" class="volunteer-avatar" />
             <div class="status-badge" :class="getStatusClass(status)">
               {{ getStatusText(status) }}
             </div>
           </div>
           <div class="basic-info">
-            <h2 class="volunteer-name">{{ name }}</h2>
-            <p class="volunteer-activity">{{ activeName }} 志愿者</p>
+            <h2 class="volunteer-name">{{ voluntDetail.userName }}</h2>
+            <p class="volunteer-activity">{{ voluntDetail.name }}</p>
             <div class="info-grid">
               <div class="info-item">
                 <el-icon>
                   <Location />
                 </el-icon>
-                <span>{{ position }}</span>
+                <span>{{ voluntDetail.place }}</span>
               </div>
               <div class="info-item">
                 <el-icon>
-                  <Phone />
+                  <Calendar />
                 </el-icon>
-                <span>{{ voluntDetails.contact }}</span>
+                <span>
+                  {{ formatDateTime(voluntDetail.startTime) }}
+                  -
+                  {{ formatDateTime(voluntDetail.endTime) }}
+                </span>
               </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 评分和统计 -->
-        <div class="stats-section">
-          <div class="stat-item">
-            <div class="stat-value">{{ voluntDetails.rating }}</div>
-            <div class="stat-label">服务评分</div>
-            <StarRating :rating="Math.round(Number(voluntDetails.rating))" />
-          </div>
-          <div class="stat-item">
-            <div class="stat-value">{{ voluntDetails.experience }}年</div>
-            <div class="stat-label">服务经验</div>
-          </div>
-          <div class="stat-item">
-            <div class="stat-value">{{ voluntDetails.totalHours }}h</div>
-            <div class="stat-label">服务时长</div>
-          </div>
-          <div class="stat-item">
-            <div class="stat-value">{{ voluntDetails.completedTasks }}次</div>
-            <div class="stat-label">完成任务</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 详细信息卡片 -->
-      <div class="detail-cards">
-        <!-- 技能特长 -->
-        <div class="detail-card">
-          <div class="card-header">
-            <el-icon>
-              <Medal />
-            </el-icon>
-            <h3>技能特长</h3>
-          </div>
-          <div class="card-content">
-            <div class="skills-list">
-              <el-tag
-                v-for="skill in voluntDetails.skills"
-                :key="skill"
-                size="large"
-                effect="plain"
-                class="skill-tag"
-              >
-                {{ skill }}
-              </el-tag>
-            </div>
-          </div>
-        </div>
-
-        <!-- 个人简介 -->
-        <div class="detail-card">
-          <div class="card-header">
-            <el-icon>
-              <Star />
-            </el-icon>
-            <h3>个人简介</h3>
-          </div>
-          <div class="card-content">
-            <p class="description">{{ voluntDetails.description }}</p>
-          </div>
-        </div>
-
-        <!-- 服务记录 -->
-        <div class="detail-card">
-          <div class="card-header">
-            <el-icon>
-              <Calendar />
-            </el-icon>
-            <h3>服务记录</h3>
-          </div>
-          <div class="card-content">
-            <div class="service-records">
-              <div class="record-item">
-                <div class="record-date">2025-12-15</div>
-                <div class="record-content">
-                  <h4>社区老年人陪伴服务</h4>
-                  <p>为独居老人提供陪伴聊天、打扫卫生等服务，获得老人及家属好评。</p>
-                  <div class="record-meta">
-                    <span class="record-duration">4小时</span>
-                    <span class="record-status completed">已完成</span>
-                  </div>
-                </div>
+              <div class="info-item">
+                <el-icon>
+                  <User />
+                </el-icon>
+                <span>需求人数: {{ voluntDetail.neededNumber ?? '--' }}</span>
               </div>
-              <div class="record-item">
-                <div class="record-date">2025-12-10</div>
-                <div class="record-content">
-                  <h4>老年人购物助手</h4>
-                  <p>帮助行动不便的老年人购买日常用品，贴心服务受到称赞。</p>
-                  <div class="record-meta">
-                    <span class="record-duration">2小时</span>
-                    <span class="record-status completed">已完成</span>
-                  </div>
-                </div>
+              <div class="info-item">
+                <el-icon>
+                  <Clock />
+                </el-icon>
+                <span>发布时间: {{ formatDateTime(voluntDetail.createTime) }}</span>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- 审核操作 -->
+      <div class="detail-cards" v-if="voluntDetail">
+        <div class="detail-card">
+          <div class="card-header">
+            <el-icon>
+              <Document />
+            </el-icon>
+            <h3>志愿详情</h3>
+          </div>
+          <div class="card-content">
+            <p class="description">{{ voluntDetail.description || '暂无描述' }}</p>
+          </div>
+        </div>
+      </div>
+
       <div class="action-section" v-if="String(status) === Status.Examine">
         <h3>审核操作</h3>
         <div class="action-buttons">
-          <el-button
-            type="success"
-            size="large"
-            :icon="Check"
-            class="action-btn approve"
-            @click="handleReview(Status.Pass)"
-          >
+          <el-button type="success" size="large" :icon="Check" class="action-btn approve"
+            @click="handleReview(Status.Pass)">
             审核通过
           </el-button>
-          <el-button
-            type="danger"
-            size="large"
-            :icon="Close"
-            class="action-btn reject"
-            @click="handleReview(Status.Reject)"
-          >
+          <el-button type="danger" size="large" :icon="Close" class="action-btn reject"
+            @click="handleReview(Status.Reject)">
             审核拒绝
           </el-button>
         </div>
@@ -315,7 +242,7 @@ $text-secondary: #666;
 
       .volunteer-avatar {
         width: 160px;
-        // height: 160px;
+        height: 160px;
         border-radius: 50%;
         border: 4px solid $bg-light;
         box-shadow: 0 4px 12px rgba(68, 128, 63, 0.1);
@@ -371,8 +298,8 @@ $text-secondary: #666;
 
       .info-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 16px;
+        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+        gap: 20px;
 
         .info-item {
           display: flex;
@@ -390,30 +317,6 @@ $text-secondary: #666;
     }
   }
 
-  .stats-section {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 24px;
-    padding-top: 24px;
-    border-top: 1px solid $border-color;
-
-    .stat-item {
-      text-align: center;
-
-      .stat-value {
-        font-size: 24px;
-        font-weight: 600;
-        color: $primary;
-        margin-bottom: 4px;
-      }
-
-      .stat-label {
-        font-size: 14px;
-        color: $text-secondary;
-        margin-bottom: 8px;
-      }
-    }
-  }
 }
 
 .detail-cards {
@@ -455,90 +358,11 @@ $text-secondary: #666;
   }
 
   .card-content {
-    .skills-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-
-      .skill-tag {
-        border-color: $primary;
-        color: $primary;
-        border-radius: 20px;
-        padding: 8px 16px;
-
-        &:hover {
-          background: $primary;
-          color: white;
-        }
-      }
-    }
-
     .description {
       font-size: 16px;
       line-height: 1.6;
       color: $text-secondary;
       margin: 0;
-    }
-
-    .service-records {
-      .record-item {
-        display: flex;
-        gap: 24px;
-        padding: 16px 0;
-        border-bottom: 1px solid $border-color;
-
-        &:last-child {
-          border-bottom: none;
-        }
-
-        .record-date {
-          min-width: 120px;
-          font-size: 14px;
-          color: $primary;
-          font-weight: 500;
-          padding-top: 4px;
-        }
-
-        .record-content {
-          flex: 1;
-
-          h4 {
-            font-size: 16px;
-            font-weight: 600;
-            color: $text-main;
-            margin: 0 0 8px 0;
-          }
-
-          p {
-            font-size: 14px;
-            color: $text-secondary;
-            margin: 0 0 12px 0;
-            line-height: 1.5;
-          }
-
-          .record-meta {
-            display: flex;
-            gap: 16px;
-            font-size: 12px;
-
-            .record-duration {
-              color: $primary;
-              font-weight: 500;
-            }
-
-            .record-status {
-              padding: 2px 12px;
-              border-radius: 12px;
-              font-weight: 500;
-
-              &.completed {
-                background: rgba(76, 175, 80, 0.1);
-                color: $primary;
-              }
-            }
-          }
-        }
-      }
     }
   }
 }
@@ -596,5 +420,6 @@ $text-secondary: #666;
   .action-btn {
     width: 100%;
   }
+
 }
 </style>

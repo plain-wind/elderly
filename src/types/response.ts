@@ -1,5 +1,3 @@
-import { s } from "vue-router/dist/router-CWoNjPRp.mjs";
-
 export interface userPositionRes {
   id: number;
   userId: number;
@@ -74,12 +72,16 @@ export interface ActivityListResponse {
 export interface voluntaryItem {
   id: string;
   name: string;
+  userId?: number;
   image: string | null;
   userName: string;
   place: string;
+  description?: string;
   startTime: string;
   endTime: string;
   hasPass: number;
+  neededNumber?: number;
+  createTime?: string;
 }
 
 // 志愿列表

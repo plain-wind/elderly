@@ -44,8 +44,8 @@ const stats = ref([
 ]);
 
 const jcyjData = ref([
-  { id: 4, title: '检测到火灾', name: '', address: '8号楼3单元201', time: '13:15:20' },
-  { id: 2, title: '检测到烟雾', name: '', address: '8号楼3单元201', time: '13:15:20' },
+  // { id: 4, title: '检测到火灾', name: '', address: '8号楼3单元201', time: '13:15:20' },
+  // { id: 2, title: '检测到烟雾', name: '', address: '8号楼3单元201', time: '13:15:20' },
   { id: 1, title: '检测到跌倒', name: '王秀英', address: '5号楼3单元301', time: '13:00:01' },
   { id: 3, title: '心率异常', name: '刘志强', address: '8号楼2单元202', time: '13:45:10' },
 ]);

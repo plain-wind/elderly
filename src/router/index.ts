@@ -110,11 +110,12 @@ const router = createRouter({
 export const routerLoading = ref(false);
 
 // 导航守卫
-router.beforeEach((to, from) => {
+router.beforeEach((to, from, next) => {
   // 只在顶层路由变化时显示加载动画
   if (isTopLevelChange(to, from)) {
     routerLoading.value = true;
   }
+  next();
 });
 
 router.afterEach((to, from) => {

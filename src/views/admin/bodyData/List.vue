@@ -95,15 +95,7 @@
         </el-table-column>
         <el-table-column prop="do" label="操作">
           <template #default="{ row }">
-            <el-button link type="primary" size="default" @click="$router.push({
-              name: 'detail',
-              query: {
-                name: row.name,
-                address: row.address,
-                phone: row.phone,
-                sonphone: row.sonphone,
-              }
-            })" class="detail-btn">
+            <el-button link type="primary" size="default" @click="handleClick(row)" class="detail-btn">
               查看详情
             </el-button>
           </template>
@@ -119,6 +111,7 @@ import { userRes } from '@/types/response';
 import { userApi } from '@/api';
 
 let searchInput = ref('');
+const router = useRouter();
 
 // const userList = ref<userRes[]>([]);
 // onMounted(async () => {
@@ -128,6 +121,24 @@ let searchInput = ref('');
 //     ElMessage.error('加载用户数据失败');
 //   }
 // });
+
+const handleClick = (row: any) => {
+  if (row.name !== '张桂兰') {
+    ElMessage.warning('暂无详情');
+    return;
+  }
+
+  router.push({
+    name: 'detail',
+    query: {
+      name: row.name,
+      address: row.address,
+      phone: row.phone,
+      sonphone: row.sonphone,
+      tzsj: row.tzsj,
+    },
+  });
+};
 
 const userList = ref([
   {

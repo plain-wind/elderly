@@ -35,7 +35,7 @@
                 <el-icon>
                   <Warning />
                 </el-icon>
-                急救: {{ guardianPhone }}
+                急救: {{ sonphone }}
               </div>
             </div>
           </div>
@@ -170,7 +170,7 @@
             <!-- <el-button link type="primary">更多</el-button> -->
           </div>
           <div class="report-container">
-            <div v-for="i in 3" :key="i" class="report-file-item">
+            <div v-for="i in 1" :key="i" class="report-file-item">
               <div class="file-info">
                 <div class="pdf-icon">
                   <el-icon>
@@ -178,14 +178,17 @@
                   </el-icon>
                 </div>
                 <div class="file-text">
-                  <span class="file-name">2025年度复检报告_0{{ i }}.pdf</span>
-                  <span class="file-meta">2025-09-{{ 20 + i }}</span>
+                  <span class="file-name">2026年度复检报告_0{{ i }}.pdf</span>
+                  <span class="file-meta">2026-04-{{ '0' + i }}</span>
                 </div>
               </div>
-              <el-button link type="primary"><el-icon>
+              <el-button link type="primary" @click="downloadReport(i)">
+                <el-icon>
                   <Download />
-                </el-icon></el-button>
+                </el-icon>
+              </el-button>
             </div>
+            <a ref="downloadRef" download style="display: none;" />
           </div>
         </div>
       </div>
@@ -209,7 +212,7 @@ import {
 } from '@element-plus/icons-vue';
 import { userApi } from '@/api';
 
-const { name, address, phone, guardianPhone } = useRoute().query;
+const { name, address, phone, sonphone } = useRoute().query;
 
 const selectedDate = ref(new Date().toISOString().substr(0, 10));
 
@@ -230,6 +233,17 @@ setInterval(async () => {
   watchData.value = res;
   console.log('更新手表数据:', res);
 }, 5000);
+
+const downloadRef = ref<HTMLAnchorElement | null>(null);
+
+function downloadReport(index: number) {
+  // 模拟下载链接
+  if (downloadRef.value) {
+    downloadRef.value.href = 'https://1111-1371592723.cos.ap-beijing.myqcloud.com/medical/4638e71baaf5439280bbe0f242eb54d3.pdf';
+    downloadRef.value.download = `2026年度复检报告_0${index}.pdf`;
+    downloadRef.value.click();
+  }
+}
 </script>
 
 <style scoped lang="scss">

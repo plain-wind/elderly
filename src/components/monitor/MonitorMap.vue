@@ -178,6 +178,23 @@ const initMap = async () => {
     strokeStyle: 'dashed',
   });
   renderPersonMarkers();
+
+  // 地图审图号
+  const mapApprovalNumber = map.value?.getMapApprovalNumber();
+  console.log('Map Approval Number:', mapApprovalNumber);
+  if (mapApprovalNumber) {
+    const infoDiv = document.createElement('div');
+    infoDiv.style.position = 'absolute';
+    infoDiv.style.bottom = '5px';
+    infoDiv.style.right = '5px';
+    infoDiv.style.padding = '2px 4px';
+    infoDiv.style.background = 'rgba(0, 0, 0, 0.5)';
+    infoDiv.style.color = '#fff';
+    infoDiv.style.fontSize = '10px';
+    infoDiv.style.zIndex = '999';
+    infoDiv.textContent = `审图号: ${mapApprovalNumber.district}`;
+    container.appendChild(infoDiv);
+  }
 };
 
 const getLngLatFromEvent = (e: any) => {
